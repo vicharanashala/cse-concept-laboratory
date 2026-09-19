@@ -54,10 +54,11 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 04 | Birthday Gift | ✅ Available |
 | 05 | The Griddle | ✅ Available |
 | 06 | Missing Homework | ✅ Available |
-| 07 | Nuts-and-Bolts | 🚧 Coming soon |
-| 08 | Operation Padlock | 🚧 Coming soon |
-| 09 | Junction Street | 🚧 Coming soon |
-| 10 | The Blindfolded Archer | 🚧 Coming soon |
+| 07 | The Milk Problem | ✅ Available |
+| 08 | Nuts-and-Bolts | 🚧 Coming soon |
+| 09 | Operation Padlock | 🚧 Coming soon |
+| 10 | Junction Street | 🚧 Coming soon |
+| 11 | The Blindfolded Archer | 🚧 Coming soon |
 
 ## Repository Structure
 

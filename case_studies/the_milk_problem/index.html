@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunday Morning Tea: A Milk Problem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   THEME: soft blue & orange, white cards, pill buttons.
+   (matches the approved benchmark template exactly)
+   ========================================================== */
+:root{
+  --bg-1:#FDF1E9; --bg-2:#EDF3FA; --bg-3:#E4EEFA; --bg-4:#D9E5F2;
+  --primary:#4A9BD1; --primary-dark:#2B6FA3; --primary-deep:#1B4A66;
+  --amber:#EA8C36; --amber-dark:#C96F1F;
+  --danger:#D9714F; --success:#4B7A4A; --violet:#EA8C36;
+  --ink:#1F2E37; --muted:#54666D; --faint:#93A5AB;
+  --card-bg:#FFFFFF;
+  --footer-bg:#22496B;
+  --glass-border:#D9E5F2;
+  --shadow-card:rgba(23,50,77,0.12); --shadow-btn:rgba(43,111,163,0.28);
+  --success-bg:#DCEAD8; --success-text:#274B26; --success-border:#4B7A4A;
+  --error-bg:#FBE1DC; --error-text:#8A3420; --error-border:#D9714F;
+  --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:'Inter', sans-serif;font-weight:400;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-2) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Poppins', sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{line-height:1.65;color:var(--muted);margin:0;}
+button{font-family:'Poppins', sans-serif;cursor:pointer;}
+button:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
+.wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px;}
+
+/* ---- top brand bar: institution logos ---- */
+.brand-bar{
+  position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 22px;z-index:500;pointer-events:none;
+}
+.brand-badge{pointer-events:auto;display:flex;align-items:center;gap:8px;background:transparent;border:none;padding:0;}
+.brand-badge img{height:90px;width:auto;display:block;}
+@media(max-width:640px){
+  .brand-bar{padding:8px 10px;}
+  .brand-badge img{height:44px;}
+}
+
+/* ---- stepper ---- */
+.stepper{max-width:760px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
+.step-circle{
+  width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;
+  font-family:'Poppins', sans-serif;
+}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins', sans-serif;}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1;}
+.step-item:first-child .step-line{display:none;}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.step-item.done .step-line{background:var(--primary-dark);}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25);}
+.step-item.active .step-label{color:var(--primary-dark);}
+
+/* ---- section framing ---- */
+.section{display:none;}
+.section.active-view{display:block;animation:sectionFade .35s ease;}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);
+  background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins', sans-serif;
+}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center;}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted);}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--ink);margin:0 0 12px;}
+
+.card{background:transparent;border:none;border-radius:0;box-shadow:none;padding:6px 0 0;}
+.btn{
+  border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 24px -10px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 28px -8px var(--shadow-btn);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none;text-align:left;}
+.btn.secondary.selected{border-color:var(--amber);background:#FBE9DA;color:var(--amber-dark);}
+.btn.secondary:disabled{opacity:.55;}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px;}
+.btn.small{padding:9px 18px;font-size:13px;}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+
+/* ---- Chapter 1: the problem (plain text, no card/box) ---- */
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0;}
+.problem-card p{margin:0 0 14px;font-size:15.5px;}
+.problem-card p:last-child{margin-bottom:0;}
+.problem-card b{color:var(--primary-deep);}
+.story-lines{
+  text-align:left;max-width:680px;margin:26px auto 0;background:transparent;
+  border:none;border-radius:0;padding:0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.story-lines p{font-size:15px;}
+.story-lines .highlight{color:var(--amber-dark);font-weight:700;}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px;}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+.rules-list li::before{content:"\2715";color:var(--danger);font-weight:700;flex-shrink:0;}
+.rules-list li.ok::before{content:"\2022";color:var(--primary);}
+.cast-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:22px 0 4px;}
+.cast-card{text-align:center;min-width:90px;}
+.cast-card .c-emoji{font-size:30px;display:block;margin-bottom:4px;}
+.cast-card .c-name{font-weight:700;font-size:13px;color:var(--primary-deep);font-family:'Poppins',sans-serif;}
+
+/* ---- game shell ---- */
+.game-shell{width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.topbar{
+  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  background:transparent;border:none;padding:4px 0;
+}
+.status-cluster{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
+.game-note{
+  max-width:640px;margin:0 auto 14px;text-align:center;font-size:13.5px;color:var(--primary-deep);
+  background:rgba(74,155,209,0.08);border:1px dashed var(--glass-border);border-radius:var(--radius-md);
+  padding:10px 16px;
+}
+.status-pill{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);}
+.status-pill.score{color:var(--amber-dark);font-weight:700;}
+
+.game-main{display:grid;grid-template-columns:1fr 220px;gap:14px;}
+@media(max-width:760px){.game-main{grid-template-columns:1fr;}.trail-panel{order:3;border-left:none;padding-left:0;border-top:1px dashed var(--glass-border);padding-top:14px;}}
+
+.explorer-panel{
+  background:transparent;border:none;border-radius:0;
+  padding:0;min-height:360px;display:flex;flex-direction:column;gap:16px;position:relative;
+}
+.dialogue-box{
+  display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);
+  border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 14px;
+}
+.dialogue-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--violet),#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .2s ease;}
+.dialogue-text{font-size:14px;color:var(--ink);line-height:1.5;}
+.dialogue-text .speaker{font-size:11px;color:var(--violet);display:block;margin-bottom:2px;letter-spacing:.05em;font-weight:700;}
+
+.current-folder-heading{display:flex;align-items:center;gap:10px;}
+.current-folder-heading .folder-icon-lg{font-size:26px;}
+.current-folder-heading h2{font-size:20px;}
+.current-folder-heading .fill-tag{font-size:13px;color:var(--muted);font-weight:600;font-family:'Inter',sans-serif;}
+.current-folder-heading .fill-tag b{color:var(--primary-deep);}
+
+.explorer-footer{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+
+.trail-panel{
+  background:transparent;border:none;border-left:1px dashed var(--glass-border);border-radius:0;
+  padding:0 0 0 16px;display:flex;flex-direction:column;gap:10px;max-height:520px;
+}
+.trail-panel .trail-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;font-weight:700;}
+.tree-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-right:2px;}
+@keyframes treePop{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:translateX(0);}}
+.log-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:2px;}
+.log-entry{padding:5px 0;font-size:12px;color:var(--muted);line-height:1.4;border-bottom:1px dashed var(--glass-border);animation:treePop .3s ease both;}
+.log-entry:first-child{border-bottom:none;}
+.log-entry.log-nomilk{color:var(--danger);}
+.log-entry.log-trip{color:var(--amber-dark);font-weight:700;}
+.log-entry.log-buy{color:var(--success);font-weight:700;}
+.log-entry.log-board{color:var(--amber-dark);font-weight:700;}
+.log-entry.log-skip{color:var(--primary-dark);}
+
+/* ---- the kitchen scene ---- */
+.kitchen{width:100%;}
+.fridge-panel{
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);
+  padding:14px 18px;text-align:center;margin-bottom:14px;transition:transform .2s;
+}
+.fridge-panel.shake{animation:fridgeShake .5s ease;}
+@keyframes fridgeShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px) rotate(-1deg);}40%{transform:translateX(6px) rotate(1deg);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+.fridge-icon-row{font-size:32px;margin-bottom:2px;transition:transform .25s ease;}
+.fridge-icon-row.opened{transform:scale(1.15) rotate(-4deg);}
+.milk-cartons{font-size:20px;min-height:28px;letter-spacing:2px;}
+.milk-cartons span{display:inline-block;animation:cartonPop .35s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes cartonPop{from{opacity:0;transform:translateY(8px) scale(.5);}to{opacity:1;transform:translateY(0) scale(1);}}
+.milk-count-text{font-size:12.5px;font-weight:700;color:var(--primary-deep);margin-top:4px;}
+.whiteboard{
+  display:none;background:#fdfdfd;border:3px solid var(--amber);border-radius:var(--radius-sm);padding:8px 14px;
+  margin:0 auto 12px;max-width:260px;text-align:center;box-shadow:0 8px 16px -8px rgba(23,50,77,.25);
+}
+.whiteboard.show{display:block;animation:sectionFade .4s;}
+.whiteboard.flash{animation:boardFlash .6s ease;}
+@keyframes boardFlash{0%,100%{box-shadow:0 8px 16px -8px rgba(23,50,77,.25);}50%{box-shadow:0 0 0 6px rgba(234,140,54,.35);}}
+.whiteboard .wb-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:3px;font-weight:700;}
+.whiteboard .wb-text{font-size:14px;color:var(--ink);font-weight:700;font-family:'Poppins',sans-serif;}
+
+.friend-row{
+  display:grid;grid-template-columns:100px 1fr;gap:10px;align-items:center;
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);
+  padding:9px 14px;margin-bottom:8px;transition:border-color .2s,box-shadow .2s;
+}
+.friend-row.active-row{border-color:var(--primary);box-shadow:0 0 0 2px rgba(74,155,209,.18);}
+.friend-info{display:flex;align-items:center;gap:8px;}
+.f-avatar{font-size:22px;}
+.f-name{font-weight:700;font-size:13px;color:var(--primary-deep);font-family:'Poppins',sans-serif;}
+.friend-track{position:relative;height:32px;background:var(--bg-3);border-radius:10px;overflow:hidden;}
+.track-stop{position:absolute;top:50%;translate:-50% -50%;font-size:14px;opacity:.55;}
+.track-stop.home{left:8%;} .track-stop.fridge{left:50%;} .track-stop.shop{left:92%;}
+.path-marker{
+  position:absolute;top:50%;left:8%;translate:-50% -50%;font-size:20px;
+  transition:left 1s cubic-bezier(.4,0,.2,1);z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));
+}
+.path-marker.walking{animation:walkBounce .3s ease-in-out infinite;}
+@keyframes walkBounce{0%,100%{transform:translateY(-50%) translateY(0);}50%{transform:translateY(-50%) translateY(-4px);}}
+.friend-status{grid-column:2;font-size:11.5px;font-weight:600;color:var(--muted);min-height:16px;margin-top:2px;}
+
+/* ---- completion / stats ---- */
+.result-card{max-width:560px;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.result-icon{font-size:56px;}
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-chip{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 18px;min-width:110px;}
+.stat-chip .num{font-size:20px;color:var(--amber-dark);font-weight:800;}
+.stat-chip .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+
+/* ---- inline quiz + challenge (embedded in the game) ---- */
+.inline-panel{display:none;margin-top:16px;background:var(--card-bg);border:1px solid var(--glass-border);
+  border-radius:var(--radius-md);padding:20px;text-align:center;}
+.inline-panel.show{display:block;animation:sectionFade .4s;}
+.inline-panel h3{margin:0 0 12px;font-size:16.5px;color:var(--primary-deep);}
+.quiz-choices{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.quiz-choices button{background:#fff;border:1.5px solid var(--glass-border);border-radius:999px;padding:10px 18px;font-weight:700;color:var(--ink);font-size:13.5px;transition:transform .12s,border-color .15s;}
+.quiz-choices button:hover:not(:disabled){transform:translateY(-1px);border-color:var(--primary);}
+.quiz-choices button.picked-wrong{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text);}
+.quiz-choices button.picked-right{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text);}
+.quiz-feedback{font-size:13.5px;font-weight:600;color:var(--ink);min-height:20px;margin-bottom:6px;}
+
+.challenge-box textarea{
+  width:100%;min-height:64px;border-radius:var(--radius-sm);border:1.5px solid var(--glass-border);padding:12px 14px;
+  font-family:inherit;font-size:14px;resize:vertical;background:#fff;color:var(--ink);margin-top:10px;
+}
+.idea-chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.idea-chip{background:#FBE9DA;border:1.5px solid var(--amber);border-radius:999px;padding:6px 14px;font-size:12px;font-weight:700;color:var(--amber-dark);}
+.challenge-response{display:none;margin-top:14px;font-size:13.5px;color:var(--primary-deep);font-weight:600;}
+.challenge-response.show{display:block;animation:sectionFade .3s;}
+
+/* ---- control bar ---- */
+.control-bar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  background:transparent;border:none;border-top:1px dashed var(--glass-border);padding:16px 0 0;
+}
+.control-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.control-btn{
+  border:1.5px solid var(--primary);background:#fff;color:var(--primary-dark);border-radius:999px;padding:9px 18px;
+  font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px;font-family:inherit;
+  transition:transform .12s,background .15s,border-color .15s,opacity .15s;
+}
+.control-btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--amber);}
+.control-btn:disabled{opacity:.35;cursor:not-allowed;}
+.control-btn.play{background:var(--primary-dark);color:#fff;border-color:transparent;}
+.control-btn.pause{background:var(--amber);color:#fff;border-color:transparent;}
+.control-btn.reset{
+  position:relative;background:transparent;color:var(--danger);border-color:var(--danger);
+  animation:resetGlow 2.2s ease-in-out infinite;
+}
+@keyframes resetGlow{0%,100%{box-shadow:0 0 0 0 rgba(217,113,79,.4);}50%{box-shadow:0 0 0 8px rgba(217,113,79,0);}}
+.control-btn.reset .r-spin{display:inline-block;transition:transform .4s;}
+.control-btn.reset:hover .r-spin{transform:rotate(180deg);}
+
+.speed-control{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px;}
+.speed-control button{width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-border);background:var(--bg-3);color:var(--primary-dark);font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.speed-control button:hover:not(:disabled){border-color:var(--amber);}
+.speed-control button:disabled{opacity:.3;cursor:not-allowed;}
+.speed-value{min-width:34px;text-align:center;color:var(--amber-dark);font-weight:700;}
+
+/* ---- overlays / achievement toast ---- */
+.overlay{position:fixed;inset:0;background:rgba(31,46,55,0.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.overlay.active{display:flex;animation:sectionFade .3s ease both;}
+.overlay-card{background:#fdfffe;border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:30px;max-width:460px;width:100%;text-align:center;display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 50px -20px rgba(23,50,77,.4);}
+.overlay-card h2{font-size:24px;}
+.overlay-card p{color:var(--muted);font-size:14.5px;line-height:1.55;}
+
+.achv-toast{
+  position:fixed;top:-90px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--amber);
+  border-radius:999px;padding:12px 22px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;
+  box-shadow:0 20px 50px -20px rgba(23,50,77,.4);z-index:80;transition:top .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.achv-toast.show{top:20px;}
+
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:900;}
+
+/* ---- open question cards: reflection + exercise ---- */
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+.qcard{
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;
+  padding:22px 20px 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:190px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .18s,box-shadow .18s;
+}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38);}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary);letter-spacing:.03em;}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600;}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.qgrid{grid-template-columns:1fr;}.qcard{min-height:auto;padding:18px 18px 16px;}}
+.qcard.qcard-wide{grid-column:1 / -1;min-height:auto;}
+.race-layout{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.race-svg{width:100%;max-width:280px;flex-shrink:0;}
+.race-label{font-size:11px;fill:var(--muted);font-weight:700;}
+.race-bar-a{fill:var(--primary);opacity:.85;}
+.race-bar-b{fill:var(--amber);opacity:.85;}
+.race-overlap{fill:var(--danger);opacity:.35;}
+.race-questions{flex:1;min-width:220px;display:flex;flex-direction:column;gap:10px;}
+
+.cs-Laboratory-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #2B6FA3; /* Modern professional blue */
+  color: #ffffff;            /* White text */
+  text-decoration: none;     /* Removes standard underline */
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 6px;        /* Smooth rounded corners */
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect */
+.cs-Laboratory-link:hover {
+  background-color: #2B6FA3; /* Darker blue on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Optional arrow animation */
+.cs-Laboratory-link:hover .arrow {
+  transform: translateX(-3px);
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+  font-size: 16px;
+}
+
+/* ---- Chapter 5: the concept, one continuous flow of plain text ---- */
+.learning-flow{max-width:640px;margin:0 auto;text-align:left;}
+.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border);}
+.sync-summary{text-align:left;}
+.sync-summary-lead{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:8px;}
+.sync-summary ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.sync-summary li{font-size:13.5px;color:var(--muted);line-height:1.55;}
+.sync-summary strong{color:var(--amber-dark);}
+.concept-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px;}
+.concept-table th{text-align:left;font-family:'Poppins',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--primary-dark);padding:8px 10px;border-bottom:2px solid var(--glass-border);}
+.concept-table td{padding:9px 10px;border-bottom:1px dashed var(--glass-border);color:var(--ink);}
+.concept-table tr:last-child td{border-bottom:none;}
+.concept-table td.story-col{color:var(--muted);}
+.concept-table td.tech-col{font-weight:700;color:var(--amber-dark);}
+
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center;}
+.key-learnings p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.key-learnings p:last-child{margin-bottom:0;}
+.key-learnings b{color:var(--primary-deep);}
+
+.hidden{display:none!important;}
+
+@media(max-width:640px){
+  .wrap{padding:96px 14px 50px;}
+  .friend-row{grid-template-columns:1fr;}
+  .friend-status{grid-column:1;}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+
+
+<div class="wrap">
+
+  <div class="stepper" id="stepper">
+    <div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Problem</span></div>
+    <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Story</span></div>
+    <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Morning</span></div>
+    <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Reflection</span></div>
+    <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Concept</span></div>
+    <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">Exercise</span></div>
+  </div>
+
+  <!-- ================= CHAPTER 1: THE PROBLEM (plain text, no card/box) ================= -->
+  <section class="section active-view" id="sec-puzzle">
+    <div class="hero">
+      <span class="eyebrow">Chapter 1 &middot; The Problem</span>
+      <h1>🥛 Communication is the Key</h1>
+    </div>
+    <div class="problem-card">
+      <p>Think about a few people sharing one thing, like a fridge, a printer or a bank account. Each person can only go by what <b>they see right now</b>. They have no idea what the others are doing at the same moment.</p>
+      <p>So everyone decides on their own, often at nearly the same time. Each decision makes sense by itself. The trouble starts when you put them all together.</p>
+      <p>What would help is one simple thing everyone can check before acting, something that says "this is already being taken care of." Without it, good intentions just end up as wasted effort.</p>
+      <p>Let's see how this plays out on an ordinary Sunday morning 👇</p>
+    </div>
+    <div class="section-nav">
+      <button class="btn" id="btn-puzzle-continue">Continue to the Story ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 2: THE STORY ================= -->
+  <section class="section" id="sec-briefing">
+    <div class="hero">
+      <span class="eyebrow">Chapter 2 &middot; Sunday Morning Tea</span>
+      <h1>Four Friends, One Fridge</h1>
+    </div>
+
+    <div class="cast-row">
+      <div class="cast-card"><span class="c-emoji">🧑</span><span class="c-name">Aman</span></div>
+      <div class="cast-card"><span class="c-emoji">👨</span><span class="c-name">Ravi</span></div>
+      <div class="cast-card"><span class="c-emoji">👩</span><span class="c-name">Neha</span></div>
+      <div class="cast-card"><span class="c-emoji">👧</span><span class="c-name">Priya</span></div>
+    </div>
+
+    <div class="story-lines" id="intro-story-lines"><!-- filled by JS --></div>
+
+    <ul class="rules-list">
+      <li>Nobody can call, text, or shout to anyone else in the flat.</li>
+      <li>Nobody knows what anyone else is doing at this exact moment.</li>
+      <li class="ok">Anyone can open the fridge and check for milk, anytime.</li>
+      <li class="ok">If the fridge has no milk, that person can walk to the shop and buy some.</li>
+      <li class="ok">Everyone just wants their tea, as fast as possible.</li>
+    </ul>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-briefing-back">⬅ Back to the Problem</button>
+      <button class="btn" id="btn-briefing-start">Start the Morning ▶</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3: THE MORNING (game) ================= -->
+  <section class="section" id="sec-search">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 &middot; The Morning</span>
+    <h2 class="section-title" id="game-title">How the Morning Went</h2>
+
+    <div class="section-nav" style="margin-top:0;margin-bottom:14px;">
+      <button class="btn ghost small" id="btn-case-back">⬅ Back to the Story</button>
+    </div>
+
+    <div class="game-shell">
+
+      <p class="game-note" id="game-sub">💡 Press <b>☀️ Start Morning</b> and watch what each friend does. You can change the <b>Speed</b> or <b>Pause</b> any time to look closer.</p>
+
+      <div class="topbar">
+        <div class="status-cluster">
+          <div class="status-pill score">🥛 <span id="milk-value">0</span> in fridge</div>
+          <div class="status-pill" id="pill-trips">🏃 <span id="trips-value">0</span> trips to the shop</div>
+          <div class="status-pill">🌅 Run <span id="run-value">1</span> of 2</div>
+        </div>
+      </div>
+
+      <div class="game-main">
+        <div class="explorer-panel">
+          <div class="dialogue-box">
+            <div class="dialogue-avatar" id="dialogue-avatar">😴</div>
+            <div class="dialogue-text">
+              <span class="speaker" id="dialogue-speaker">NARRATOR</span>
+              <span id="dialogue-text">Everyone's still asleep. Press Start Morning whenever you're ready.</span>
+            </div>
+          </div>
+
+          <div class="kitchen">
+            <div class="fridge-panel" id="fridge-panel">
+              <div class="fridge-icon-row" id="fridge-icon">🧊</div>
+              <div class="whiteboard" id="whiteboard">
+                <div class="wb-title">Whiteboard</div>
+                <div class="wb-text" id="wb-text">&nbsp;</div>
+              </div>
+              <div class="milk-cartons" id="milk-cartons"></div>
+              <div class="milk-count-text" id="milk-count-text">Milk in fridge: 0</div>
+            </div>
+
+            <div class="friend-row" id="row-aman">
+              <div class="friend-info"><span class="f-avatar">🧑</span><span class="f-name">Aman</span></div>
+              <div class="friend-track">
+                <span class="track-stop home">🛏️</span><span class="track-stop fridge">🧊</span><span class="track-stop shop">🏪</span>
+                <div class="path-marker" id="marker-aman">🧑</div>
+              </div>
+              <div class="friend-status" id="status-aman">😴 Still asleep...</div>
+            </div>
+            <div class="friend-row" id="row-ravi">
+              <div class="friend-info"><span class="f-avatar">👨</span><span class="f-name">Ravi</span></div>
+              <div class="friend-track">
+                <span class="track-stop home">🛏️</span><span class="track-stop fridge">🧊</span><span class="track-stop shop">🏪</span>
+                <div class="path-marker" id="marker-ravi">👨</div>
+              </div>
+              <div class="friend-status" id="status-ravi">😴 Still asleep...</div>
+            </div>
+            <div class="friend-row" id="row-neha">
+              <div class="friend-info"><span class="f-avatar">👩</span><span class="f-name">Neha</span></div>
+              <div class="friend-track">
+                <span class="track-stop home">🛏️</span><span class="track-stop fridge">🧊</span><span class="track-stop shop">🏪</span>
+                <div class="path-marker" id="marker-neha">👩</div>
+              </div>
+              <div class="friend-status" id="status-neha">😴 Still asleep...</div>
+            </div>
+            <div class="friend-row" id="row-priya">
+              <div class="friend-info"><span class="f-avatar">👧</span><span class="f-name">Priya</span></div>
+              <div class="friend-track">
+                <span class="track-stop home">🛏️</span><span class="track-stop fridge">🧊</span><span class="track-stop shop">🏪</span>
+                <div class="path-marker" id="marker-priya">👧</div>
+              </div>
+              <div class="friend-status" id="status-priya">😴 Still asleep...</div>
+            </div>
+          </div>
+
+          <div class="explorer-footer">
+            <button class="btn" id="start-morning-btn">☀️ Start Morning</button>
+          </div>
+
+          <!-- Tally after the first (uncoordinated) morning -->
+          <div class="inline-panel" id="tally-1">
+            <div style="font-size:34px;">🥛🥛🥛🥛</div>
+            <h3>Everyone came back proud of themselves!</h3>
+            <div class="stat-row" style="justify-content:center;">
+              <div class="stat-chip"><div class="num">4</div><div class="lbl">Milk Purchased</div></div>
+              <div class="stat-chip"><div class="num">1</div><div class="lbl">Milk Needed</div></div>
+            </div>
+            <p style="margin-top:10px;">😅 The fridge is now full of milk.</p>
+            <div class="section-nav">
+              <button class="btn secondary" id="to-quiz-btn">Wait... what just happened? →</button>
+            </div>
+          </div>
+
+          <!-- Reflection quiz: who made the mistake -->
+          <div class="inline-panel" id="quiz-panel">
+            <h3>🤔 Who made the mistake?</h3>
+            <div class="quiz-choices" id="quiz-choices"></div>
+            <p class="quiz-feedback" id="quiz-feedback"></p>
+            <div class="section-nav" id="quiz-continue-row" style="display:none;margin-top:0;">
+              <button class="btn" id="to-challenge-btn">Continue →</button>
+            </div>
+          </div>
+
+          <!-- Challenge: what rule would you make -->
+          <div class="inline-panel challenge-box" id="challenge-panel">
+            <h3>💡 If you lived in this flat, what rule would you set so this doesn't happen again?</h3>
+            <p style="font-size:13px;">There's no one right answer. Any sensible idea works. Need a hint? Tap one below.</p>
+            <div class="idea-chips">
+              <span class="idea-chip" data-idea="Leave a note on the fridge.">📝 Leave a note</span>
+              <span class="idea-chip" data-idea="Send a message in our group chat.">💬 Group chat</span>
+              <span class="idea-chip" data-idea="Call or ask before leaving.">📞 Call first</span>
+              <span class="idea-chip" data-idea="Put a whiteboard next to the fridge.">🖊️ Whiteboard</span>
+              <span class="idea-chip" data-idea="Assign one person to always check on milk.">🙋 Assign one person</span>
+            </div>
+            <textarea id="challenge-input" placeholder="Type your idea here…"></textarea>
+            <div class="section-nav">
+              <button class="btn" id="challenge-submit" disabled>Submit My Idea</button>
+            </div>
+            <p class="challenge-response" id="challenge-response"></p>
+            <div class="section-nav" id="to-scene3-row" style="display:none;margin-top:0;">
+              <button class="btn secondary" id="to-scene3-btn">Try It With the Whiteboard ➜</button>
+            </div>
+          </div>
+
+          <!-- Tally after the improved (whiteboard) morning -->
+          <div class="inline-panel" id="tally-2">
+            <div style="font-size:34px;">🥛☕</div>
+            <h3>Only one trip to the shop!</h3>
+            <div class="stat-row" style="justify-content:center;">
+              <div class="stat-chip"><div class="num">1</div><div class="lbl">Milk Purchased</div></div>
+              <div class="stat-chip"><div class="num">1</div><div class="lbl">Milk Needed</div></div>
+            </div>
+            <p style="margin-top:10px;">Everyone enjoys tea together. ☕☕☕☕</p>
+            <div class="section-nav">
+              <button class="btn" id="to-complete-btn">Compare Both Mornings ➜</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="trail-panel" id="trail-panel">
+          <span class="trail-label">📜 Morning Log</span>
+          <div class="tree-scroll"><ul class="log-list" id="log-container"></ul></div>
+        </aside>
+      </div>
+
+      <div class="control-bar">
+        <div class="control-group">
+          <button class="control-btn pause" id="btn-pause" disabled>⏸ Pause</button>
+          <button class="control-btn play" id="btn-resume" disabled>▶ Resume</button>
+          <button class="control-btn reset" id="btn-reset"><span class="r-spin">⟲</span> Restart</button>
+        </div>
+        <div class="control-group">
+          <div class="speed-control">
+            <span>Speed</span>
+            <button id="speed-down" aria-label="Slower">−</button>
+            <span class="speed-value" id="speed-value">1×</span>
+            <button id="speed-up" aria-label="Faster">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3b: MISSION COMPLETE ================= -->
+  <section class="section" id="sec-complete">
+    <div class="result-card">
+      <div class="result-icon">🎉</div>
+      <h2>Same friends, same fridge. Only the whiteboard changed.</h2>
+      <div class="stat-row">
+        <div class="stat-chip"><div class="num">4 → 1</div><div class="lbl">Trips to the Shop</div></div>
+        <div class="stat-chip"><div class="num">3</div><div class="lbl">Wasted Trips Saved</div></div>
+        <div class="stat-chip"><div class="num" id="complete-milk">0</div><div class="lbl">Milk Bought (Run 2)</div></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-complete-replay">⟲ Replay the Morning</button>
+        <button class="btn" id="btn-complete-continue">Continue to Reflection ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 4: REFLECTION ================= -->
+  <section class="section" id="sec-notes">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 &middot; Reflection</span>
+    <h2 class="section-title">What did you notice?</h2>
+    <p class="section-sub">Take a moment to think about these. There are no fixed answers, so just reply in your own words.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Everyone's Reasonable Choice</span><span class="q-text">Why can't we blame any one friend, even though so much milk got wasted?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Spotting the Real Cause</span><span class="q-text">What was different in the second morning that made it go so much better?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; The Whiteboard's Job</span><span class="q-text">What did the whiteboard do that four friends with good intentions couldn't do on their own?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Scaling Up</span><span class="q-text">What if ten roommates lived here instead of four? Would the whiteboard still work, or would something need to change?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Reconstructing the Rule</span><span class="q-text">A new roommate moves in today. How would you explain the whiteboard rule to them in a sentence or two?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-notes-back">⬅ Back to the Morning</button>
+        <button class="btn" id="btn-notes-continue">Continue to the Concept ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 5: THE CONCEPT (concept + lock demo, one continuous flow) ================= -->
+  <section class="section" id="sec-method">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 &middot; The Concept</span>
+    <h2 class="section-title">Understand the Difference</h2>
+    <p class="section-sub">This is the idea you've been watching all along. Now it gets a name.</p>
+
+    <div class="hero" style="margin-bottom:6px;">
+      <div class="result-icon">🔒</div>
+      <h2>It's Called Synchronization</h2>
+    </div>
+
+    <div class="learning-flow">
+      <div class="sync-summary">
+        <p class="sync-summary-lead">This is what the whiteboard did for your Sunday morning:</p>
+        <ul>
+          <li>Before you act, check the shared signal. Is someone already handling it?</li>
+          <li>If nobody is, claim it. Write your name down, then go do it.</li>
+          <li>While your name is up, anyone else who checks sees it and stays put.</li>
+          <li>When you're done, wipe your name off so someone else can claim it the next time it's needed.</li>
+        </ul>
+        <p class="sync-summary-lead">This idea is called <strong>Synchronization</strong>. It controls how people (or programs) use something shared, so their separate decisions don't clash.</p>
+        <table class="concept-table">
+          <thead><tr><th>In the Story</th><th>In Computing</th></tr></thead>
+          <tbody>
+            <tr><td class="story-col">The fridge / milk</td><td class="tech-col">A shared resource</td></tr>
+            <tr><td class="story-col">Each friend checking independently</td><td class="tech-col">A race condition</td></tr>
+            <tr><td class="story-col">Everyone buying milk at once</td><td class="tech-col">Wasted, duplicated work</td></tr>
+            <tr><td class="story-col">The whiteboard note</td><td class="tech-col">A lock / flag / mutex</td></tr>
+            <tr><td class="story-col">"Someone's already on it, stay home"</td><td class="tech-col">Mutual exclusion</td></tr>
+            <tr><td class="story-col">Erasing the note once done</td><td class="tech-col">Releasing the lock</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="key-learnings">
+        <h3>🔑 Key Takeaways</h3>
+        <p><b>The problem:</b> When several people or programs share one resource and each acts only on what they know, every decision can make sense, yet the group still wastes effort or makes mistakes.</p>
+        <p><b>The fix:</b> A small shared signal, like a note, a flag or a lock, lets everyone see what's already taken care of before they act. Separate guesses become one shared decision.</p>
+        <p><b>In computing:</b> Operating systems use locks, semaphores and mutexes so that programs or threads sharing a resource don't get in each other's way, the way Aman, Ravi, Neha and Priya did.</p>
+        <p><b>Where you'll see it:</b> Two people editing one document, two apps writing to one file, or two threads updating one bank balance all run into the same milk problem.</p>
+      </div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-method-back">⬅ Back to Reflection</button>
+      <button class="btn" id="btn-method-continue">Continue to the Exercise ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 6: EXERCISE ================= -->
+  <section class="section" id="sec-cases">
+
+  <a href="../../index.html" class="cs-Laboratory-link">
+    <strong>← Back to CSE Concept Laboratory</strong>
+  </a>
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; Exercise</span>
+    <h2 class="section-title">Test What You Learned</h2>
+    <p class="section-sub">Here are a few new situations. Use what you just learned to work through them.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Compare Approaches</span><span class="q-text">One office shares a printer with no sign-up sheet. Another office keeps a sign-up sheet by the door. How would you decide how much coordination a shared thing really needs?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Recognize the Pattern</span><span class="q-text">A big team is editing the same online spreadsheet at once, and nobody can see what the others are changing. Why is this really the milk problem in disguise?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Spot the Misconception</span><span class="q-text">A friend says, “Synchronization means only one person can ever use the shared thing, forever.” What's wrong with that?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Apply to a New Scenario</span><span class="q-text">Two people withdraw money from the same joint account at two different ATMs at almost the same time. What could go wrong, and how would a lock fix it?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Trade-offs</span><span class="q-text">What if someone forgets to erase the whiteboard note after coming back with milk? What problem would that cause, and what would the same mistake look like in software?</span></div>
+        <div class="qcard qcard-wide">
+          <span class="q-num">Question 6</span>
+          <div class="race-layout">
+            <svg class="race-svg" viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+              <line x1="20" y1="40" x2="240" y2="40" class="sync-lane"></line>
+              <text x="20" y="26" class="race-label">Person A: reads, then writes balance</text>
+              <rect x="30" y="32" width="80" height="16" rx="4" class="race-bar-a"></rect>
+
+              <line x1="20" y1="100" x2="240" y2="100" class="sync-lane"></line>
+              <text x="20" y="86" class="race-label">Person B: reads, then writes balance</text>
+              <rect x="70" y="92" width="80" height="16" rx="4" class="race-bar-b"></rect>
+
+              <rect x="70" y="32" width="40" height="80" class="race-overlap"></rect>
+              <text x="72" y="130" class="race-label">shaded = both acting at once</text>
+            </svg>
+            <div class="race-questions">
+              <span class="q-text">Person A and Person B both read the same balance, add their own deposit, and write the new total back at almost the same time. Which two actions overlap in the shaded area and cause one deposit to be lost?</span>
+              <span class="q-text">Where would you put a lock on this timeline so both deposits are counted?</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-cases-back">⬅ Back to the Concept</button>
+        <button class="btn" id="btn-cases-finish">🏁 Restart from Beginning ➜</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= OVERLAYS: pause ================= -->
+<div class="overlay" id="overlay-pause">
+  <div class="overlay-card">
+    <h2>⏸ Paused</h2>
+    <p>The morning is paused. Nobody moves until you resume.</p>
+    <div class="section-nav">
+      <button class="btn" id="btn-overlay-resume">▶ Resume</button>
+      <button class="btn ghost" id="btn-overlay-quit">Quit to the Story</button>
+    </div>
+  </div>
+</div>
+
+<div class="achv-toast" id="achv-toast">
+  <span class="achv-icon">🏆</span>
+  <span id="achv-text">Achievement unlocked</span>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   NAVIGATION: 6-chapter stepper wrapping the game screens
+   ============================================================ */
+const STEP_FOR_SECTION = {
+  'sec-puzzle':1, 'sec-briefing':2, 'sec-search':3, 'sec-complete':3, 'sec-notes':4, 'sec-method':5, 'sec-cases':6
+};
+function setStep(n){
+  for (let i = 1; i <= 6; i++){
+    const el = document.getElementById('step-' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view'));
+  document.getElementById(id).classList.add('active-view');
+  setStep(STEP_FOR_SECTION[id] || 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+const cvs = document.getElementById('confetti-canvas');
+const cctx = cvs.getContext('2d');
+const CONFETTI_COLORS = ['#4A9BD1','#EA8C36','#4B7A4A','#2B6FA3','#C96F1F','#93C5E5'];
+function resizeCvs(){ cvs.width = innerWidth; cvs.height = innerHeight; }
+resizeCvs(); window.addEventListener('resize', resizeCvs);
+function fireConfetti(){
+  const pieces = [];
+  for (let i=0;i<120;i++) pieces.push({
+    x:Math.random()*cvs.width, y:-20-Math.random()*200,
+    vx:(Math.random()-.5)*3, vy:2+Math.random()*3, size:5+Math.random()*6,
+    color:CONFETTI_COLORS[i % CONFETTI_COLORS.length], rot:Math.random()*360, vr:(Math.random()-.5)*10
+  });
+  let frame = 0;
+  function tick(){
+    cctx.clearRect(0,0,cvs.width,cvs.height); frame++; let alive=false;
+    pieces.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; if (p.y<cvs.height+20) alive=true;
+      cctx.save(); cctx.translate(p.x,p.y); cctx.rotate(p.rot*Math.PI/180);
+      cctx.fillStyle=p.color; cctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6); cctx.restore();
+    });
+    if (alive && frame<260) requestAnimationFrame(tick); else cctx.clearRect(0,0,cvs.width,cvs.height);
+  }
+  tick();
+}
+
+/* =========================================================================
+   STORY DATA
+   ========================================================================= */
+const INTRO_LINES = [
+  'It\'s Sunday morning. Everyone wakes up at a slightly different time.',
+  'Today, <span class="highlight">everyone wants tea</span>.',
+  'Whoever opens the fridge first checks if there is any milk.',
+  'If there isn\'t, they go to the shop to buy some, without asking anyone else.',
+];
+
+const FRIENDS = [
+  { id:'aman', name:'Aman', icon:'🧑' },
+  { id:'ravi', name:'Ravi', icon:'👨' },
+  { id:'neha', name:'Neha', icon:'👩' },
+  { id:'priya', name:'Priya', icon:'👧' },
+];
+
+function say(list){ return Array.isArray(list) ? list[Math.floor(Math.random() * list.length)] : list; }
+
+/* =========================================================================
+   GAME STATE
+   ========================================================================= */
+const state = {
+  status: 'idle', run: 1, milkCount: 0, trips: 0,
+  speedIndex: 1, paused: false, pauseWaiters: [], runId: 0,
+  achievements: new Set(),
+};
+const SPEED_STEPS = [
+  { label:'0.5×', mult:1.7 }, { label:'1×', mult:1.0 }, { label:'1.5×', mult:0.68 }, { label:'2×', mult:0.45 },
+];
+
+/* =========================================================================
+   RENDERING helpers
+   ========================================================================= */
+function renderCaseStory(){
+  document.getElementById('intro-story-lines').innerHTML = INTRO_LINES.map(l => `<p>${l}</p>`).join('');
+}
+function renderHUD(){
+  document.getElementById('milk-value').textContent = state.milkCount;
+  document.getElementById('trips-value').textContent = state.trips;
+  document.getElementById('run-value').textContent = state.run;
+}
+function renderDialogue(speaker, avatar, text){
+  document.getElementById('dialogue-speaker').textContent = speaker;
+  document.getElementById('dialogue-avatar').textContent = avatar;
+  document.getElementById('dialogue-text').textContent = text;
+}
+function renderControls(){
+  const playing = state.status === 'playing';
+  document.getElementById('btn-pause').disabled = !playing;
+  document.getElementById('btn-resume').disabled = !(state.status === 'paused');
+  document.getElementById('speed-down').disabled = state.speedIndex === 0;
+  document.getElementById('speed-up').disabled = state.speedIndex === SPEED_STEPS.length - 1;
+  document.getElementById('start-morning-btn').disabled = playing || state.status === 'paused';
+}
+function log(msg, type){
+  const container = document.getElementById('log-container');
+  const li = document.createElement('li');
+  li.className = 'log-entry' + (type ? ' log-' + type : '');
+  li.textContent = msg;
+  container.appendChild(li);
+  const scroller = container.parentElement;
+  scroller.scrollTop = scroller.scrollHeight;
+}
+function setRowActive(id, active){
+  document.getElementById('row-' + id).classList.toggle('active-row', active);
+}
+function setStatus(id, text){ document.getElementById('status-' + id).textContent = text; }
+function moveMarker(id, stop, walking){
+  const marker = document.getElementById('marker-' + id);
+  const pct = stop === 'home' ? 8 : stop === 'fridge' ? 50 : 92;
+  marker.style.left = pct + '%';
+  marker.classList.toggle('walking', !!walking);
+}
+function addMilkCarton(){
+  state.milkCount++;
+  const span = document.createElement('span');
+  span.textContent = '🥛';
+  document.getElementById('milk-cartons').appendChild(span);
+  document.getElementById('milk-count-text').textContent = 'Milk in fridge: ' + state.milkCount;
+  renderHUD();
+  if (state.milkCount >= 4){
+    const panel = document.getElementById('fridge-panel');
+    panel.classList.add('shake');
+    setTimeout(() => panel.classList.remove('shake'), 500);
+    unlockAchievement('overbought', 'Too much milk! Four cartons when one was enough.');
+  }
+}
+function openFridgeIcon(){
+  const icon = document.getElementById('fridge-icon');
+  icon.classList.add('opened');
+  setTimeout(() => icon.classList.remove('opened'), 300);
+}
+function resetFridgeDisplay(){
+  state.milkCount = 0; state.trips = 0;
+  document.getElementById('milk-cartons').innerHTML = '';
+  document.getElementById('milk-count-text').textContent = 'Milk in fridge: 0';
+  document.getElementById('whiteboard').classList.remove('show');
+  document.getElementById('wb-text').textContent = '\u00a0';
+  document.getElementById('log-container').innerHTML = '';
+  FRIENDS.forEach(f => { setStatus(f.id, '😴 Still asleep...'); moveMarker(f.id, 'home'); setRowActive(f.id, false); });
+  renderHUD();
+}
+
+/* =========================================================================
+   PAUSE-AWARE DELAY — lets Pause/Resume and Speed genuinely control the
+   scripted morning animation instead of just disabling buttons.
+   ========================================================================= */
+function waitWhilePaused(){
+  return new Promise(resolve => {
+    if (state.status !== 'paused') return resolve();
+    state.pauseWaiters.push(resolve);
+  });
+}
+function resumeWaiters(){
+  const waiters = state.pauseWaiters;
+  state.pauseWaiters = [];
+  waiters.forEach(r => r());
+}
+async function delay(ms, myRun){
+  const total = ms * SPEED_STEPS[state.speedIndex].mult;
+  const chunk = 60;
+  let done = 0;
+  while (done < total){
+    if (myRun !== undefined && myRun !== state.runId) throw { aborted:true };
+    await waitWhilePaused();
+    if (myRun !== undefined && myRun !== state.runId) throw { aborted:true };
+    const step = Math.min(chunk, total - done);
+    await new Promise(res => setTimeout(res, step));
+    done += step;
+  }
+  if (myRun !== undefined && myRun !== state.runId) throw { aborted:true };
+  await waitWhilePaused();
+}
+
+/* =========================================================================
+   ACHIEVEMENTS
+   ========================================================================= */
+function unlockAchievement(key, label){
+  if (state.achievements.has(key)) return;
+  state.achievements.add(key);
+  const toast = document.getElementById('achv-toast');
+  document.getElementById('achv-text').textContent = label;
+  toast.classList.add('show');
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+
+/* =========================================================================
+   NAVIGATION / MISSION FLOW
+   ========================================================================= */
+function initLevel(){
+  state.runId++; resumeWaiters();
+  state.status = 'idle'; state.run = 1; state.paused = false; state.pauseWaiters = [];
+  resetFridgeDisplay();
+  document.getElementById('overlay-pause').classList.remove('active');
+  ['tally-1','tally-2','quiz-panel','challenge-panel'].forEach(id => document.getElementById(id).classList.remove('show'));
+  document.getElementById('challenge-input').value = '';
+  document.getElementById('challenge-response').classList.remove('show');
+  document.getElementById('challenge-submit').disabled = true;
+  document.getElementById('to-scene3-row').style.display = 'none';
+  document.getElementById('quiz-continue-row').style.display = 'none';
+  document.getElementById('game-title').textContent = 'How the Morning Went';
+  document.getElementById('to-scene3-btn').disabled = false;
+  renderDialogue('NARRATOR', '😴', "Everyone's still asleep. Press Start Morning whenever you're ready.");
+  renderControls();
+  showSection('sec-search');
+}
+function pauseMission(){
+  if (state.status !== 'playing') return;
+  state.status = 'paused';
+  document.getElementById('overlay-pause').classList.add('active');
+  renderControls();
+}
+function resumeMission(){
+  if (state.status !== 'paused') return;
+  state.status = 'playing';
+  document.getElementById('overlay-pause').classList.remove('active');
+  renderControls();
+  resumeWaiters();
+}
+function resetMission(){ initLevel(); }
+function quitToBriefing(){
+  state.runId++; resumeWaiters();
+  state.status = 'idle';
+  document.getElementById('overlay-pause').classList.remove('active');
+  showSection('sec-briefing');
+}
+function changeSpeed(delta){
+  const next = state.speedIndex + delta;
+  if (next < 0 || next >= SPEED_STEPS.length) return;
+  state.speedIndex = next;
+  document.getElementById('speed-value').textContent = SPEED_STEPS[next].label;
+  renderControls();
+}
+
+/* =========================================================================
+   MORNING #1: everyone acts independently
+   ========================================================================= */
+async function playMorningUncoordinated(myRun){
+  state.status = 'playing'; renderControls();
+  try {
+    for (const f of FRIENDS){
+      setRowActive(f.id, true);
+      setStatus(f.id, '🥱 Wakes up and wants tea...');
+      renderDialogue(f.name, f.icon, 'Mmm, tea sounds good right about now.');
+      log(`🥱 ${f.name} wakes up and wants tea.`);
+      await delay(600, myRun);
+
+      moveMarker(f.id, 'fridge', true);
+      setStatus(f.id, '🚪 Checking the fridge...');
+      log(`🚪 ${f.name} checks the fridge.`);
+      await delay(700, myRun);
+      moveMarker(f.id, 'fridge', false);
+      openFridgeIcon();
+
+      setStatus(f.id, '😟 No milk!');
+      renderDialogue(f.name, f.icon, 'No milk? Guess I\'ll grab some.');
+      log(`😟 ${f.name}: "No milk."`, 'nomilk');
+      await delay(600, myRun);
+
+      moveMarker(f.id, 'shop', true);
+      setStatus(f.id, '🏃 Heading to the shop...');
+      log(`🏃 ${f.name} heads to the shop to buy milk.`, 'trip');
+      state.trips++; renderHUD();
+      if (state.trips === 1) unlockAchievement('first-trip', 'Someone\'s off to the shop!');
+      await delay(850, myRun);
+      setRowActive(f.id, false);
+    }
+    for (const f of FRIENDS){
+      setRowActive(f.id, true);
+      moveMarker(f.id, 'fridge', false);
+      setStatus(f.id, '🥛 Back with milk!');
+      renderDialogue(f.name, f.icon, 'Got the milk! Tea time.');
+      log(`🥛 ${f.name} returns proudly carrying milk.`, 'buy');
+      addMilkCarton();
+      await delay(480, myRun);
+      setRowActive(f.id, false);
+    }
+    await delay(300, myRun);
+    document.getElementById('tally-1').classList.add('show');
+    document.getElementById('tally-1').scrollIntoView({ behavior:'smooth', block:'center' });
+    state.status = 'idle'; renderControls();
+  } catch(e){
+    if (!e || !e.aborted) throw e;
+    // a restart happened mid-animation, initLevel() has already reset everything, just stop here.
+  }
+}
+
+/* =========================================================================
+   MORNING #2: the whiteboard coordinates everyone
+   ========================================================================= */
+async function playMorningCoordinated(myRun){
+  state.status = 'playing'; renderControls();
+  document.getElementById('whiteboard').classList.add('show');
+
+  const aman = FRIENDS[0];
+  const others = FRIENDS.slice(1);
+
+  try {
+    // Aman wakes first, finds no milk, claims the whiteboard, and heads out.
+    setRowActive(aman.id, true);
+    setStatus(aman.id, '🥱 Wakes up and wants tea...');
+    renderDialogue(aman.name, aman.icon, 'Tea time! Let me check the fridge.');
+    log(`🥱 ${aman.name} wakes up and wants tea.`);
+    await delay(550, myRun);
+
+    moveMarker(aman.id, 'fridge', true);
+    setStatus(aman.id, '🚪 Checking the fridge...');
+    log(`🚪 ${aman.name} checks the fridge.`);
+    await delay(650, myRun);
+    moveMarker(aman.id, 'fridge', false);
+    openFridgeIcon();
+
+    setStatus(aman.id, '😟 No milk. Let me write that down.');
+    renderDialogue(aman.name, aman.icon, 'No milk. I\'ll put my name on the whiteboard.');
+    log(`😟 ${aman.name}: "No milk." Writes a note on the whiteboard.`, 'board');
+    const board = document.getElementById('whiteboard');
+    document.getElementById('wb-text').textContent = 'Buying Milk, Aman';
+    board.classList.add('flash'); setTimeout(() => board.classList.remove('flash'), 600);
+    await delay(700, myRun);
+
+    moveMarker(aman.id, 'shop', true);
+    setStatus(aman.id, '🏃 Heading to the shop...');
+    log(`🏃 ${aman.name} heads to the shop.`, 'trip');
+    state.trips++; renderHUD();
+    await delay(500, myRun);
+    moveMarker(aman.id, 'shop', false);
+    setStatus(aman.id, '🛒 Still at the shop...');
+    setRowActive(aman.id, false);
+
+    // While Aman is genuinely out, everyone else wakes up, checks the whiteboard, and stays home.
+    for (const f of others){
+      setRowActive(f.id, true);
+      setStatus(f.id, '🥱 Wakes up and wants tea...');
+      renderDialogue(f.name, f.icon, 'Tea time! Let me check the fridge.');
+      log(`🥱 ${f.name} wakes up and wants tea.`);
+      await delay(550, myRun);
+
+      moveMarker(f.id, 'fridge', true);
+      setStatus(f.id, '🚪 Checking the fridge...');
+      log(`🚪 ${f.name} checks the fridge.`);
+      await delay(650, myRun);
+      moveMarker(f.id, 'fridge', false);
+      openFridgeIcon();
+
+      setStatus(f.id, '👀 Checking the whiteboard...');
+      renderDialogue(f.name, f.icon, 'Let me check the whiteboard first.');
+      log(`👀 ${f.name} glances at the whiteboard.`);
+      await delay(650, myRun);
+      setStatus(f.id, `😊 Oh, ${aman.name}'s already on it! Staying home.`);
+      renderDialogue(f.name, f.icon, 'Aman\'s already on it. I\'ll stay home.');
+      log(`😊 ${f.name}: "Oh, ${aman.name} is already buying milk." Stays home.`, 'skip');
+      await delay(600, myRun);
+      setRowActive(f.id, false);
+    }
+
+    // Only now, after everyone else has checked and stayed home, does Aman return.
+    setRowActive(aman.id, true);
+    moveMarker(aman.id, 'fridge', true);
+    setStatus(aman.id, '🚶 Heading back with the milk...');
+    renderDialogue(aman.name, aman.icon, 'Got the milk! Heading home now.');
+    await delay(700, myRun);
+    moveMarker(aman.id, 'fridge', false);
+    setStatus(aman.id, '🥛 Back with milk!');
+    renderDialogue(aman.name, aman.icon, 'Home with the milk! Wiping the note off.');
+    log(`🥛 ${aman.name} returns with milk, erases the note.`, 'buy');
+    addMilkCarton();
+    await delay(450, myRun);
+    setRowActive(aman.id, false);
+
+    await delay(300, myRun);
+    document.getElementById('tally-2').classList.add('show');
+    document.getElementById('tally-2').scrollIntoView({ behavior:'smooth', block:'center' });
+    if (state.milkCount === 1) unlockAchievement('coordinated', 'Nice! Only one trip to the shop.');
+    fireConfetti();
+    state.status = 'idle'; renderControls();
+  } catch(e){
+    if (!e || !e.aborted) throw e;
+    // a restart happened mid-animation, initLevel() has already reset everything, just stop here.
+  }
+}
+
+/* =========================================================================
+   REFLECTION QUIZ — "who made the mistake?"
+   ========================================================================= */
+const QUIZ_NAMES = ['Aman','Ravi','Neha','Priya','Nobody'];
+function buildQuizChoices(){
+  const wrap = document.getElementById('quiz-choices');
+  wrap.innerHTML = '';
+  QUIZ_NAMES.forEach(name => {
+    const b = document.createElement('button');
+    b.textContent = name;
+    b.addEventListener('click', () => onQuizPick(name, b));
+    wrap.appendChild(b);
+  });
+}
+function onQuizPick(name, btnEl){
+  const fb = document.getElementById('quiz-feedback');
+  Array.from(document.getElementById('quiz-choices').children).forEach(b => b.classList.remove('picked-wrong','picked-right'));
+  if (name === 'Nobody'){
+    btnEl.classList.add('picked-right');
+    fb.textContent = "Right. Each friend made a sensible choice with what they knew. The real problem was that nobody knew someone else was already going.";
+    document.getElementById('quiz-continue-row').style.display = 'flex';
+  } else {
+    btnEl.classList.add('picked-wrong');
+    fb.textContent = `Not really. ${name} saw an empty fridge and went to buy milk, which is a fair thing to do. Try again.`;
+  }
+}
+
+/* =========================================================================
+   CHALLENGE — zero-friction free text, any idea accepted
+   ========================================================================= */
+document.querySelectorAll('.idea-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const ta = document.getElementById('challenge-input');
+    ta.value = chip.dataset.idea;
+    ta.dispatchEvent(new Event('input'));
+    ta.focus();
+  });
+});
+document.getElementById('challenge-input').addEventListener('input', (e) => {
+  document.getElementById('challenge-submit').disabled = e.target.value.trim().length === 0;
+});
+document.getElementById('challenge-submit').addEventListener('click', () => {
+  const resp = document.getElementById('challenge-response');
+  resp.textContent = "🎉 Good idea! The flat tried something similar: a small whiteboard next to the fridge. Let's see what happens when everyone can see it.";
+  resp.classList.add('show');
+  document.getElementById('to-scene3-row').style.display = 'flex';
+  document.getElementById('challenge-submit').disabled = true;
+});
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click', initLevel);
+document.getElementById('btn-case-back').addEventListener('click', quitToBriefing);
+
+document.getElementById('start-morning-btn').addEventListener('click', async () => {
+  document.getElementById('game-sub').innerHTML = 'Keep watching. See if you notice a pattern.';
+  const myRun = state.runId;
+  await playMorningUncoordinated(myRun);
+});
+document.getElementById('to-quiz-btn').addEventListener('click', () => {
+  buildQuizChoices();
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-continue-row').style.display = 'none';
+  document.getElementById('quiz-panel').classList.add('show');
+  document.getElementById('quiz-panel').scrollIntoView({ behavior:'smooth', block:'center' });
+});
+document.getElementById('to-challenge-btn').addEventListener('click', () => {
+  document.getElementById('challenge-panel').classList.add('show');
+  document.getElementById('challenge-panel').scrollIntoView({ behavior:'smooth', block:'center' });
+});
+document.getElementById('to-scene3-btn').addEventListener('click', async () => {
+  document.getElementById('to-scene3-btn').disabled = true;
+  document.getElementById('game-title').textContent = 'The Morning With a Whiteboard';
+  const myRun = state.runId;
+  state.run = 2; renderHUD();
+  resetFridgeDisplay();
+  document.querySelector('.kitchen').scrollIntoView({ behavior:'smooth', block:'start' });
+  await delay(300, myRun);
+  await playMorningCoordinated(myRun);
+});
+document.getElementById('to-complete-btn').addEventListener('click', () => {
+  document.getElementById('complete-milk').textContent = state.milkCount;
+  showSection('sec-complete');
+});
+
+document.getElementById('btn-pause').addEventListener('click', pauseMission);
+document.getElementById('btn-resume').addEventListener('click', resumeMission);
+document.getElementById('btn-reset').addEventListener('click', resetMission);
+document.getElementById('speed-down').addEventListener('click', () => changeSpeed(-1));
+document.getElementById('speed-up').addEventListener('click', () => changeSpeed(1));
+
+document.getElementById('btn-overlay-resume').addEventListener('click', resumeMission);
+document.getElementById('btn-overlay-quit').addEventListener('click', quitToBriefing);
+
+document.getElementById('btn-complete-replay').addEventListener('click', initLevel);
+document.getElementById('btn-complete-continue').addEventListener('click', () => showSection('sec-notes'));
+
+document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-complete'));
+document.getElementById('btn-notes-continue').addEventListener('click', () => showSection('sec-method'));
+
+document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click', () => showSection('sec-cases'));
+
+document.getElementById('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
+document.getElementById('btn-cases-finish').addEventListener('click', () => {
+  showSection('sec-puzzle');
+});
+// Home button: jumps straight to the Home page.
+// If this lesson lives inside a bigger site, put that site's home URL in HOME_URL.
+// While it's empty, Home takes the learner to the first screen of this lesson.
+const HOME_URL = '';
+document.getElementById('btn-cases-home').addEventListener('click', () => {
+  if (HOME_URL) { window.location.href = HOME_URL; }
+  else { showSection('sec-puzzle'); }
+});
+
+/* ---------------- initial paint ---------------- */
+renderCaseStory();
+resetFridgeDisplay();
+
+})();
+</script>
+</body>
+</html>
