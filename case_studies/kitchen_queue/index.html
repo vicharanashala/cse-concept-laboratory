@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-9M9C5T1Y9R');</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitchen Rush: Cloud Kitchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-1:#FDF1E9;--bg-2:#EDF3FA;--bg-3:#E4EEFA;--primary:#4A9BD1;--primary-dark:#2B6FA3;--primary-deep:#1B4A66;--amber:#EA8C36;--amber-dark:#C96F1F;--danger:#D9714F;--success:#4B7A4A;--ink:#1F2E37;--muted:#54666D;--faint:#93A5AB;--card-bg:#fff;--glass-border:#D9E5F2;--shadow-card:rgba(23,50,77,0.12);--shadow-btn:rgba(43,111,163,0.28);--radius-lg:18px}
+*,*::before,*::after{box-sizing:border-box}html,body{height:100%}body{margin:0;min-height:100vh;font-family:'Inter',sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 40%,var(--bg-2) 100%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}p{line-height:1.65;color:var(--muted);margin:0}button{font-family:'Poppins',sans-serif;cursor:pointer}
+.wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px}
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
+.step-circle{width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;font-family:'Poppins',sans-serif}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins',sans-serif}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1}
+.step-item:first-child .step-line{display:none}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+.step-item.done .step-line{background:var(--primary-dark)}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25)}
+.step-item.active .step-label{color:var(--primary-dark)}
+.section{display:none}.section.active-view{display:block;animation:sectionFade .35s ease}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins',sans-serif}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted)}
+.hero{text-align:center}.hero h1{font-size:clamp(26px,4.4vw,40px);margin:0 0 12px}
+.card{background:transparent;border:none;padding:6px 0 0}
+.btn{border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-dark));box-shadow:0 12px 24px -10px var(--shadow-btn);transition:.15s}
+.btn:hover:not(:disabled){transform:translateY(-1px)} .btn:disabled{opacity:.4}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px}
+.btn.small{padding:9px 18px;font-size:13px}
+.btn.on{box-shadow:0 0 0 3px var(--primary-deep);background:rgba(74,155,209,.12)}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0}.problem-card p{margin:0 0 14px;font-size:15.5px}.problem-card b{color:var(--primary-deep)}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.rules-list li::before{content:"✕";color:var(--danger);font-weight:700}
+.rules-list li.ok::before{content:"✓";color:var(--success)}
+.game-shell{width:100%;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.kitchen{border:1.5px solid var(--glass-border);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(23,50,77,.06)}
+.kitchen-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F3F8FD;border-bottom:1px solid var(--glass-border);font-weight:700;font-size:13px;color:var(--primary-deep)}
+.kitchen-head span.sub{font-weight:600;font-size:11px;color:var(--muted)}
+.rail{display:flex;align-items:center;gap:10px;padding:18px;min-height:130px;overflow-x:auto;background:linear-gradient(180deg,#fff 0%,#F3F8FD 100%)}
+.ticket{min-width:96px;padding:14px 10px;border-radius:14px;background:#fff;border:1.5px solid var(--glass-border);text-align:center;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);position:relative}
+.ticket.front{border-color:var(--amber);box-shadow:0 0 0 3px rgba(234,140,54,.2);transform:scale(1.04)}
+.ticket .emoji{font-size:22px} .ticket .name{font-weight:700;font-size:12px;color:var(--ink);margin-top:6px} .ticket .time{font-size:10px;color:var(--faint);margin-top:2px}
+.ticket .badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:20px}
+.badge.front-badge{background:var(--amber);color:#fff} .badge.rear-badge{background:var(--primary-dark);color:#fff}
+.arrow{color:var(--faint);font-size:18px;flex-shrink:0}
+.stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.stat{font-size:12.5px;font-weight:700;color:var(--muted)} .stat strong{color:var(--ink)}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.qgrid{grid-template-columns:1fr}}
+.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center}
+.kl-grid{display:flex;flex-direction:column;gap:14px}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border)}
+.kl-icon{font-size:20px;flex-shrink:0}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);margin-bottom:18px}
+.concept-blank h4{font-size:13px;color:var(--primary);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.concept-blank h4:first-child{margin-top:0}
+.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:14px;padding:18px;text-align:center}
+.compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.pulse{animation:ctaPulse 1.8s ease-in-out infinite}
+@keyframes ctaPulse{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(74,155,209,.45)}50%{transform:translateY(-2px);box-shadow:0 0 0 10px rgba(74,155,209,0)}}
+.modal-overlay{position:fixed;inset:0;background:rgba(31,46,55,.5);display:none;align-items:center;justify-content:center;z-index:95;padding:20px}.modal-overlay.show{display:flex}.modal-box{background:#fff;border:1px solid var(--glass-border);border-radius:18px;padding:30px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(23,50,77,.22)}.modal-eyebrow{font-family:'Poppins',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-dark);margin-bottom:12px}.modal-box p{font-size:14.5px;color:var(--muted);margin:0 0 8px}.modal-punch{font-weight:700;color:var(--ink)}.modal-actions{display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap}.btn-danger{background:linear-gradient(135deg,#E39A7D,var(--danger));color:#fff;box-shadow:0 6px 18px rgba(217,113,79,.3)}.btn-danger:hover{transform:translateY(-1px)}
+code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rgba(74,155,209,.08);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="stepper" id="stepper">
+<div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Puzzle</span></div>
+<div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Briefing</span></div>
+<div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Kitchen</span></div>
+<div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Case Notes</span></div>
+<div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Method</span></div>
+<div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">New Cases</span></div>
+</div>
+
+<section class="section active-view" id="sec-puzzle">
+<div class="hero">
+<span class="eyebrow">Chapter 1 · The Puzzle</span>
+<h1>Who gets their food first?</h1>
+</div>
+<div class="problem-card">
+<p>It's 8pm at a cloud kitchen. Orders flood in: <b>Biryani → Momos → Pizza → Burger</b>. The kitchen can cook one order at a time.</p>
+<p>If the <b>last order</b> is cooked first, the family waiting for Biryani (first order) waits longest: cold food, 1-star rating.</p>
+<p>When does <em>first come, first served</em> keep everyone happy, and why does any other order feel unfair?</p>
+</div>
+<div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button></div>
+</section>
+
+<section class="section" id="sec-briefing">
+<div class="hero">
+<span class="eyebrow">Chapter 2 · The Briefing</span>
+<h1>Kitchen Rush</h1>
+</div>
+<div class="card" style="text-align:center;max-width:640px;margin:0 auto">
+<p style="margin-bottom:14px">Orders form a <b>line</b>, you can only serve the <b>front</b>.</p>
+<ul class="rules-list">
+<li>No cutting in, you can't lift an order from the middle.</li>
+<li>VIP line is not allowed.</li>
+<li class="ok">New order → joins the back (right)</li>
+<li class="ok">Serve → take from the front (left) only</li>
+</ul>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn" id="btn-briefing-start">Enter the Kitchen ▶</button></div>
+</section>
+
+<section class="section" id="sec-search">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 · The Kitchen</span>
+<h2 class="section-title">The Order Line</h2>
+<p class="section-sub">New orders join the back. Serve always from the front: first come, first served.</p>
+<div class="game-shell">
+<div style="display:flex;gap:12px;justify-content:center" class="stats">
+<span class="stat">In queue: <strong id="q-size">0</strong></span><span class="stat">Served: <strong id="q-ops">0</strong></span><span class="stat">Front: <strong id="q-front">·</strong></span><span class="stat">Rear: <strong id="q-rear">·</strong></span><span class="stat">Mode: <strong id="q-mode">Manual</strong></span>
+</div>
+<div class="kitchen">
+<div class="kitchen-head"><span>🍳 Kitchen Rail, left = next to cook</span><span class="sub" id="kitchen-sub">Empty, new order will be rear</span></div>
+<div class="rail" id="rail"><span style="color:var(--faint);margin:auto">No orders, click + New Order</span></div>
+</div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+<button class="btn ghost small" id="btn-auto">▶ Auto Rush</button>
+<button class="btn ghost small" id="btn-enq">+ New Order</button>
+<button class="btn ghost small" id="btn-deq">✓ Serve Front</button>
+<button class="btn ghost small" id="btn-reset">Reset</button>
+<button class="btn small" id="btn-challenge" style="background:var(--amber);color:#fff;border-color:var(--amber)">🎯 Challenge: Keep ★★★★★</button>
+<button class="btn ghost small" id="btn-cheat" title="Try serving the last order first, watch what happens">⚠️ Cheat: Skip the Line</button>
+</div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
+<span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">Speed</span>
+<select id="speed-select" title="Playback speed" style="padding:7px 10px;border:1.5px solid var(--primary);border-radius:8px;background:var(--card-bg);color:var(--primary-dark);font-weight:800;font-size:12.5px;cursor:pointer">
+<option value="0.25">0.25x</option>
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option value="1" selected>1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="1.75">1.75x</option>
+<option value="2">2x</option>
+</select>
+</div>
+<div id="challenge-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
+<span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="challenge-mission" style="color:var(--ink)">Add 4 orders, then <b>serve from the front 4 times</b> in order to keep <span id="stars">★★★★★</span></span> <span id="challenge-status" style="font-weight:700;color:var(--muted)">· not started</span>
+</div>
+<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Start: press + New Order to put the first order at the back of the line.</p>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-search-back">⬅ Back to Briefing</button><button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button></div>
+</section>
+
+<section class="section" id="sec-notes">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 · Case Notes</span>
+<h2 class="section-title">What did you notice?</h2>
+<p class="section-sub">No single right answer, just what you saw happen.</p>
+<div class="card"><div class="qgrid">
+<div class="qcard"><span class="q-num">01 · Cold Biryani</span><span class="q-text">Biryani came at 8:00, Burger at 8:05. If Burger is served first, how long does Biryani keep waiting?</span></div>
+<div class="qcard"><span class="q-num">02 · Serve twice</span><span class="q-text">Orders: Biryani, Momos, Pizza, Burger. You serve two. Who is still waiting, and in what order?</span></div>
+<div class="qcard"><span class="q-num">03 · Fair or not</span><span class="q-text">Serving the newest order before the oldest, how does that feel for the first customer? Which way feels fair?</span></div>
+<div class="qcard"><span class="q-num">04 · Same everywhere</span><span class="q-text">Where else should the first to arrive be served first, a counter line, a bus stand? Why do people dislike queue-jumping?</span></div>
+<div class="qcard"><span class="q-num">05 · Watch, don't touch</span><span class="q-text">You glance at the front order but don't serve it. Why does looking at it not count as serving it?</span></div>
+<div class="qcard"><span class="q-num">06 · The printer queue</span><span class="q-text">You send a print job, then a friend sends theirs. Should the printer finish yours first (newest) or theirs first (oldest)? Which feels fair?</span></div>
+<div class="qcard"><span class="q-num">07 · Milk shelf</span><span class="q-text">Old milk must leave the shelf before new milk so it doesn't spoil. Is that the same rule as your kitchen line, or the opposite?</span></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
+</section>
+
+<section class="section" id="sec-method">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 · The Method</span>
+<h2 class="section-title">How it really worked</h2>
+<p class="section-sub">You just felt fairness. Here's the name for it.</p>
+<div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🚶‍♂️🚶‍♀️</div><h2>The Queue (FIFO)</h2></div>
+<div class="learning-flow">
+<div class="concept-blank">
+<h4>Definition</h4><p><strong>FIFO: First In, First Out.</strong> Like a line, first to arrive is first to be served. No cutting.</p>
+<h4>Mechanism</h4><p><code>enqueue(x)</code>: new order at rear, <code>dequeue()</code>: serve from front, <code>peek()</code>: see front. All <code>O(1)</code>. Rear in, front out: the middle is never touched.</p>
+<h4>Vocabulary</h4><p><code>front</code>: next to serve, <code>rear</code>: last arrived, <code>FIFO</code>, <code>underflow</code>: serve when empty.</p>
+</div>
+<div class="compare-cards" style="margin-top:18px">
+<div class="compare-card"><span class="compare-title">If it were a Stack (LIFO)</span><span class="compare-sub">Last order first: Biryani waits longest, gets cold</span></div>
+<div class="compare-card"><span class="compare-title">Because it’s a Queue (FIFO)</span><span class="compare-sub">First order first: everyone waits fairly, hot food</span></div>
+</div>
+<div class="key-learnings"><h3>🔑 Key Learnings</h3><div class="kl-grid">
+<div class="kl-item"><span class="kl-icon">🚶‍♂️</span><div><b>The Shape</b><p>A line with two ends, you enter at rear and leave at front.</p></div></div>
+<div class="kl-item"><span class="kl-icon">⚖️</span><div><b>Fairness</b><p>Arrival order = serve order. No starvation.</p></div></div>
+<div class="kl-item"><span class="kl-icon">🌍</span><div><b>Where You'll See It</b><p>Kitchen orders, printer jobs, network packets, grocery milk shelves, checkout lines, all serve the oldest first. Heaps of coal and Undo buttons serve the newest.</p></div></div>
+</div></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn" id="btn-method-continue">Continue to New Cases ➜</button></div>
+</section>
+
+<section class="section" id="sec-cases">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Cases</span>
+<h2 class="section-title">Try on your own</h2>
+<p class="section-sub">Work it out in your head.</p>
+<div class="card"><div class="qgrid">
+<div class="qcard"><span class="q-num">01 · Predict the queue</span><span class="q-text">Predict: enqueue Biryani, enqueue Momos, dequeue, enqueue Pizza, dequeue, enqueue Burger. Who remains in the queue, and who is at the front?</span></div>
+<div class="qcard"><span class="q-num">02 · Stack at the printer</span><span class="q-text">A printer queue serves jobs oldest-first. Would a Stack (LIFO) work? Trace push Job A, push Job B, pop, push Job C, pop: which job prints out of order and which starves?</span></div>
+<div class="qcard"><span class="q-num">03 · Empty dequeue</span><span class="q-text">The queue is empty and a dequeue (Serve) is called. What must your code do instead of serving, and what is that case called?</span></div>
+<div class="qcard"><span class="q-num">04 · Two riders</span><span class="q-text">Two riders share one queue. R1 drops Biryani then Pizza, R2 drops Momos then Burger, interleaved as they arrive. Predict the exact serve order, and confirm each rider's pair leaves oldest-first.</span></div>
+<div class="qcard"><span class="q-num">05 · Burger exactly third</span><span class="q-text">Orders arrive: Biryani, Momos, Pizza, Burger. Design the enqueue/dequeue sequence so Burger is served exactly third. You may serve between enqueues: how many dequeues run before Burger leaves?</span></div>
+<div class="qcard"><span class="q-num">06 · Newest-first router</span><span class="q-text">Packets P1, P2, P3 arrive in order. If a router processed the newest first, trace the serve order and explain what breaks for P1.</span></div>
+<div class="qcard"><span class="q-num">07 · Coal heap</span><span class="q-text">A truck dumps coal onto a heap, then a second truck dumps on top. Is the shovel grabbing from the front or the top, and which structure does the heap match?</span></div>
+<div class="qcard"><span class="q-num">08 · Milk shelf vs coal heap</span><span class="q-text">Prices rise, so newest-sold-first lowers tax while oldest-sold-first raises it. Which selling rule fits the milk shelf (FIFO) and which fits the coal heap (LIFO)? Why must milk clear the oldest first?</span></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
+</section>
+
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="modal-back-warn">
+<div class="modal-box">
+<div class="modal-eyebrow">Wait:</div>
+<p>Going back will reset your current progress on this page.</p>
+<p class="modal-punch">Do you want to continue?</p>
+<div class="modal-actions">
+<button class="btn ghost" id="modal-back-cancel">Stay Here</button>
+<button class="btn btn-danger" id="modal-back-confirm">Go Back</button>
+</div>
+</div>
+</div>
+<script>
+(function(){
+"use strict";
+const STEP_FOR={'sec-puzzle':1,'sec-briefing':2,'sec-search':3,'sec-notes':4,'sec-method':5,'sec-cases':6};
+function setStep(n){for(let i=1;i<=6;i++){const el=document.getElementById('step-'+i);el.classList.remove('active','done');if(i<n)el.classList.add('done');if(i===n)el.classList.add('active');}}
+function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-view'));document.getElementById(id).classList.add('active-view');setStep(STEP_FOR[id]||1);window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click',()=>{showSection('sec-search');document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line.';});
+document.getElementById('btn-search-back').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.add('show');});
+document.getElementById('modal-back-cancel').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');});
+document.getElementById('modal-back-confirm').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');if(mode==='auto')stopAuto();resetQ();showSection('sec-briefing');});
+document.getElementById('modal-back-warn').addEventListener('click',(e)=>{if(e.target===document.getElementById('modal-back-warn'))document.getElementById('modal-back-warn').classList.remove('show');});
+document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
+document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
+document.getElementById('btn-method-back').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click',()=>showSection('sec-cases'));
+document.getElementById('btn-cases-back').addEventListener('click',()=>showSection('sec-method'));
+document.getElementById('btn-cases-home').addEventListener('click',()=>window.location.href='../../');
+document.getElementById('btn-cases-finish').addEventListener('click',()=>{resetQ();showSection('sec-puzzle');});
+var orders=[
+{emoji:'🍛',name:'Biryani',time:'8:00'},
+{emoji:'🥟',name:'Momos',time:'8:02'},
+{emoji:'🍕',name:'Pizza',time:'8:03'},
+{emoji:'🍔',name:'Burger',time:'8:05'},
+{emoji:'🍜',name:'Noodles',time:'8:07'}
+];
+var speed=1;var queue=[],ops=0,idx=0,mode='manual',autoTimer=null,autoStepIdx=0;
+var rail=document.getElementById('rail');
+function renderQ(){
+document.getElementById('q-size').textContent=queue.length;
+document.getElementById('q-ops').textContent=ops;
+document.getElementById('q-front').textContent=queue.length?queue[0].name:'·';
+document.getElementById('q-rear').textContent=queue.length?queue[queue.length-1].name:'·';
+document.getElementById('kitchen-sub').textContent=queue.length?('Front: '+queue[0].name+' • Rear: '+queue[queue.length-1].name):'Empty, new order will be rear';
+rail.innerHTML='';
+if(!queue.length){rail.innerHTML='<span style="color:var(--faint);margin:auto">No orders, click + New Order</span>';document.getElementById('btn-enq').classList.toggle('pulse',!challengeOn&&mode!=='auto');return;}
+queue.forEach(function(o,i){
+var d=document.createElement('div');d.className='ticket'+(i===0?' front':'');
+d.innerHTML='<span class="badge '+(i===0?'front-badge':(i===queue.length-1?'rear-badge':''))+'" style="'+(i!==0&&i!==queue.length-1?'display:none':'')+'">'+(i===0?'FRONT':(i===queue.length-1?'REAR':''))+'</span><div class="emoji">'+o.emoji+'</div><div class="name">'+o.name+'</div><div class="time">'+o.time+'</div>';
+rail.appendChild(d);
+if(i<queue.length-1){var a=document.createElement('span');a.className='arrow';a.textContent='→';rail.appendChild(a);}
+});
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+var challengeOn=false, challengeDone=false, stars=5, challengeNeedEnq=4, challengeNeedDeq=4;
+function updateStars(n){stars=n; document.getElementById('stars').textContent=n>0?'★'.repeat(n)+'☆'.repeat(5-n):'☆☆☆☆☆'; document.getElementById('stars').style.color=n>=4?'var(--success)':n>=2?'var(--amber-dark)':'var(--danger)';}
+function checkChallenge(isCheat){
+if(!challengeOn || challengeDone) return;
+var s=document.getElementById('challenge-status');
+if(isCheat){ updateStars(Math.max(1,stars-2)); s.textContent='✗ Skipping the line! Biryani is getting cold → ★★☆☆☆'; s.style.color='var(--danger)'; document.getElementById('game-hint').textContent='😡 Customer angry, Biryani waited longest, got cold! First come, first served was broken.'; toast('😡 1★, that was unfair!'); return;}
+if(queue.length===challengeNeedEnq - challengeNeedDeq && idx===challengeNeedEnq && stars===5 && ops===challengeNeedEnq + challengeNeedDeq){
+  s.textContent='✓ Perfect!'; s.style.color='var(--success)'; challengeDone=true; toast('🎉 5★, fairness kept!'); document.getElementById('game-hint').textContent='🎉 5★, '+challengeNeedEnq+' in, '+challengeNeedDeq+' served first come, first served = fair! Next Challenge →'; document.getElementById('btn-challenge').textContent='🔁 Next Challenge'; document.getElementById('toast').style.background='var(--success)'; setTimeout(()=>document.getElementById('toast').style.background='#22496B',1800);
+  for(var i=0;i<12;i++){ (function(k){ setTimeout(function(){ var e=document.createElement('div'); e.textContent=['🎉','✨','🎊'][k%3]; e.style.position='fixed'; e.style.left=(15+Math.random()*70)+'%'; e.style.top='-20px'; e.style.fontSize='20px'; e.style.zIndex='99'; e.style.pointerEvents='none'; e.style.transition='transform 1.1s ease-out, opacity 1.1s'; document.body.appendChild(e); setTimeout(function(){e.style.transform='translateY(85vh) rotate('+(Math.random()*360)+'deg)'; e.style.opacity='0';},20); setTimeout(function(){e.remove();},1200);}, k*60);})(i); }
+}
+}
+document.getElementById('btn-challenge').addEventListener('click',function(){
+resetQ(); challengeNeedEnq = 4 + Math.floor(Math.random()*2); // 4 or 5
+challengeNeedDeq = 2 + Math.floor(Math.random()*2); // 2 or 3
+if(challengeNeedDeq >= challengeNeedEnq) challengeNeedDeq = challengeNeedEnq -1;
+challengeOn=true; challengeDone=false; document.getElementById('challenge-banner').style.display='block'; updateStars(5);
+document.getElementById('challenge-mission').innerHTML='Add '+challengeNeedEnq+' orders, then <b>serve from the front '+challengeNeedDeq+' times</b> in order to keep <span id="stars">★★★★★</span>';
+// re-acquire stars element after innerHTML rewrite
+updateStars(5);
+document.getElementById('challenge-status').textContent='· add '+challengeNeedEnq+' orders, serve '+challengeNeedDeq+' from the front';
+document.getElementById('challenge-status').style.color='var(--muted)';
+document.getElementById('game-hint').textContent='Challenge ON, '+challengeNeedEnq+' orders in, '+challengeNeedDeq+' serves from the front to keep 5★. Try Cheat to feel why skipping the line fails.';
+document.getElementById('btn-challenge').textContent='🎯 Challenge: '+challengeNeedDeq+' serves';
+toast('🎯 Add '+challengeNeedEnq+' orders → serve '+challengeNeedDeq+' from the front');
+});
+document.getElementById('btn-cheat').addEventListener('click',function(){
+if(!queue.length){toast('Empty, nothing to cheat');return;}
+var o=queue.pop(); ops++; renderQ(); updateStars(Math.max(1,stars-2));
+document.getElementById('game-hint').textContent='Cheated: served '+o.name+' from the back of the line, Biryani is still waiting, getting cold!';
+checkChallenge(true);
+});
+function doEnq(){var o=orders[idx%orders.length];idx++;queue.push(o);ops++;renderQ();document.getElementById('game-hint').textContent=o.name+' joins the back of the line. Front is still '+queue[0].name+'.'; if(challengeOn && queue.length===4 && idx===4) document.getElementById('challenge-status').textContent='· now serve from the front 4×';}
+function doDeq(){if(!queue.length){toast('No orders to serve');return;}var o=queue.shift();ops++;renderQ();document.getElementById('game-hint').textContent='Served '+o.name+' from the front: first come, first served.'; checkChallenge(false);}
+function resetQ(){queue=[];ops=0;idx=0; challengeOn=false; challengeDone=false; updateStars(5); document.getElementById('challenge-banner').style.display='none'; renderQ();document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line. Serve always from the front: first come, first served.';}
+document.getElementById('btn-enq').addEventListener('click',doEnq);
+document.getElementById('btn-deq').addEventListener('click',doDeq);
+document.getElementById('btn-reset').addEventListener('click',resetQ);
+function startAuto(){
+mode='auto';autoStepIdx=0;
+document.getElementById('btn-auto').textContent='⏸ Stop Auto';
+document.getElementById('btn-enq').disabled=true;
+document.getElementById('btn-deq').disabled=true;
+document.getElementById('btn-cheat').disabled=true;
+document.getElementById('btn-challenge').disabled=true;
+document.getElementById('q-mode').textContent='Automatic';
+document.getElementById('game-hint').textContent='Automatic Mode: watch orders served first come, first served. Press ⏸ Stop Auto to take over.';
+resetQ();
+autoTimer=setInterval(autoTick,1200/speed);
+}
+function stopAuto(){
+clearInterval(autoTimer);mode='manual';
+document.getElementById('btn-auto').textContent='▶ Auto Mode';
+document.getElementById('btn-enq').disabled=false;
+document.getElementById('btn-deq').disabled=false;
+document.getElementById('btn-cheat').disabled=false;
+document.getElementById('btn-challenge').disabled=false;
+document.getElementById('q-mode').textContent='Manual';
+document.getElementById('game-hint').textContent='Manual Mode: press + New Order and ✓ Serve Front at your own pace.';
+renderQ();
+}
+function autoTick(){
+if(mode!=='auto')return;
+if(autoStepIdx===0)resetQ();
+if(autoStepIdx<4){var o=orders[autoStepIdx%orders.length];queue.push(o);ops++;document.getElementById('game-hint').textContent='Auto · + '+o.name+' joins the back of the line.';}
+else{var o2=queue.shift();ops++;document.getElementById('game-hint').textContent='Auto · served '+o2.name+': first come, first served.';}
+renderQ();
+autoStepIdx=(autoStepIdx+1)%8;
+if(autoStepIdx===0){stopAuto();return;}
+}
+document.getElementById('btn-auto').addEventListener('click',function(){if(mode==='auto'){stopAuto();}else{startAuto();}});
+function setSpeed(m){speed=Math.round(m*100)/100;if(mode==='auto'){clearInterval(autoTimer);autoTimer=setInterval(autoTick,1200/speed);}}
+document.getElementById('speed-select').addEventListener('change',function(){setSpeed(parseFloat(this.value));});
+document.getElementById('speed-select').value='1';setSpeed(1);
+setStep(1);renderQ();document.getElementById('game-hint').textContent='Start: press + New Order to put the first order at the back of the line.';
+})();
+</script>
+</body>
+</html>
