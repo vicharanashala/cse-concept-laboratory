@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config','G-9M9C5T1Y9R');</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meera's Corner Store: The Neat Shelf</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-1:#FDF1E9;--bg-2:#EDF3FA;--bg-3:#E4EEFA;--primary:#4A9BD1;--primary-dark:#2B6FA3;--primary-deep:#1B4A66;--amber:#EA8C36;--amber-dark:#C96F1F;--danger:#D9714F;--success:#4B7A4A;--ink:#1F2E37;--muted:#54666D;--faint:#93A5AB;--card-bg:#fff;--glass-border:#D9E5F2;--shadow-card:rgba(23,50,77,0.12);--shadow-btn:rgba(43,111,163,0.28);--radius-lg:18px}
+*,*::before,*::after{box-sizing:border-box}html,body{height:100%}body{margin:0;min-height:100vh;font-family:'Inter',sans-serif;color:var(--ink);background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 40%,var(--bg-2) 100%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}p{line-height:1.65;color:var(--muted);margin:0}button{font-family:'Poppins',sans-serif;cursor:pointer}
+.wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px}
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative}
+.step-circle{width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins',sans-serif}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1}
+.step-item:first-child .step-line{display:none}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+.step-item.done .step-line{background:var(--primary-dark)}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25)}
+.step-item.active .step-label{color:var(--primary-dark)}
+.section{display:none}.section.active-view{display:block;animation:sectionFade .35s ease}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins',sans-serif}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted)}
+.hero{text-align:center}.hero h1{font-size:clamp(26px,4.4vw,40px);margin:0 0 12px}
+.card{background:transparent;border:none;padding:6px 0 0}
+.btn{border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-dark));box-shadow:0 12px 24px -10px var(--shadow-btn);transition:.15s}
+.btn:hover:not(:disabled){transform:translateY(-1px)} .btn:disabled{opacity:.4}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px}
+.btn.small{padding:9px 18px;font-size:13px}
+.btn.on{box-shadow:0 0 0 3px var(--primary-deep);background:rgba(74,155,209,.12)}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0}.problem-card p{margin:0 0 14px;font-size:15.5px}.problem-card b{color:var(--primary-deep)}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.rules-list li::before{content:"✕";color:var(--danger);font-weight:700}
+.rules-list li.ok::before{content:"✓";color:var(--success)}
+.game-shell{width:100%;max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.stat{font-size:12.5px;font-weight:700;color:var(--muted)} .stat strong{color:var(--ink)}
+.shelf-stage{border:1.5px solid var(--glass-border);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 10px 28px rgba(23,50,77,.08)}
+.shelf-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#F3F8FD;border-bottom:1px solid var(--glass-border);font-weight:700;font-size:13px;color:var(--primary-deep)}
+.shelf-head span.sub{font-weight:600;font-size:11px;color:var(--muted)}
+.shelf{display:flex;align-items:flex-end;gap:0;padding:26px 18px 34px;min-height:170px;background:linear-gradient(180deg,#fff 0%,#F3F8FD 100%);overflow-x:auto}
+.jar{position:relative;width:46px;border-radius:8px 8px 4px 4px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;color:#fff;font-weight:800;font-size:13px;box-shadow:0 12px 22px -12px rgba(23,50,77,.4);transition:transform .15s}
+.jar::after{content:"";display:block;height:6px;width:100%;border-radius:3px;background:rgba(255,255,255,.5);margin-top:6px}
+.gap{width:14px;height:64px;align-self:flex-end;margin:0 2px;border-radius:8px;border:2px dashed var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary);transition:.15s;cursor:pointer;flex-shrink:0}
+.gap:hover{background:rgba(74,155,209,.18);transform:scale(1.08)}
+.gap.correct{background:rgba(75,122,74,.18);border-color:var(--success);color:var(--success)}
+.gap-target{border-color:var(--success);color:var(--success);background:rgba(75,122,74,.15);border-style:solid;animation:gapPulse .75s ease-in-out infinite}
+.gap span{font-size:9px;font-weight:800;letter-spacing:.04em}
+.held-zone{display:flex;align-items:center;justify-content:center;gap:14px;min-height:84px;border:1.5px dashed var(--glass-border);background:#FFF9F2;border-radius:14px;padding:10px 14px}
+.held-zone .placeholder{color:var(--faint);font-size:13px}
+.jar-held{width:56px;border-radius:10px 10px 5px 5px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:10px;color:#fff;font-weight:800;font-size:15px;box-shadow:0 14px 26px -12px rgba(201,111,31,.65);animation:bob 1s ease-in-out infinite}
+.jar-held::after{content:"";display:block;height:6px;width:100%;border-radius:3px;background:rgba(255,255,255,.5);margin-top:6px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes gapPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(75,122,74,.35)}50%{transform:scale(1.12);box-shadow:0 0 0 8px rgba(75,122,74,0)}}
+@keyframes jarShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.held-shake{animation:jarShake .3s ease}
+.box{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:12px 8px;background:#F7FAFD;border:1px dashed var(--glass-border);border-radius:12px}
+.box .label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);width:100%;text-align:center;margin-bottom:2px}
+.box .jar-dim{position:relative;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:11px;opacity:.45}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:140px;display:flex;flex-direction:column;gap:10px}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38)}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary)}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.qgrid{grid-template-columns:1fr}}
+.learning-flow{max-width:640px;margin:0 auto;text-align:left}.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border)}
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center}
+.kl-grid{display:flex;flex-direction:column;gap:14px}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border)}
+.kl-icon{font-size:20px;flex-shrink:0}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5}
+.concept-blank{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px;box-shadow:0 14px 30px -18px rgba(23,50,77,.3);margin-bottom:18px}
+.concept-blank h4{font-size:13px;color:var(--primary);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.concept-blank h4:first-child{margin-top:0}
+.compare-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.compare-card{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:14px;padding:18px;text-align:center}
+.compare-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.compare-sub{font-size:12.5px;color:var(--faint);margin-top:4px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#22496B;color:#fff;font-weight:600;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:90} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal-overlay{position:fixed;inset:0;background:rgba(31,46,55,.5);display:none;align-items:center;justify-content:center;z-index:95;padding:20px}.modal-overlay.show{display:flex}.modal-box{background:#fff;border:1px solid var(--glass-border);border-radius:18px;padding:30px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 20px 50px rgba(23,50,77,.22)}.modal-eyebrow{font-family:'Poppins',sans-serif;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-dark);margin-bottom:12px}.modal-box p{font-size:14.5px;color:var(--muted);margin:0 0 8px}.modal-punch{font-weight:700;color:var(--ink)}.modal-actions{display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap}.btn-danger{background:linear-gradient(135deg,#E39A7D,var(--danger));color:#fff;box-shadow:0 6px 18px rgba(217,113,79,.3)}.btn-danger:hover{transform:translateY(-1px)}code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rgba(74,155,209,.08);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="stepper" id="stepper">
+<div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Puzzle</span></div>
+<div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Briefing</span></div>
+<div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Shelf</span></div>
+<div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Case Notes</span></div>
+<div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Method</span></div>
+<div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">New Cases</span></div>
+</div>
+
+<section class="section active-view" id="sec-puzzle">
+<div class="hero">
+<span class="eyebrow">Chapter 1 · The Puzzle</span>
+<h1>How do you keep a shelf neat, one jar at a time?</h1>
+</div>
+<div class="problem-card">
+<p>Meera has a box of 6 jars, all different heights. She wants them lined up on a shelf: tallest at the back, shortest at the front.</p>
+<p>But there's a catch: she must take the jars out of the box one at a time, in the order they're packed. Each jar has to find its spot on the shelf as soon as it comes out of the box.</p>
+<p>Say the shelf already holds 3 and 8, and jar 6 comes out next. Its spot is between them, so 8 has to shuffle one step over to make room.</p>
+
+</div>
+<div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button></div>
+</section>
+
+<section class="section" id="sec-briefing">
+<div class="hero">
+<span class="eyebrow">Chapter 2 · The Briefing</span>
+<h1>The Neat Shelf</h1>
+</div>
+<div class="card" style="text-align:center;max-width:640px;margin:0 auto">
+<p style="margin-bottom:14px">Jars come out of the box <b>one at a time, in a fixed order</b>. You slide each one into its place among the jars already on the shelf.</p>
+<ul class="rules-list">
+<li>No peeking: jars come out one at a time.</li>
+<li>No rebuilding: once placed, a jar stays where it is.</li>
+<li class="ok">Take the next jar, find its spot, slide it in.</li>
+<li class="ok">Only the neighbours that must move slide over.</li>
+</ul>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn" id="btn-briefing-start">Enter the Shelf ▶</button></div>
+</section>
+
+<section class="section" id="sec-search">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 · The Shelf</span>
+<h2 class="section-title">One Jar at a Time</h2>
+<p class="section-sub">Take the next jar and tap the gap where it belongs. Tall at the back, short at the front.</p>
+<div class="game-shell">
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="stats">
+<span class="stat">Placed: <strong id="s-placed">0/6</strong></span><span class="stat">Slips: <strong id="s-slips">0</strong></span><span class="stat">Slides: <strong id="s-moves">0</strong></span>
+</div>
+<div class="shelf-stage">
+<div class="shelf-head"><span>🍶 The Jar Shelf: left is the front (short), right is the back (tall)</span><span class="sub" id="shelf-sub">Empty shelf, take the first jar</span></div>
+<div class="shelf" id="shelf"></div>
+</div>
+<div class="held-zone" id="held-zone">
+<span class="placeholder" id="held-text">No jar in hand, press <b>Take Next Jar</b>.</span>
+</div>
+<div class="box"><span class="label">📦 The Box: jars you haven't taken yet</span><span id="box-contents" style="font-size:13px;color:var(--faint)">…</span></div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px">
+<button class="btn ghost small" id="btn-auto">▶ Start Auto</button>
+<button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
+<button class="btn ghost small" id="btn-next">＋ Take Next Jar</button>
+<button class="btn ghost small" id="btn-reset">↺ New Round</button>
+</div>
+<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
+<span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">Speed</span>
+<select id="speed-select" title="Playback speed" style="padding:7px 10px;border:1.5px solid var(--primary);border-radius:8px;background:var(--card-bg);color:var(--primary-dark);font-weight:800;font-size:12.5px;cursor:pointer">
+<option value="0.25">0.25x</option>
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option value="1" selected>1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="1.75">1.75x</option>
+<option value="2">2x</option>
+</select>
+</div>
+<p style="text-align:center;font-size:12.5px;color:var(--muted);margin-top:8px">Two ways to play: <b>manual</b>, take each jar yourself and tap its gap; or press <b>▶ Start Auto</b> to watch it slot in by itself.</p>
+<div id="mission-banner" style="display:none;margin-top:12px;padding:12px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--amber);text-align:center;font-size:13px">
+<span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text" style="color:var(--ink)">Arrange all 6 jars in height order with <b>0 slips</b>.</span> <span id="mission-status" style="font-weight:700;color:var(--muted)">· in progress</span>
+<div id="mission-done" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">✅ Mission Completed</div>
+</div>
+<p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px" id="game-hint">Tap the dashed gaps. The one where nothing is out of order is the right spot.</p>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-search-back">⬅ Back to Briefing</button><button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button></div>
+</section>
+
+<section class="section" id="sec-notes">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 · Case Notes</span>
+<h2 class="section-title">What did you notice?</h2>
+<p class="section-sub">No single right answer, just what you saw happen on the shelf.</p>
+<div class="card"><div class="qgrid">
+<div class="qcard"><span class="q-num">01 · Second jar in</span><span class="q-text">The second jar often ended up next to the first. Did it ever land far from where the first one went? Why not?</span></div>
+<div class="qcard"><span class="q-num">02 · The slide</span><span class="q-text">When a short jar arrived, the taller ones slid over. Which direction did they move, front or back?</span></div>
+<div class="qcard"><span class="q-num">03 · Already placed</span><span class="q-text">Did a jar you placed early ever move again? What does that tell you about the part of the shelf already filled?</span></div>
+<div class="qcard"><span class="q-num">04 · Same feeling</span><span class="q-text">Where else do you slide one thing into its spot, books you just bought, cards you are holding in your hand?</span></div>
+<div class="qcard"><span class="q-num">05 · No redo</span><span class="q-text">You never had to empty the shelf and start over. Why did the single-jar-at-a-time rule make that possible?</span></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
+</section>
+
+<section class="section" id="sec-method">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 · The Method</span>
+<h2 class="section-title">How it really worked</h2>
+<p class="section-sub">Every time you slotted a jar into its spot, you were inserting. Here's the name for it.</p>
+<div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🍶</div><h2>Insertion Sort</h2></div>
+<div class="learning-flow">
+<div class="concept-blank">
+<h4>Definition</h4><p><strong>Insertion Sort: build one neat stretch.</strong> Keep everything before you in order. For each new item, slide it left, shifting larger items over one at a time, until it belongs.</p>
+<h4>Mechanism</h4><p><code>insert(x)</code>: take the next item and place it among the already-arranged items, shifting bigger ones right by one space. Repeat for every item until none are left.</p>
+<h4>Vocabulary</h4><p><code>pass</code>: one item handled, <code>shift</code>: a neighbour sliding over one space, <code>sorted prefix</code>: the neat part you've already built.</p>
+</div>
+<div class="compare-cards" style="margin-top:18px">
+<div class="compare-card"><span class="compare-title">If you swept the line again and again</span><span class="compare-sub">You'd keep walking the whole shelf, nudging neighbours each time, even after early jars were settled.</span></div>
+<div class="compare-card"><span class="compare-title">Because you inserted each jar</span><span class="compare-sub">Only the newest jar moves; the neat stretch just grows, no jar is ever moved twice.</span></div>
+</div>
+<div class="key-learnings"><h3>🔑 Key Learnings</h3><div class="kl-grid">
+<div class="kl-item"><span class="kl-icon">🃏</span><div><b>The Growing Neat Part</b><p>Only the part you've handled stays neat, the box behind stays messy until its turn.</p></div></div>
+<div class="kl-item"><span class="kl-icon">➡️</span><div><b>Slide, Don't Sweep</b><p>A new item shifts only the neighbours that must move, nothing else in the line is touched.</p></div></div>
+<div class="kl-item"><span class="kl-icon">🌍</span><div><b>Where You'll See It</b><p>Cards in a hand, books you slot onto a shelf, paper slips into a stack, all insert one at a time. Great when the pile is already nearly neat.</p></div></div>
+</div></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn" id="btn-method-continue">Continue to New Cases ➜</button></div>
+</section>
+
+<section class="section" id="sec-cases">
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Cases</span>
+<h2 class="section-title">Try on your own</h2>
+<p class="section-sub">Work it out in your head.</p>
+<div class="card"><div class="qgrid">
+<div class="qcard"><span class="q-num">01 · Count the shifts</span><span class="q-text">Shelf holds 5 and 7. Jar 4 arrives. How many jars shift right on this insertion pass, and where does 4 land?</span></div>
+<div class="qcard"><span class="q-num">02 · The easy order</span><span class="q-text">Jars arrive 3, 4, 5, 6, 7, 8 in perfect height order. How many shifts does the whole round need, and why is it so small?</span></div>
+<div class="qcard"><span class="q-num">03 · The reverse pile</span><span class="q-text">Jars arrive biggest first: 8, 7, 6, 5, 4, 3. Which single pass makes the most shifts, and roughly how many shifts in total?</span></div>
+<div class="qcard"><span class="q-num">04 · Re-sort each time</span><span class="q-text">An assistant empties and re-sorts the whole shelf after every jar. Why does that move already placed jars again, and how does a single insertion pass avoid it?</span></div>
+<div class="qcard"><span class="q-num">05 · Use the prefix</span><span class="q-text">The sorted prefix is 1, 3, 6, 8 and jar 9 arrives last. How many shifts does the final insertion pass need, and where does 9 land?</span></div>
+<div class="qcard"><span class="q-num">06 · Pick the box</span><span class="q-text">Two boxes: one arrives nearly sorted, the other fully reversed. Which box makes insertion sort shine, and which forces the most shifts?</span></div>
+<div class="qcard"><span class="q-num">07 · Marksheet stack</span><span class="q-text">A teacher files marksheets by roll number, sliding only the sheets after each new one. When is this fastest, when the stack is nearly sorted or fully shuffled? Why?</span></div>
+</div>
+<div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
+</section>
+
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="modal-back-warn">
+<div class="modal-box">
+<div class="modal-eyebrow">Wait:</div>
+<p>Going back will reset your current progress on this page.</p>
+<p class="modal-punch">Do you want to continue?</p>
+<div class="modal-actions">
+<button class="btn ghost" id="modal-back-cancel">Stay Here</button>
+<button class="btn btn-danger" id="modal-back-confirm">Go Back</button>
+</div>
+</div>
+</div>
+<script>
+(function(){
+"use strict";
+const STEP_FOR={ 'sec-puzzle':1,'sec-briefing':2,'sec-search':3,'sec-notes':4,'sec-method':5,'sec-cases':6 };
+function setStep(n){for(let i=1;i<=6;i++){const el=document.getElementById('step-'+i);el.classList.remove('active','done');if(i<n)el.classList.add('done');if(i===n)el.classList.add('active');}}
+function showSection(id){if(id!=='sec-search')stopAuto();document.querySelectorAll('.section').forEach(s=>s.classList.remove('active-view'));document.getElementById(id).classList.add('active-view');setStep(STEP_FOR[id]||1);window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('btn-puzzle-continue').addEventListener('click',()=>showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click',()=>showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click',()=>showSection('sec-search'));
+document.getElementById('btn-search-back').addEventListener('click',()=>document.getElementById('modal-back-warn').classList.add('show'));
+document.getElementById('modal-back-cancel').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');});
+document.getElementById('modal-back-confirm').addEventListener('click',()=>{document.getElementById('modal-back-warn').classList.remove('show');newRound();showSection('sec-briefing');});
+document.getElementById('modal-back-warn').addEventListener('click',(e)=>{if(e.target===document.getElementById('modal-back-warn'))document.getElementById('modal-back-warn').classList.remove('show');});
+document.getElementById('btn-search-continue').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-notes-back').addEventListener('click',()=>showSection('sec-search'));
+document.getElementById('btn-notes-continue').addEventListener('click',()=>showSection('sec-method'));
+document.getElementById('btn-method-back').addEventListener('click',()=>showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click',()=>showSection('sec-cases'));
+document.getElementById('btn-cases-back').addEventListener('click',()=>showSection('sec-method'));
+document.getElementById('btn-cases-home').addEventListener('click',()=>window.location.href='../../');
+document.getElementById('btn-cases-finish').addEventListener('click',()=>{newRound();showSection('sec-puzzle');});
+var JAR_COLORS=['#4A9BD1','#EA8C36','#7C5CB8','#4B7A4A','#D9714F','#4A7D8C','#C96F1F','#3A6EA5'];
+var speed=1;var autoOn=false,paused=false,autoTimer=null;var bag=[],shelf=[],held=null,slips=0,moves=0,done=false,round=0;
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function jarHeight(h){return 26+h*11;}
+function render(){
+document.getElementById('s-placed').textContent=shelf.length+'/6';
+document.getElementById('s-slips').textContent=slips;
+document.getElementById('s-moves').textContent=moves;
+document.getElementById('shelf-sub').textContent=held!==null?('Holding jar '+held+', tap the gap where it belongs'):(shelf.length?('Neat so far, '+(bag.length?('take the next jar ('+bag[0]+')'):'every jar placed')):'Empty shelf, take the first jar');
+var shelfEl=document.getElementById('shelf');shelfEl.innerHTML='';
+function makeGap(idx){
+var g=document.createElement('div');g.className='gap';
+if(held!==null&&round===1){var cc=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)cc++;}if(idx===cc)g.className+=' gap-target';}
+g.innerHTML='<span>↓</span>';
+g.addEventListener('click',function(){tryPlace(idx);});
+shelfEl.appendChild(g);
+}
+function makeJar(h){
+var d=document.createElement('div');d.className='jar';
+d.style.height=jarHeight(h)+'px';
+d.style.background='linear-gradient(180deg,'+JAR_COLORS[h%JAR_COLORS.length]+',rgba(0,0,0,.25))';
+d.textContent=h;shelfEl.appendChild(d);
+}
+for(var i=0;i<shelf.length;i++){makeGap(i);makeJar(shelf[i]);}
+makeGap(shelf.length);
+var heldZone=document.getElementById('held-zone');heldZone.innerHTML='';
+if(held!==null){
+var hd=document.createElement('div');hd.className='jar-held';hd.style.height=(jarHeight(held)+14)+'px';
+hd.style.background='linear-gradient(180deg,var(--amber),var(--amber-dark))';hd.textContent=held;heldZone.appendChild(hd);
+var msg=document.createElement('span');msg.style.fontSize='13px';msg.style.color='var(--ink)';msg.innerHTML='Holding jar <b>'+held+'</b>, tap the dashed gap where it belongs.';heldZone.appendChild(msg);
+}else{
+var ph=document.createElement('span');ph.className='placeholder';ph.innerHTML='No jar in hand, press <b>＋ Take Next Jar</b>.';heldZone.appendChild(ph);
+}
+var boxEl=document.getElementById('box-contents');
+if(bag.length){boxEl.innerHTML='';for(var k=0;k<bag.length;k++){var bd=document.createElement('span');bd.className='jar-dim';bd.style.height='34px';bd.style.background='linear-gradient(180deg,'+JAR_COLORS[bag[k]%JAR_COLORS.length]+',rgba(0,0,0,.25))';bd.textContent=bag[k];boxEl.appendChild(bd);}}
+else{boxEl.innerHTML='<span style="color:var(--success);font-weight:700">Empty, the box is finished!</span>';}
+document.getElementById('btn-next').disabled=held!==null||done;
+document.getElementById('btn-auto').disabled=done;document.getElementById('btn-auto').textContent=autoOn?'⏸ Stop Auto':'▶ Start Auto';document.getElementById('btn-pause').disabled=done||!autoOn;
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+function confetti(){
+var t=document.getElementById('toast');t.style.background='var(--success)';setTimeout(()=>t.style.background='#22496B',1800);
+for(var i=0;i<16;i++){
+(function(k){setTimeout(function(){var e=document.createElement('div');e.textContent=['🎉','✨','🎊','🥳'][k%4];e.style.position='fixed';e.style.left=(10+Math.random()*80)+'%';e.style.top='-20px';e.style.fontSize='22px';e.style.transition='transform 1.2s ease-out, opacity 1.2s';e.style.zIndex='99';e.style.pointerEvents='none';document.body.appendChild(e);setTimeout(function(){e.style.transform='translateY(90vh) rotate('+(Math.random()*360)+'deg)';e.style.opacity='0';},20);setTimeout(function(){e.remove();},1300);},k*70);})(i);}
+}
+function tryPlace(idx){
+if(held===null||done)return;
+var correct=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)correct++;}
+if(idx===correct){
+var shifts=shelf.length-idx;
+shelf.splice(idx,0,held);moves+=shifts;held=null;
+toast(shifts>0?(shifts+' neighbour'+(shifts>1?'s':'')+' slid over to make room'):'Perfect spot, no neighbour had to move!');
+document.getElementById('mission-status').textContent=(shelf.length)+'/6 placed';
+if(bag.length){document.getElementById('game-hint').textContent='Nice! Shelf is neat. Take the next jar: '+bag[0]+'.';}
+if(!bag.length){finish();}
+}else{
+slips++;
+var hz=document.getElementById('held-zone');hz.classList.add('held-shake');setTimeout(()=>hz.classList.remove('held-shake'),350);
+toast('A taller jar can\'t sit in front of a shorter one, tap a different gap.');
+document.getElementById('game-hint').textContent='That gap would break the order. Slips so far: '+slips+'.';
+}
+render();
+}
+function finish(){
+done=true;
+if(slips===0){
+var md=document.getElementById('mission-done');md.style.display='block';
+md.textContent='✅ Mission Completed! Shelf neat with 0 slips and '+moves+' slide'+(moves===1?'':'s')+' total.';
+document.getElementById('mission-status').textContent='✓ Complete!';
+toast('🎉 Mission completed!');confetti();
+document.getElementById('game-hint').textContent='🎉 All 6 jars in place with 0 slips, brilliant! Press New Round to try again.';
+}else{
+document.getElementById('mission-status').textContent='Arranged ('+slips+' slip'+(slips>1?'s':'')+')';
+document.getElementById('game-hint').textContent='Arranged after '+slips+' slip'+(slips>1?'s':'')+', press New Round and aim for 0!';
+}
+}
+function takeNext(){
+if(done)return;
+if(held!==null){toast('Place the jar you are holding first');return;}
+if(!bag.length){toast('The box is empty');return;}
+held=bag.shift();
+document.getElementById('game-hint').textContent='Holding jar '+held+', tap the dashed gap where it belongs.';
+render();
+}
+function scheduleNext(){if(autoOn&&!paused&&!done)autoTimer=setTimeout(autoStep,1200/speed);}
+function autoStep(){
+if(done)return;
+if(autoTimer){clearTimeout(autoTimer);autoTimer=null;}
+if(!autoOn||paused)return;
+if(held===null){
+if(!bag.length)return;
+takeNext();
+scheduleNext();
+}else{
+var s=0;for(var kk=0;kk<shelf.length;kk++){if(shelf[kk]<held)s++;}
+tryPlace(s);
+scheduleNext();
+}
+}
+function startAuto(){if(done)return;autoOn=true;paused=false;document.getElementById('btn-auto').textContent='⏸ Stop Auto';document.getElementById('btn-pause').disabled=false;document.getElementById('btn-pause').textContent='⏸ Pause';autoStep();}
+function stopAuto(){autoOn=false;paused=false;if(autoTimer){clearTimeout(autoTimer);autoTimer=null;}document.getElementById('btn-auto').textContent='▶ Start Auto';document.getElementById('btn-pause').disabled=true;document.getElementById('btn-pause').textContent='⏸ Pause';}
+function togglePause(){if(!autoOn)return;paused=!paused;var b=document.getElementById('btn-pause');b.textContent=paused?'▶ Resume':'⏸ Pause';if(paused){if(autoTimer){clearTimeout(autoTimer);autoTimer=null;}document.getElementById('game-hint').textContent='Paused: the shelf is frozen. Press ▶ Resume to keep going from here.';}else{document.getElementById('game-hint').textContent='Resumed: continuing from where you left off.';autoStep();}}
+function newRound(){
+stopAuto();
+round++;
+bag=shuffle([3,4,5,6,7,8].slice());shelf=[];held=null;slips=0;moves=0;done=false;
+document.getElementById('mission-done').style.display='none';
+document.getElementById('mission-banner').style.display='block';
+document.getElementById('mission-status').textContent='· in progress';
+document.getElementById('mission-text').innerHTML='Arrange all 6 jars in height order with <b>0 slips</b>.';
+document.getElementById('btn-next').textContent='＋ Take Next Jar';
+document.getElementById('game-hint').textContent=round===1?'Tap the dashed gaps. The one where nothing is out of order is the right spot (it blinks green).':'No hint this round, find the right gap yourself.';
+render();
+}
+document.getElementById('btn-next').addEventListener('click',takeNext);
+document.getElementById('btn-reset').addEventListener('click',newRound);
+document.getElementById('btn-auto').addEventListener('click',function(){if(autoOn)stopAuto();else startAuto();});
+document.getElementById('btn-pause').addEventListener('click',togglePause);
+function setSpeed(m){speed=Math.round(m*100)/100;}
+document.getElementById('speed-select').addEventListener('change',function(){setSpeed(parseFloat(this.value));});
+document.getElementById('speed-select').value='1';setSpeed(1);
+setStep(1);newRound();
+})();
+</script>
+</body>
+</html>
