@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-9M9C5T1Y9R');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohan's Planter Patch: The Swap</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #FDF1E9;
+            --bg-2: #EDF3FA;
+            --bg-2b: #E0EBF7;
+            --bg-3: #E4EEFA;
+            --bg-4: #D6E6F7;
+            --ink: #1F2E37;
+            --muted: #54666D;
+            --faint: #93A5AB;
+            --primary: #4A9BD1;
+            --primary-dark: #2B6FA3;
+            --primary-deep: #1B4A66;
+            --amber: #EA8C36;
+            --amber-dark: #C96F1F;
+            --danger: #D9714F;
+            --success: #4B7A4A;
+            --card-bg: #fff;
+            --glass-border: #D9E5F2;
+            --glass-bg: rgba(255, 255, 255, .4);
+            --shadow-card: 0 14px 34px -18px rgba(23, 50, 77, .35);
+            --shadow-btn: 0 16px 28px -12px rgba(43, 111, 163, .5);
+            --radius: 18px
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            background: linear-gradient(180deg, var(--bg-1), var(--bg-2) 42%, var(--bg-3));
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            margin: 0
+        }
+
+        p {
+            line-height: 1.65;
+            color: var(--muted);
+            margin: 0
+        }
+
+        button {
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer
+        }
+
+        .wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 96px 20px 70px
+        }
+
+        .stepper {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-3);
+            color: var(--primary-deep);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--glass-border);
+            transition: .25s;
+            z-index: 2
+        }
+
+        .step-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+            text-align: center;
+            letter-spacing: .03em;
+            font-family: 'Poppins', sans-serif
+        }
+
+        .step-line {
+            position: absolute;
+            top: 16px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--glass-border);
+            z-index: 1
+        }
+
+        .step-item:first-child .step-line {
+            display: none
+        }
+
+        .step-item.done .step-circle {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: #fff
+        }
+
+        .step-item.done .step-line {
+            background: var(--primary-dark)
+        }
+
+        .step-item.active .step-circle {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary-dark);
+            color: #fff;
+            box-shadow: 0 0 0 4px rgba(74, 155, 209, .25)
+        }
+
+        .step-item.active .step-label {
+            color: var(--primary-dark)
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--amber-dark);
+            background: #FBE9DA;
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif
+        }
+
+        .hero {
+            text-align: center
+        }
+
+        .hero h1 {
+            font-size: clamp(24px, 4.4vw, 38px);
+        }
+
+        .section-sub {
+            max-width: 640px;
+            margin: 0 auto 18px;
+            text-align: center;
+            font-size: 14.5px
+        }
+
+        .section-title {
+            font-size: clamp(24px, 4vw, 36px);
+            color: var(--ink);
+            margin: 0 0 8px
+        }
+
+        .section {
+            display: none
+        }
+
+        .section.active-view {
+            display: block;
+            animation: sectionFade .35s ease
+        }
+
+        @keyframes sectionFade {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(8px)
+        }
+
+        .problem-card {
+            text-align: left;
+            max-width: 680px;
+            margin: 20px auto 0
+        }
+
+        .problem-card p {
+            margin: 0 0 14px;
+            font-size: 15.5px
+        }
+
+        .problem-card b {
+            color: var(--primary-deep)
+        }
+
+        .rules-list {
+            list-style: none;
+            margin: 20px auto 0;
+            padding: 0;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .rules-list li {
+            font-size: 14px;
+            color: var(--muted);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            line-height: 1.5
+        }
+
+        .rules-list li::before {
+            content: "✕";
+            color: var(--danger);
+            font-weight: 700
+        }
+
+        .rules-list li.ok::before {
+            content: "✓";
+            color: var(--success)
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 999px;
+            padding: 13px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: var(--shadow-btn);
+            transition: .15s
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--primary-dark);
+            box-shadow: none;
+            border: 1.5px solid var(--primary);
+            padding: 11px 22px
+        }
+
+        .btn.small {
+            padding: 10px 18px;
+            font-size: 13px
+        }
+        .btn.on {
+            box-shadow: 0 0 0 3px var(--primary-deep);
+            background: rgba(74, 155, 209, 0.12)
+        }
+
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px
+        }
+
+        .stat {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--muted)
+        }
+
+        .stat strong {
+            color: var(--ink)
+        }
+
+        .game-shell {
+            width: 100%;
+            max-width: 780px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .patch-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-2);
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        .patch-head .sub {
+            font-size: 12px;
+            color: var(--faint);
+            font-weight: 600
+        }
+
+        .patch {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 22px 16px;
+            min-height: 160px;
+            background: linear-gradient(180deg, var(--bg-2b), var(--bg-3));
+            border-radius: 14px
+        }
+
+        .pot {
+            position: relative;
+            width: 56px;
+            border-radius: 12px 12px 10px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 10px;
+            color: #fff;
+            font-weight: 800;
+            font-size: 14px;
+            box-shadow: 0 12px 22px -12px rgba(30, 70, 30, .4);
+            transition: transform .12s, border-color .15s;
+            cursor: pointer;
+            flex-shrink: 0
+        }
+
+        .pot::after {
+            content: "";
+            display: block;
+            height: 7px;
+            width: 100%;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, .5);
+            margin-top: 5px
+        }
+
+        .pot span.spot {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--faint)
+        }
+
+        .pot:hover:not(.locked) {
+            transform: translateY(-4px)
+        }
+
+        .pot.selected {
+            border: 3px solid var(--amber);
+            box-shadow: 0 0 0 4px rgba(234, 140, 54, .3);
+            animation: potPull .55s ease-in-out infinite alternate
+        }
+        @keyframes potPull {
+            from { transform: translateY(0) }
+            to { transform: translateY(6px) }
+        }
+
+        .pot.locked {
+            cursor: not-allowed;
+            opacity: .9;
+            outline: 2.5px solid var(--success)
+        }
+
+        .pot.locked::before {
+            content: "🔒";
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            font-size: 12px
+        }
+
+        .pot.wrongpick {
+            animation: potShake .3s ease
+        }
+
+        @keyframes potShake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-7px)
+            }
+
+            75% {
+                transform: translateX(7px)
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--primary-deep);
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 999px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .3s;
+            z-index: 90
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(31, 46, 55, .5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 95;
+            padding: 20px
+        }
+
+        .modal-overlay.show {
+            display: flex
+        }
+
+        .modal-box {
+            background: #fff;
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 30px 28px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(23, 50, 77, .22)
+        }
+
+        .modal-eyebrow {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--amber-dark);
+            margin-bottom: 12px
+        }
+
+        .modal-box p {
+            font-size: 14.5px;
+            color: var(--muted);
+            margin: 0 0 8px
+        }
+
+        .modal-punch {
+            font-weight: 700;
+            color: var(--ink)
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #E39A7D, var(--danger));
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(217, 113, 79, .3)
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px)
+        }
+
+        .qgrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 8px
+        }
+
+        .qcard {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px 20px 20px;
+            box-shadow: var(--shadow-card);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform .15s
+        }
+
+        .qcard:hover {
+            transform: translateY(-3px)
+        }
+
+        .q-num {
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--primary)
+        }
+
+        .q-text {
+            font-size: 14.5px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-weight: 600
+        }
+
+        .learning-flow {
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: left
+        }
+
+        .learning-flow>*+* {
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px dashed var(--glass-border)
+        }
+
+        .key-learnings h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--primary-deep);
+            text-align: center
+        }
+
+        .kl-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .kl-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            text-align: left
+        }
+
+        .kl-item+.kl-item {
+            padding-top: 14px;
+            border-top: 1px dotted var(--glass-border)
+        }
+
+        .kl-icon {
+            font-size: 20px;
+            flex-shrink: 0
+        }
+
+        .kl-item b {
+            display: block;
+            font-size: 13.5px;
+            color: var(--primary-deep);
+            margin-bottom: 3px
+        }
+
+        .kl-item p {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .compare-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 18px
+        }
+
+        .compare-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center
+        }
+
+        .compare-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .compare-sub {
+            font-size: 12.5px;
+            color: var(--faint);
+            margin-top: 4px
+        }
+
+        /* gliding pot during a swap */
+        .pot.flying {
+            z-index: 30;
+            position: relative;
+            transition: transform .55s cubic-bezier(.25, .25, .6, 1), box-shadow .55s;
+        }
+
+        .pot.flying::after {
+            box-shadow: inset 0 1px 4px rgba(255, 255, 255, .4)
+        }
+
+        /* confetti rain */
+        .confetti-field {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 100
+        }
+
+        .confetti-field i {
+            position: absolute;
+            top: -3%;
+            display: block;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            animation: cfall linear forwards;
+            opacity: .95
+        }
+
+        .confetti-field i:nth-child(odd) {
+            border-radius: 50%
+        }
+
+        @keyframes cfall {
+            0% {
+                transform: translate3d(0, 0, 0) rotate(0deg)
+            }
+
+            100% {
+                transform: translate3d(var(--sway, 40px), 105vh, 0) rotate(720deg)
+            }
+        }
+
+        code {
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="stepper" id="stepper">
+            <div class="step-item active" id="step-1"><span class="step-line"></span><span
+                    class="step-circle">1</span><span class="step-label">The Puzzle</span></div>
+            <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span
+                    class="step-label">The Briefing</span></div>
+            <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span
+                    class="step-label">The Patch</span></div>
+            <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span
+                    class="step-label">Case Notes</span></div>
+            <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span
+                    class="step-label">The Method</span></div>
+            <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span
+                    class="step-label">New Cases</span></div>
+        </div>
+
+        <section class="section active-view" id="sec-puzzle">
+            <div class="hero">
+                <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 1 · The Puzzle</span>
+                <h1>One patch, six pots, only two hands.</h1>
+            </div>
+            <div class="card problem-card">
+                <p>Rohan has a seed tray with <b>6 potted seedlings, all different heights</b>: the shortest at 3, the
+                    tallest at 8. Right now they sit mixed up in the tray, lined up in six spots.</p>
+                <p>He wants the shortest seedling in the <b>first spot</b>, the tallest in the <b>last spot</b>. But he
+                    has a rule for himself: he may <b>only lift two pots at a time and trade their spots</b>: a swap.
+                    Each swap costs effort, so he wants as <b>few swaps</b> as possible.
+                </p>
+                <p>One clever bit: the moment a seedling lands in the spot where it belongs <i>for good</i>,
+                    that spot is <b>done</b>. Trading that pot again would be wasted effort.</p>
+            </div>
+            <div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button>
+            </div>
+        </section>
+
+        <section class="section" id="sec-briefing">
+            <div class="hero">
+                <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 2 · The Briefing</span>
+                <h1>A Swap at a Time</h1>
+            </div>
+            <div class="card" style="text-align:center;max-width:640px;margin:0 auto">
+                <p style="margin-bottom:14px">He wants the pots in height order in the tray: shortest in spot 1,
+                    tallest in spot 6.</p>
+                <ul class="rules-list">
+                    <li>One move = swap the spots of <b>any two pots</b>.</li>
+                    <li>You may swap the same pot many times, but every swap counts.</li>
+                    <li class="ok">When a pot reaches its forever-spot, it locks, so leave it alone from then on.</li>
+                    <li class="ok">Goal: all 6 spots locked using <b>5 swaps or fewer</b>.</li>
+                </ul>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn"
+                    id="btn-briefing-start">Enter the Patch ▶</button></div>
+        </section>
+
+        <section class="section" id="sec-search">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3
+                · The Patch</span>
+            <h2 class="section-title">Lock Every Spot</h2>
+            <p class="section-sub">Tap one pot, then tap another, and they trade spots. A pot that locks is done
+                forever.</p>
+            <div class="game-shell">
+                <div class="stats">
+                    <span class="stat">Swaps: <strong id="s-swaps">0</strong>/5</span><span class="stat">Locked: <strong
+                            id="s-locked">0</strong>/6</span>
+                </div>
+                <div class="patch-head"><span>🪴 The Tray: spots 1 → 6</span><span class="sub" id="patch-sub">Tap a
+                        pot, then tap the pot to swap with it</span></div>
+                <div class="patch" id="patch"></div>
+                <div class="section-nav" style="margin-top:14px">
+                    <button class="btn ghost small" id="btn-hint">💡 Hint</button>
+                    <button class="btn ghost small" id="btn-auto">▶ Start Auto</button>
+                    <button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
+                    <button class="btn ghost small" id="btn-reset">↺ New Round</button>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;align-items:center">
+                    <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">Speed</span>
+                    <select id="speed-select" title="Playback speed" style="padding:7px 10px;border:1.5px solid var(--primary);border-radius:8px;background:var(--card-bg);color:var(--primary-dark);font-weight:800;font-size:12.5px;cursor:pointer">
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="1.75">1.75x</option>
+                    <option value="2">2x</option>
+                    </select>
+                </div>
+                <div id="mission-banner"
+                    style="margin-top:14px;padding:14px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--glass-border);text-align:center;font-size:13px">
+                    <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text"
+                        style="color:var(--ink)">Lock all 6 seeds in height order with <b>5 swaps or fewer</b>.</span>
+                    <span id="mission-status" style="font-weight:700;color:var(--muted)">· in progress</span>
+                    <div id="mission-done"
+                        style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">
+                        ✅ Mission Completed</div>
+                </div>
+                <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px;display:none"
+                    id="game-hint"></p>
+                <div class="section-nav" style="margin-top:16px">
+                    <button class="btn ghost small" id="btn-search-back">⬅ Back</button>
+                    <button class="btn" id="btn-search-continue">Continue to Case Notes ➜</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="sec-notes">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4
+                · Case Notes</span>
+            <h2 class="section-title">What did you notice?</h2>
+            <p class="section-sub">No single right answer, just what you saw on the tray.</p>
+            <div class="qgrid">
+                    <div class="qcard"><span class="q-num">01 · First swap</span><span class="q-text">Which pot had to
+                            reach spot 1, and how could you tell it was the shortest before you moved anything?</span>
+                    </div>
+                    <div class="qcard"><span class="q-num">02 · The lock</span><span class="q-text">Once a pot landed in
+                            its forever-spot it locked and you stopped touching it. Did any locked pot ever move again
+                            in your game?</span></div>
+                    <div class="qcard"><span class="q-num">03 · Fewer and fewer</span><span class="q-text">After each
+                            swap, the pots waiting for their spot shrank by one. What did you have to compare against as
+                            the rounds went on?</span></div>
+                    <div class="qcard"><span class="q-num">04 · The swap</span><span class="q-text">Every move traded
+                            the spots of two pots. Compared to sliding a new jar between neighbours, what did a swap NOT
+                            have to do?</span></div>
+                    <div class="qcard"><span class="q-num">05 · Almost sorted</span><span class="q-text">If the tray
+                            already sat in perfect order, how many swaps would you need, and why?</span></div>
+                    <div class="qcard"><span class="q-num">06 · Two hands</span><span class="q-text">Where else do you
+                            pull out the smallest thing first and set it aside: medals, cards, seeds, even washing up
+                            plates one by one?</span></div>
+                </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn"
+                    id="btn-notes-continue">Continue to The Method ➜</button></div>
+        </section>
+
+        <section class="section" id="sec-method">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5
+                · The Method</span>
+            <h2 class="section-title">How it really worked</h2>
+            <p class="section-sub">You kept locking the smallest into its final spot with a swap. Here's the name.</p>
+            <div class="hero" style="margin-bottom:6px">
+                <div style="font-size:46px">🌱</div>
+                <h2>Selection Sort</h2>
+            </div>
+            <div class="learning-flow" style="margin-top:10px">
+                <h4>Definition</h4>
+                <p><strong>Selection Sort: find the smallest of what's left, put it in its final spot, lock it,
+                        repeat.</strong> Each round you scan the remaining pots, take the shortest one, and place it
+                    where it will live from now on.</p>
+                <p>In the game you did this with a <b>swap</b>: the shortest unlocked pot traded spots with the first
+                    unlocked spot. Because every other pot was already in the right place or still waiting, the swap
+                    locked the smallest for good.</p>
+                <h4>Mechanism</h4>
+                <p><code>find-minimum</code>: look through the remaining and remember the smallest; <code>swap</code>
+                    it into the front of the unsorted part so it locks. The "sorted prefix" grows by one each round, and
+                    every item moves <b>at most once</b>.</p>
+                <h4>Vocabulary</h4>
+                <p><code>pass</code>: one scan of the remaining items, <code>minimum</code>: the smallest
+                    remaining item, <code>swap</code>: trade the spots of two items, <code>sorted prefix</code>: the
+                    neat part you've already built, <code>O(n²)</code>: repeats n passes, each scanning up to n
+                    items.</p>
+            </div>
+            <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
+                <div class="compare-cards">
+                    <div class="compare-card"><span class="compare-title">Shelf: you slid jars into the gap</span><span
+                            class="compare-sub">One jar in hand, neighbours shuffled sideways to make room, and each new
+                            jar moved into place among the others.</span></div>
+                    <div class="compare-card"><span class="compare-title">Tray: you swapped pots in place</span><span
+                            class="compare-sub">Two pots traded spots at once; nothing else brushed against anything.
+                            Locked pots never moved again.</span></div>
+                </div>
+                <div class="key-learnings">
+                    <h3>🔑 Key Learnings</h3>
+                    <div class="kl-grid">
+                        <div class="kl-item"><span class="kl-icon">🔍</span>
+                            <div><b>Scan Everything First</b>
+                                <p>To be sure you found the smallest, you must peek at every remaining item, even ones already
+                                    neat. That repeat scan is the work.</p>
+                            </div>
+                        </div>
+                        <div class="kl-item"><span class="kl-icon">🔄</span>
+                            <div><b>Minimal Swaps</b>
+                                <p>Each item is placed exactly once, straight into its final spot, at most n−1 swaps,
+                                    never misplacing a locked pot.</p>
+                            </div>
+                        </div>
+                        <div class="kl-item"><span class="kl-icon">🧩</span>
+                            <div><b>Where You'll See It</b>
+                                <p>Picking the smallest mango first, arranging medals on a shelf, sorting cards by
+                                    pulling the lowest first, handy when moving an item is the expensive part, so you
+                                    want each move to be final.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-nav" style="margin-top:14px">
+                <button class="btn ghost small" id="btn-method-back">⬅ Back</button>
+                <button class="btn" id="btn-method-continue">Continue to New Cases ➜</button>
+            </div>
+        </section>
+
+        <section class="section" id="sec-cases">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6
+                · New Cases</span>
+            <h2 class="section-title">Try on your own</h2>
+            <p class="section-sub">Work it out in your head.</p>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · First swap</span><span class="q-text">Tray reads 5, 8, 3, 7,
+                        6, 4. Selection sort's first pass finds the minimum and swaps it into spot 1. Which pot locks
+                        first, and which two spots trade?</span></div>
+                <div class="qcard"><span class="q-num">02 · Swap total</span><span class="q-text">For any tray of 6 pots,
+                        selection sort finishes in at most 5 swaps. Why can it never need a 6th swap, even though there
+                        are 6 spots?</span></div>
+                <div class="qcard"><span class="q-num">03 · Selection vs shelf</span><span class="q-text">Insertion sort
+                        slides each new item sideways into a gap, like jars on a shelf. When is swapping pots in place,
+                        the selection sort way, a better move than all that sliding?</span></div>
+                <div class="qcard"><span class="q-num">04 · Reverse order</span><span class="q-text">Tray reads 8, 7, 6,
+                        5, 4, 3, perfect reverse order. How many swaps does selection sort need, and how many passes does
+                        it still scan through?</span></div>
+                <div class="qcard"><span class="q-num">05 · Locked already</span><span class="q-text">Halfway through,
+                        the pot in spot 4 already holds the right value. Does selection sort ever swap it? How can you
+                        tell, without touching it, that it is safe to leave alone?</span></div>
+                <div class="qcard"><span class="q-num">06 · Why O(n²)</span><span class="q-text">Locking spot 1 scans all
+                        6 pots, spot 2 scans the 5 that remain, and so on. If the tray doubled to 12 pots, why does the
+                        work grow by about four times instead of two?</span></div>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
+                    id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart
+                    ↻</button></div>
+        </section>
+
+    </div>
+    <div class="modal-overlay" id="modal-back-warn">
+        <div class="modal-box">
+            <div class="modal-eyebrow">Wait</div>
+            <p>Going back will reset your current progress on this page.</p>
+            <p class="modal-punch">Do you want to continue?</p>
+            <div class="modal-actions">
+                <button class="btn ghost" id="modal-back-cancel">Stay Here</button>
+                <button class="btn btn-danger" id="modal-back-confirm">Go Back</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+        (function () {
+            "use strict";
+            var STEP_FOR = { 'sec-puzzle': 1, 'sec-briefing': 2, 'sec-search': 3, 'sec-notes': 4, 'sec-method': 5, 'sec-cases': 6 };
+            function setStep(n) { for (var i = 1; i <= 6; i++) { var el = document.getElementById('step-' + i); el.classList.remove('active', 'done'); if (i < n) el.classList.add('done'); if (i === n) el.classList.add('active'); } }
+            function showSection(id) { if (id !== 'sec-search') stopAuto(); document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view')); document.getElementById(id).classList.add('active-view'); setStep(STEP_FOR[id] || 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
+            document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
+            document.getElementById('btn-briefing-start').addEventListener('click', () => showSection('sec-search'));
+            document.getElementById('btn-search-back').addEventListener('click', () => {
+                document.getElementById('modal-back-warn').classList.add('show');
+            });
+            document.getElementById('modal-back-cancel').addEventListener('click', () => {
+                document.getElementById('modal-back-warn').classList.remove('show');
+            });
+            document.getElementById('modal-back-confirm').addEventListener('click', () => {
+                document.getElementById('modal-back-warn').classList.remove('show');
+                newRound(); showSection('sec-briefing');
+            });
+            document.getElementById('modal-back-warn').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal-back-warn')) document.getElementById('modal-back-warn').classList.remove('show');
+            });
+            document.getElementById('btn-search-continue').addEventListener('click', () => showSection('sec-notes'));
+            document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-search'));
+            document.getElementById('btn-notes-continue').addEventListener('click', () => showSection('sec-method'));
+            document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
+            document.getElementById('btn-method-continue').addEventListener('click', () => showSection('sec-cases'));
+            document.getElementById('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
+            document.getElementById('btn-cases-home').addEventListener('click', () => window.location.href = '../../');
+            document.getElementById('btn-cases-finish').addEventListener('click', () => { newRound(); showSection('sec-puzzle'); });
+            var COL = ['#4A9BD1', '#EA8C36', '#7C5CB8', '#4B7A4A', '#D9714F', '#4A7D8C', '#C96F1F', '#3E6A5C'];
+            var speed = 1; var pots = [], sel = null, swaps = 0, done = false; var autoOn = false, paused = false, autoTimer = null, animTimer = null;
+            function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+            function hpx(h) { return 26 + h * 11; }
+            function isLocked(i) { return pots[i] === i + 3; }
+            function firstUnlocked() { for (var i = 0; i < pots.length; i++) { if (!isLocked(i)) return i; } return -1; }
+            function minUnlockedIdx(f) { var mi = f; for (var i = f + 1; i < pots.length; i++) { if (pots[i] < pots[mi]) mi = i; } return mi; }
+            function render() {
+                document.getElementById('s-swaps').textContent = swaps;
+                var lc = 0; for (var i = 0; i < pots.length; i++) { if (isLocked(i)) lc++; }
+                document.getElementById('s-locked').textContent = lc;
+                var f = firstUnlocked();
+                document.getElementById('patch-sub').textContent = (sel === null) ? 'Start: tap any pot to pick it up, then tap the pot you want to swap with.' : 'Picked up, now tap the spot/pot to swap with it.';
+                var p = document.getElementById('patch'); p.innerHTML = '';
+                for (var i = 0; i < pots.length; i++) {
+                    (function (i) {
+                        var d = document.createElement('div'); d.className = 'pot'; d.style.height = hpx(pots[i]) + 'px'; d.style.background = 'linear-gradient(180deg,' + COL[pots[i] % COL.length] + ',rgba(0,0,0,.25))'; d.textContent = pots[i]; d.setAttribute('data-val', pots[i]);
+                        var sp = document.createElement('span'); sp.className = 'spot'; sp.textContent = 'spot ' + (i + 1); d.appendChild(sp);
+                        if (isLocked(i)) d.classList.add('locked');
+                        if (sel === i) d.classList.add('selected');
+                        d.addEventListener('click', function () { onPotClick(i); });
+                        p.appendChild(d);
+                    })(i);
+                }
+                document.getElementById('btn-hint').disabled = done;
+                document.getElementById('btn-auto').disabled = done;
+                document.getElementById('btn-auto').textContent = autoOn ? '⏸ Stop Auto' : '▶ Start Auto';
+                document.getElementById('btn-pause').disabled = done || !autoOn;
+            }
+            function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
+            function confetti() {
+                if (document.getElementById('confetti-layer')) return;
+                var layer = document.createElement('div'); layer.id = 'confetti-layer'; layer.className = 'confetti-field';
+                var cols = ['#f4d03f', '#e74c3c', '#2ecc71', '#3498db', '#9b59b6', '#ff6b81'];
+                for (var i = 0; i < 160; i++) {
+                    var p = document.createElement('i');
+                    p.style.left = (Math.random() * 100) + '%';
+                    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+                    var r = 5 + Math.random() * 6;
+                    p.style.width = r + 'px'; p.style.height = (r * 0.5) + 'px';
+                    p.style.animationDelay = (Math.random() * 0.6) + 's';
+                    p.style.animationDuration = (1.8 + Math.random() * 2.2) + 's';
+                    layer.appendChild(p);
+                }
+                document.body.appendChild(layer);
+                setTimeout(function () { if (layer.parentNode) layer.parentNode.removeChild(layer); }, 4200);
+            }
+            function finish() {
+                done = true;
+                var lc = 0; for (var i = 0; i < pots.length; i++) { if (isLocked(i)) lc++; }
+                if (lc === 6 && swaps <= 5) {
+                    document.getElementById('mission-done').style.display = 'block';
+                    document.getElementById('mission-status').textContent = '✓ Complete!';
+                    toast('🎉 Mission completed!'); confetti();
+                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = '🎉 All 6 locked in ' + swaps + ' swap' + (swaps === 1 ? '' : 's') + ', every seed moved at most once! Press New Round to try again.';
+                } else {
+                    document.getElementById('mission-status').textContent = 'Locked in ' + swaps + ' swaps';
+                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'All 6 locked after ' + swaps + ' swap' + (swaps > 1 ? 's' : '') + ', try to keep it to 5 with New Round!';
+                }
+            }
+            function onPotClick(i) {
+                if (done) return;
+                if (isLocked(i)) { toast('This pot is already locked, leave it in its final spot.'); return; }
+                if (sel === null) { sel = i; render(); return; }
+                if (sel === i) { sel = null; render(); return; }
+                var a = sel; sel = null;
+                var movedA = pots[a], movedB = pots[i];
+                animateSwap(a, i, function () {
+                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'Swapped pots ' + movedB + ' and ' + movedA + '. Locked: ' + lockedCount() + '/6. Swaps left in budget: ' + (5 - swaps) + '.';
+                    if (lockedCount() === 6) finish();
+                });
+            }
+            function lockedCount() { var c = 0; for (var i = 0; i < pots.length; i++) { if (isLocked(i)) c++; } return c; }
+            function animateSwap(a, b, after) {
+                if (a === b) { if (after) after(); return; }
+                var patch = document.getElementById('patch');
+                var va = pots[a], vb = pots[b];
+                var ga = patch.querySelector('.pot[data-val="' + va + '"]');
+                var gb = patch.querySelector('.pot[data-val="' + vb + '"]');
+                var ra = ga ? ga.getBoundingClientRect() : null;
+                var rb = gb ? gb.getBoundingClientRect() : null;
+                pots[a] = vb; pots[b] = va; swaps++;
+                render();
+                var na = patch.querySelector('.pot[data-val="' + va + '"]');
+                var nb = patch.querySelector('.pot[data-val="' + vb + '"]');
+                if (ra && na) { var nr = na.getBoundingClientRect(); na.style.transition = 'none'; na.style.transform = 'translate(' + (ra.left - nr.left) + 'px,' + (ra.top - nr.top) + 'px)'; }
+                if (rb && nb) { var mr = nb.getBoundingClientRect(); nb.style.transition = 'none'; nb.style.transform = 'translate(' + (rb.left - mr.left) + 'px,' + (rb.top - mr.top) + 'px)'; }
+                void patch.offsetWidth;
+                if (na) { na.style.transition = 'transform .85s cubic-bezier(.3,.65,.4,1)'; na.style.transform = 'translate(0,0)'; }
+                if (nb) { nb.style.transition = 'transform .85s cubic-bezier(.3,.65,.4,1)'; nb.style.transform = 'translate(0,0)'; }
+                if (after) animTimer = setTimeout(after, 880);
+            }
+            function scheduleNext() { if (autoOn && !paused && !done) autoTimer = setTimeout(autoStep, 1200 / speed); }
+            function autoStep() {
+                if (done || !autoOn || paused) return;
+                if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+                var f = firstUnlocked(); if (f < 0) { finish(); render(); return; }
+                var mi = minUnlockedIdx(f);
+                var a = f, b = mi, came = pots[a];
+                animateSwap(a, b, function () {
+                    if (!autoOn || paused) return;
+                    document.getElementById('game-hint').style.display = 'block'; document.getElementById('game-hint').textContent = 'Auto: moved pot ' + came + ' into spot ' + (f + 1) + ' and locked it.';
+                    if (lockedCount() === 6) { finish(); return; }
+                    scheduleNext();
+                });
+            }
+            function startAuto() { if (done) return; autoOn = true; paused = false; document.getElementById('btn-auto').textContent = '⏸ Stop Auto'; document.getElementById('btn-pause').disabled = false; document.getElementById('btn-pause').textContent = '⏸ Pause'; autoStep(); }
+            function stopAuto() { autoOn = false; paused = false; if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } if (animTimer) { clearTimeout(animTimer); animTimer = null; } document.getElementById('btn-auto').textContent = '▶ Start Auto'; document.getElementById('btn-pause').disabled = true; document.getElementById('btn-pause').textContent = '⏸ Pause'; }
+            function togglePause() { if (!autoOn) return; paused = !paused; var b = document.getElementById('btn-pause'); b.textContent = paused ? '▶ Resume' : '⏸ Pause'; var h = document.getElementById('game-hint'); h.style.display = 'block'; if (paused) { if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; } if (animTimer) { clearTimeout(animTimer); animTimer = null; } h.textContent = 'Paused: the tray is frozen. Press ▶ Resume to keep going from here.'; } else { h.textContent = 'Resumed: continuing from where you left off.'; autoStep(); } }
+            function toast2(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
+            function hint() { var h = document.getElementById('game-hint'); if (h && swaps > 0) { h.style.display = 'block'; } var f = firstUnlocked(); if (f < 0) { toast('All locked, nothing left to move.'); return; } var mi = minUnlockedIdx(f); toast('The shortest not locked is ' + pots[mi] + '. Swap it into spot ' + (f + 1) + '.'); }
+            function newRound() { stopAuto(); pots = shuffle([3, 4, 5, 6, 7, 8].slice()); sel = null; swaps = 0; done = false; document.getElementById('mission-done').style.display = 'none'; document.getElementById('mission-status').textContent = '· in progress'; document.getElementById('mission-text').innerHTML = 'Lock all 6 seeds in height order with <b>5 swaps or fewer</b>.'; var gh = document.getElementById('game-hint'); if (gh) { gh.style.display = 'none'; gh.textContent = ''; } render(); }
+            document.getElementById('btn-hint').addEventListener('click', hint);
+            document.getElementById('btn-auto').addEventListener('click', function () { if (autoOn) stopAuto(); else startAuto(); });
+            document.getElementById('btn-pause').addEventListener('click', togglePause);
+            function setSpeed(m) { speed = Math.round(m * 100) / 100; }
+            document.getElementById('speed-select').addEventListener('change', function () { setSpeed(parseFloat(this.value)); });
+            document.getElementById('speed-select').value = '1'; setSpeed(1);
+            document.getElementById('btn-reset').addEventListener('click', newRound);
+            setStep(1); newRound();
+        })();
+    </script>
+</body>
+
+</html>
