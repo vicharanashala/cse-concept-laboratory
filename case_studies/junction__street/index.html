@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-9M9C5T1Y9R');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Junction Street — A Case Study</title>
@@ -76,7 +67,9 @@
     box-shadow: var(--shadow);
     overflow:hidden;
     position:relative;
+    transition: max-width .35s ease;
   }
+  .shell.wide{ max-width: 1160px; }
   .shell::before{
     content:"";
     position:absolute; top:0; left:0; right:0; height:5px;
@@ -511,6 +504,119 @@
     margin-top: 6px;
   }
   .reveal.show{ display:block; animation: fadeIn .4s ease; }
+  /* ---------- descriptive question cards (page 4 & 5) ---------- */
+  .qcard-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 18px 0;
+  }
+  @media (max-width: 760px){
+    .qcard-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 520px){
+    .qcard-grid{ grid-template-columns: 1fr; }
+  }
+  .qcard{
+    background: var(--bg-panel);
+    border:1px solid var(--border-soft);
+    border-left: 3px solid var(--orange);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 16px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .qcard .qnum{
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
+    font-size:12px;
+    color: var(--orange);
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  .qcard .qtitle{
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    color: var(--text);
+  }
+  .qcard .qbody{
+    font-size:13.5px;
+    color: var(--text-dim);
+    line-height:1.6;
+  }
+
+  /* ---------- concept page (Mile 5) ---------- */
+  .cond-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 18px 0;
+  }
+  @media (max-width: 620px){
+    .cond-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  .cond-card{
+    background: var(--bg-panel);
+    border:1px solid var(--border-soft);
+    border-top: 3px solid var(--blue);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    padding: 14px 12px;
+    text-align:center;
+  }
+  .cond-title{
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    color: var(--blue-dark);
+    margin-bottom:4px;
+  }
+  .cond-sub{
+    font-size:11.5px;
+    color: var(--text-faint);
+  }
+  .formula-pill{
+    text-align:center;
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    color: var(--text);
+    background: var(--bg-panel-raised);
+    border:1px dashed var(--border);
+    border-radius:999px;
+    padding: 12px 18px;
+    margin: 18px 0;
+  }
+  .concept-compare{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 18px;
+  }
+  @media (max-width: 560px){
+    .concept-compare{ grid-template-columns: 1fr; }
+  }
+  .compare-card{
+    background: var(--bg-panel);
+    border:1px solid var(--border-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 16px;
+    text-align:center;
+  }
+  .compare-card.bad{ border-left: 3px solid var(--error-border); }
+  .compare-card.good{ border-left: 3px solid var(--success-border); }
+  .compare-card svg{ max-width: 160px; margin: 0 auto; display:block; }
+  .compare-cap{
+    font-size:12.5px;
+    color: var(--text-dim);
+    margin-top:10px;
+    font-weight:500;
+  }
+
   .ingredient-list{ display:flex; flex-direction:column; gap:10px; margin: 14px 0; }
   .ingredient{
     display:flex; gap:12px; align-items:flex-start;
@@ -586,6 +692,11 @@
     border:none; color:#FFFFFF;
     background: linear-gradient(135deg, var(--orange-light), var(--orange-dark));
     box-shadow: 0 8px 20px -6px rgba(201,111,31,0.35);
+  }
+  #btnHome{
+    border:1.5px solid var(--blue);
+    color: var(--blue-dark);
+    background: transparent;
   }
 
   /* ---------- modal ---------- */
@@ -870,7 +981,7 @@
 </head>
 <body>
 
-<div class="shell">
+<div class="shell" id="shell">
   <header>
     <div class="eyebrow">A case study</div>
     <h1 class="title">Junction Street</h1>
@@ -1061,98 +1172,121 @@
     <section class="page" id="page-4">
       <div class="kicker">Mile 4 · Debrief</div>
       <h2>What just happened?</h2>
-      <p>Before you keep going, think back on the junction.</p>
+      <p>Before you keep going, think back on the junction. Talk these through — no right answer to click.</p>
 
-      <div class="qgroup">
-        <div class="qtext">1. Why didn't any car move at first, even though each driver only needed one spot to open up?</div>
-        <div class="options" id="r1-options">
-          <label class="option"><input type="radio" name="r1" value="a"> The drivers weren't paying attention</label>
-          <label class="option"><input type="radio" name="r1" value="b"> Each driver was waiting on the very next driver, and that chain of waiting looped all the way back around</label>
-          <label class="option"><input type="radio" name="r1" value="c"> There weren't enough lanes painted on the road</label>
+      <div class="qcard-grid">
+        <div class="qcard">
+          <div class="qnum">Question 1</div>
+          <div class="qbody">After all four drivers have arrived, why can't any of them move even though the crossing itself is not physically blocked?</div>
         </div>
-        <div class="qfeedback" id="r1-feedback"></div>
-      </div>
-
-      <div class="qgroup">
-        <div class="qtext">2. What was actually needed to get everyone moving again?</div>
-        <div class="options" id="r2-options">
-          <label class="option"><input type="radio" name="r2" value="a"> A fifth car joining the junction</label>
-          <label class="option"><input type="radio" name="r2" value="b"> One driver giving up the spot they were holding, even though it wasn't "their turn"</label>
-          <label class="option"><input type="radio" name="r2" value="c"> Everyone honking at the same time</label>
+        <div class="qcard">
+          <div class="qnum">Question 2</div>
+          <div class="qbody">Each driver is waiting for someone else to act first. What happens when everyone is waiting for someone who is also waiting?</div>
         </div>
-        <div class="qfeedback" id="r2-feedback"></div>
-      </div>
-
-      <div class="reveal" id="revealPanel">
-        <div class="card">
-          <p style="margin-bottom:10px; color:var(--text); font-weight:600;">Four things had to be true at once for the junction to freeze completely:</p>
-          <div class="ingredient-list">
-            <div class="ingredient"><div class="num">1</div><div class="txt"><strong>Only one car fits at a time.</strong> The crossing couldn't be shared — a spot belonged to whoever was in it.</div></div>
-            <div class="ingredient"><div class="num">2</div><div class="txt"><strong>Everyone held their ground while waiting.</strong> No driver gave up their spot just because they were stuck.</div></div>
-            <div class="ingredient"><div class="num">3</div><div class="txt"><strong>Nobody would go out of turn.</strong> Everyone followed the rule correctly, so no one broke the pattern on their own.</div></div>
-            <div class="ingredient"><div class="num">4</div><div class="txt"><strong>The waiting formed a closed loop.</strong> Aarav waited on Rhea, who waited on Meera, who waited on Dev, who waited on Aarav — right back to the start.</div></div>
-          </div>
-          <p style="margin-bottom:0;">Take away any one of those four and the freeze breaks. That's exactly what happened when you waved one driver through, out of turn.</p>
-          <p style="margin-bottom:0; color:var(--text-faint); font-size:12.5px;">You'll spot this same shape in surprising places — two cooks each holding the tool the other one needs, a group chat where everyone's waiting for someone else to reply first, even two computer programs each holding a file the other one is waiting on.</p>
+        <div class="qcard">
+          <div class="qnum">Question 3</div>
+          <div class="qbody">If you could allow only one driver to move out of turn, which driver would you choose, and why would that be enough to get the others moving?</div>
+        </div>
+        <div class="qcard">
+          <div class="qnum">Question 4</div>
+          <div class="qbody">Imagine the same situation with 10 drivers instead of 4. What would make it harder to notice why nobody can move?</div>
+        </div>
+        <div class="qcard">
+          <div class="qnum">Question 5</div>
+          <div class="qbody">What pattern do you notice in the way the drivers are waiting for one another, and why does breaking one part of that pattern allow the whole situation to proceed?</div>
         </div>
       </div>
     </section>
 
-    <!-- PAGE 5 — EXERCISE -->
+    <!-- PAGE 5 — THE CONCEPT -->
     <section class="page" id="page-5">
-      <div class="kicker">Mile 5 · Checkpoint</div>
-      <h2>Spot the pattern elsewhere</h2>
-      <p>Same shape, different scenery. Answer all four, then submit.</p>
+      <div class="kicker">Mile 5 · The Concept</div>
+      <h2>The formal picture</h2>
+      <p>What you explored has a name: <strong>deadlock</strong> — a set of things stuck forever, each waiting on the next in a closed loop.</p>
 
-      <form id="quizForm">
-        <div class="qgroup">
-          <div class="qtext">1. Chef A holds the only knife and needs the cutting board. Chef B holds the only cutting board and needs the knife. Neither will let go until they're done with it. What happens?</div>
-          <div class="options" data-q="0">
-            <label class="option"><input type="radio" name="q0" value="0"> They instantly swap tools</label>
-            <label class="option"><input type="radio" name="q0" value="1"> Both cooks wait forever — the meal never gets made</label>
-            <label class="option"><input type="radio" name="q0" value="2"> Chef A gives up and starts washing dishes instead</label>
-          </div>
-        </div>
-
-        <div class="qgroup">
-          <div class="qtext">2. Four rowers sit in a circle. Each one is holding an oar that the rower behind them needs, and no one wants to hand theirs over first. What does it take to get the boat moving?</div>
-          <div class="options" data-q="1">
-            <label class="option"><input type="radio" name="q1" value="0"> A fifth rower joins the boat</label>
-            <label class="option"><input type="radio" name="q1" value="1"> One rower hands over their oar, even though it isn't "their turn"</label>
-            <label class="option"><input type="radio" name="q1" value="2"> Everyone rows harder at the same time</label>
-          </div>
-        </div>
-
-        <div class="qgroup">
-          <div class="qtext">3. Two apps each lock a different file, then each tries to also lock the other's file — and neither will release its own lock until it's finished. What's the likely outcome?</div>
-          <div class="options" data-q="2">
-            <label class="option"><input type="radio" name="q2" value="0"> One file wins at random and the other app skips ahead</label>
-            <label class="option"><input type="radio" name="q2" value="1"> Both apps freeze, each one waiting on the other, indefinitely</label>
-            <label class="option"><input type="radio" name="q2" value="2"> The two files merge automatically</label>
-          </div>
-        </div>
-
-        <div class="qgroup">
-          <div class="qtext">4. Which of these was <em>not</em> one of the ingredients behind the Junction Street freeze?</div>
-          <div class="options" data-q="3">
-            <label class="option"><input type="radio" name="q3" value="0"> Each spot could hold only one car at a time</label>
-            <label class="option"><input type="radio" name="q3" value="1"> Drivers held their spot while they waited</label>
-            <label class="option"><input type="radio" name="q3" value="2"> A traffic officer eventually forced one car to reverse</label>
-            <label class="option"><input type="radio" name="q3" value="3"> The waiting formed a closed loop back to the start</label>
-          </div>
-        </div>
-      </form>
-
-      <button id="btnSubmitQuiz" onclick="submitQuiz()" disabled>Submit answers</button>
-
-      <div class="score-banner" id="scoreBanner">
-        <div class="num" id="scoreNum">0 / 4</div>
-        <div class="cap">correct</div>
+      <div class="cond-grid">
+        <div class="cond-card"><div class="cond-title">Mutual Exclusion</div><div class="cond-sub">one holder at a time</div></div>
+        <div class="cond-card"><div class="cond-title">Hold &amp; Wait</div><div class="cond-sub">keep what you have, ask for more</div></div>
+        <div class="cond-card"><div class="cond-title">No Preemption</div><div class="cond-sub">nobody can force a release</div></div>
+        <div class="cond-card"><div class="cond-title">Circular Wait</div><div class="cond-sub">the chain loops back</div></div>
       </div>
 
-      <div style="margin-top:22px; display:none;" id="restartWrap">
-        <p style="margin-bottom:12px;">That closed loop of waiting is the whole story here — same shape, different costumes, every time.</p>
+      <div class="formula-pill">Deadlock ⇔ Mutual Exclusion ∧ Hold-and-Wait ∧ No Preemption ∧ Circular Wait</div>
+
+      <div class="concept-compare">
+        <div class="compare-card bad">
+          <svg viewBox="0 0 180 180" width="100%" height="auto">
+            <defs>
+              <marker id="arrowBad" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--blocked)"/></marker>
+            </defs>
+            <path d="M 90,35 A 55,55 0 0 1 145,90" fill="none" stroke="var(--blocked)" stroke-width="3" marker-end="url(#arrowBad)"/>
+            <path d="M 145,90 A 55,55 0 0 1 90,145" fill="none" stroke="var(--blocked)" stroke-width="3" marker-end="url(#arrowBad)"/>
+            <path d="M 90,145 A 55,55 0 0 1 35,90" fill="none" stroke="var(--blocked)" stroke-width="3" marker-end="url(#arrowBad)"/>
+            <path d="M 35,90 A 55,55 0 0 1 90,35" fill="none" stroke="var(--blocked)" stroke-width="3" marker-end="url(#arrowBad)"/>
+            <circle cx="90" cy="25" r="13" fill="var(--blocked)"/>
+            <circle cx="155" cy="90" r="13" fill="var(--blocked)"/>
+            <circle cx="90" cy="155" r="13" fill="var(--blocked)"/>
+            <circle cx="25" cy="90" r="13" fill="var(--blocked)"/>
+          </svg>
+          <div class="compare-cap">With deadlock — cycle closed, nobody moves</div>
+        </div>
+        <div class="compare-card good">
+          <svg viewBox="0 0 180 180" width="100%" height="auto">
+            <defs>
+              <marker id="arrowGood" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--go)"/></marker>
+            </defs>
+            <path d="M 90,35 A 55,55 0 0 1 145,90" fill="none" stroke="var(--go)" stroke-width="3" marker-end="url(#arrowGood)"/>
+            <path d="M 145,90 A 55,55 0 0 1 90,145" fill="none" stroke="var(--go)" stroke-width="3" marker-end="url(#arrowGood)"/>
+            <path d="M 90,145 A 55,55 0 0 1 35,90" fill="none" stroke="var(--go)" stroke-width="3" marker-end="url(#arrowGood)"/>
+            <path d="M 35,90 A 55,55 0 0 1 90,35" fill="none" stroke="var(--border)" stroke-width="3" stroke-dasharray="5 5"/>
+            <circle cx="90" cy="25" r="13" fill="var(--go)"/>
+            <circle cx="155" cy="90" r="13" fill="var(--go)"/>
+            <circle cx="90" cy="155" r="13" fill="var(--go)"/>
+            <circle cx="25" cy="90" r="13" fill="var(--go)"/>
+          </svg>
+          <div class="compare-cap">Without deadlock — one link broken, everyone moves</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 6 — EXERCISE -->
+    <section class="page" id="page-6">
+      <div class="kicker">Mile 6 · Checkpoint</div>
+      <h2>Spot the pattern elsewhere</h2>
+      <p>Same shape, different scenery. Talk through each one.</p>
+
+      <div class="qcard-grid">
+        <div class="qcard">
+          <div class="qnum">1</div>
+          <div class="qtitle">The Parking Lot</div>
+          <div class="qbody">Four cars enter a narrow parking area from four directions. Each car is blocking the space needed by the next car, so none can move forward or backward. What pattern would you look for to determine whether the situation is a deadlock?</div>
+        </div>
+        <div class="qcard">
+          <div class="qnum">2</div>
+          <div class="qtitle">Shared Chargers</div>
+          <div class="qbody">Three students are working on their laptops. Each student has one charger adapter, but each needs a different adapter currently held by another student to finish their work. How could they arrange the exchange so that everyone eventually gets what they need?</div>
+        </div>
+        <div class="qcard">
+          <div class="qnum">3</div>
+          <div class="qtitle">Spot the Misconception</div>
+          <div class="qbody">A student says, "Whenever several people are waiting for something, there is a deadlock." Consider a restaurant where five customers are waiting for one table. Why is this not necessarily a deadlock?</div>
+        </div>
+        <div class="qcard">
+          <div class="qnum">4</div>
+          <div class="qtitle">A Smaller Group</div>
+          <div class="qbody">Three friends each have one key, and each needs the key held by the person on their right to open a locker. Draw or describe the waiting relationships. What is the smallest change needed to allow all three friends to eventually open their lockers?</div>
+        </div>
+        <div class="qcard">
+          <div class="qnum">5</div>
+          <div class="qtitle">Real-Life Design</div>
+          <div class="qbody">Imagine a hotel where guests can reserve multiple shared facilities — such as a meeting room, projector, and conference phone — and each facility can be held by only one group at a time. What reservation rule could the hotel introduce to reduce the chance that groups end up waiting for one another indefinitely?</div>
+        </div>
+      </div>
+
+      <div style="margin-top:22px; display:flex; gap:10px; flex-wrap:wrap;">
+        <p style="margin-bottom:12px; width:100%;">That closed loop of waiting is the whole story here — same shape, different costumes, every time.</p>
         <button id="btnRestart" onclick="restartJourney()">↺ Restart journey</button>
+        <button id="btnHome" onclick="window.location.href='../../'">🏠 Home</button>
       </div>
     </section>
 
@@ -1187,14 +1321,13 @@ const PAGES = [
   { id:3, label:'Mile 3' },
   { id:4, label:'Mile 4' },
   { id:5, label:'Mile 5' },
+  { id:6, label:'Mile 6' },
 ];
 
 let state = {
   current: 1,
   furthest: 1,
-  game: { attempts:0, hintShown:false, reversed:null, complete:false, started:false, movedSet:new Set(), queue:{N:0,E:0,S:0,W:0} },
-  reflection: { r1:null, r2:null, complete:false },
-  quiz: { answers:[null,null,null,null], submitted:false, score:0, complete:false }
+  game: { attempts:0, hintShown:false, reversed:null, complete:false, started:false, movedSet:new Set(), queue:{N:0,E:0,S:0,W:0} }
 };
 
 const ORDER = ['N','E','S','W'];
@@ -1239,6 +1372,7 @@ function showPage(n){
   state.current = n;
   renderRail();
   document.getElementById('btnBack').style.display = (n===1) ? 'none' : 'inline-block';
+  document.getElementById('shell').classList.toggle('wide', n===4 || n===6);
   updateNextButton();
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -1250,13 +1384,14 @@ function updateNextButton(){
   if(state.current===1) complete = true; // intro just needs reading
   if(state.current===2) complete = true; // instructions just need reading
   if(state.current===3) complete = state.game.complete;
-  if(state.current===4) complete = state.reflection.complete;
-  if(state.current===5) complete = false; // last page uses restart, not next
+  if(state.current===4) complete = true; // discussion cards, nothing to answer
+  if(state.current===5) complete = true; // concept page, nothing to answer
+  if(state.current===6) complete = false; // last page uses restart, not next
 
   btn.disabled = false;
-  btn.classList.toggle('pulse', complete && state.current!==5);
+  btn.classList.toggle('pulse', complete && state.current!==6);
 
-  if(state.current===5){
+  if(state.current===6){
     btn.style.display='none';
     hint.textContent='';
   } else {
@@ -1264,8 +1399,7 @@ function updateNextButton(){
     hint.textContent = complete ? 'Ready to continue' : (
       state.current===1 ? 'Take a moment, then continue' :
       state.current===2 ? 'Take a moment, then continue' :
-      state.current===3 ? 'Clear the junction to continue' :
-      'Answer both questions to continue'
+      'Clear the junction to continue'
     );
   }
 }
@@ -1273,7 +1407,7 @@ function updateNextButton(){
 function tryGoNext(){
   if(document.getElementById('btnNext').disabled) return;
   const next = state.current + 1;
-  if(next > 5) return;
+  if(next > 6) return;
   state.furthest = Math.max(state.furthest, next);
   showPage(next);
   if(next===3) renderGame();
@@ -1282,8 +1416,12 @@ function tryGoNext(){
 /* ---------------- back navigation with warning ---------------- */
 let pendingBackFrom = null;
 function tryGoBack(){
-  pendingBackFrom = state.current;
-  document.getElementById('modalOverlay').classList.add('show');
+  if(state.current === 3){
+    pendingBackFrom = state.current;
+    document.getElementById('modalOverlay').classList.add('show');
+  } else {
+    performGoBack(state.current);
+  }
 }
 function closeModal(){
   document.getElementById('modalOverlay').classList.remove('show');
@@ -1292,12 +1430,15 @@ function closeModal(){
 function confirmGoBack(){
   const leaving = pendingBackFrom;
   document.getElementById('modalOverlay').classList.remove('show');
+  pendingBackFrom = null;
+  performGoBack(leaving);
+}
+function performGoBack(leaving){
   resetPageState(leaving);
   const dest = leaving - 1;
   state.furthest = dest;
   showPage(dest);
   if(dest===3) renderGame();
-  pendingBackFrom = null;
 }
 
 function resetPageState(pageNum){
@@ -1315,21 +1456,13 @@ function resetPageState(pageNum){
     switchPart(1);
   }
   if(pageNum===4){
-    state.reflection = { r1:null, r2:null, complete:false };
-    document.querySelectorAll('input[name="r1"], input[name="r2"]').forEach(i=>i.checked=false);
-    document.querySelectorAll('#r1-options .option, #r2-options .option').forEach(o=>o.classList.remove('selected','correct-flag','wrong-flag'));
-    document.getElementById('r1-feedback').classList.remove('show');
-    document.getElementById('r2-feedback').classList.remove('show');
-    document.getElementById('revealPanel').classList.remove('show');
+    // page 4 is now a static set of discussion cards — nothing to reset
   }
   if(pageNum===5){
-    state.quiz = { answers:[null,null,null,null], submitted:false, score:0, complete:false };
-    document.querySelectorAll('#quizForm input[type=radio]').forEach(i=>i.checked=false);
-    document.querySelectorAll('#quizForm .option').forEach(o=>o.classList.remove('selected','correct-flag','wrong-flag'));
-    document.getElementById('scoreBanner').classList.remove('show');
-    document.getElementById('restartWrap').style.display='none';
-    document.getElementById('btnSubmitQuiz').disabled = true;
-    document.getElementById('btnSubmitQuiz').style.display='inline-block';
+    // page 5 is a static concept explainer — nothing to reset
+  }
+  if(pageNum===6){
+    // page 6 is now a static set of discussion cards — nothing to reset
   }
 }
 
@@ -1500,77 +1633,6 @@ function reverseCar(car){
   });
 }
 
-/* ---------------- PAGE 4: reflection ---------------- */
-document.addEventListener('change', (e)=>{
-  if(e.target.name==='r1' || e.target.name==='r2'){
-    handleReflectionAnswer(e.target.name, e.target.value);
-  }
-  if(e.target.name && e.target.name.startsWith('q') && e.target.closest('#quizForm')){
-    handleQuizAnswer(e.target.name, e.target.value);
-  }
-});
-
-function handleReflectionAnswer(name, value){
-  state.reflection[name] = value;
-  const group = document.getElementById(name+'-options');
-  group.querySelectorAll('.option').forEach(o=>{
-    o.classList.remove('selected','correct-flag','wrong-flag');
-    if(o.querySelector('input').checked) o.classList.add('selected');
-  });
-  const correctVal = 'b';
-  const fb = document.getElementById(name+'-feedback');
-  fb.classList.add('show');
-  if(value===correctVal){
-    fb.className='qfeedback show ok';
-    fb.textContent = '✓ that\'s the shape of it.';
-  } else {
-    fb.className='qfeedback show notyet';
-    fb.textContent = 'Worth reconsidering — look at the loop of waiting again.';
-  }
-  if(state.reflection.r1 && state.reflection.r2){
-    state.reflection.complete = true;
-    document.getElementById('revealPanel').classList.add('show');
-  }
-  updateNextButton();
-}
-
-/* ---------------- PAGE 5: quiz ---------------- */
-function handleQuizAnswer(name, value){
-  const idx = parseInt(name.replace('q',''));
-  state.quiz.answers[idx] = parseInt(value);
-  const group = document.querySelector(`.options[data-q="${idx}"]`);
-  group.querySelectorAll('.option').forEach(o=>{
-    o.classList.toggle('selected', o.querySelector('input').checked);
-  });
-  const allAnswered = state.quiz.answers.every(a=>a!==null);
-  document.getElementById('btnSubmitQuiz').disabled = !allAnswered;
-}
-
-const QUIZ_CORRECT = [1,1,1,2];
-
-function submitQuiz(){
-  if(state.quiz.answers.some(a=>a===null)) return;
-  let score = 0;
-  state.quiz.answers.forEach((ans, idx)=>{
-    const group = document.querySelector(`.options[data-q="${idx}"]`);
-    const opts = group.querySelectorAll('.option');
-    opts.forEach((o, oi)=>{
-      if(oi===QUIZ_CORRECT[idx]) o.classList.add('correct-flag');
-      else if(oi===ans && ans!==QUIZ_CORRECT[idx]) o.classList.add('wrong-flag');
-    });
-    if(ans===QUIZ_CORRECT[idx]) score++;
-  });
-  state.quiz.score = score;
-  state.quiz.submitted = true;
-  state.quiz.complete = true;
-
-  document.getElementById('scoreNum').textContent = score + ' / 4';
-  document.getElementById('scoreBanner').classList.add('show');
-  document.getElementById('btnSubmitQuiz').style.display='none';
-  document.getElementById('restartWrap').style.display='block';
-  document.querySelectorAll('#quizForm input[type=radio]').forEach(i=>i.disabled=true);
-}
-
 /* ---------------- restart everything ---------------- */
 function restartJourney(){
   state.current = 1;
@@ -1578,7 +1640,7 @@ function restartJourney(){
   resetPageState(3);
   resetPageState(4);
   resetPageState(5);
-  document.querySelectorAll('#quizForm input[type=radio]').forEach(i=>i.disabled=false);
+  resetPageState(6);
   showPage(1);
 }
 
