@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-9M9C5T1Y9R');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zara's Print Studio: A Garbage Collection Case Study</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #FDF4EC;
+            --bg-2: #F3F0FA;
+            --bg-3: #EAF2FA;
+            --bg-4: #DCE9F6;
+            --ink: #1F2E37;
+            --muted: #54666D;
+            --faint: #93A5AB;
+            --primary: #4A9BD1;
+            --primary-dark: #2B6FA3;
+            --primary-deep: #22496B;
+            --amber: #EA8C36;
+            --amber-dark: #C96F1F;
+            --amber-bg: #FBE9DA;
+            --danger: #D9714F;
+            --success: #4B7A4A;
+            --card-bg: rgba(255, 255, 255, .78);
+            --glass-border: #D9E5F2;
+            --glass-bg: rgba(255, 255, 255, .4);
+            --shadow-card: 0 14px 34px -18px rgba(23, 50, 77, .35);
+            --shadow-btn: 0 16px 28px -12px rgba(43, 111, 163, .5);
+            --radius: 18px
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            background: linear-gradient(180deg, var(--bg-1), var(--bg-2) 42%, var(--bg-3));
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            margin: 0
+        }
+
+        p {
+            line-height: 1.65;
+            color: var(--muted);
+            margin: 0
+        }
+
+        button {
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer
+        }
+
+        .wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 96px 20px 70px
+        }
+
+        .stepper {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-3);
+            color: var(--primary-deep);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--glass-border);
+            transition: .25s;
+            z-index: 2
+        }
+
+        .step-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+            text-align: center;
+            letter-spacing: .03em;
+            font-family: 'Poppins', sans-serif
+        }
+
+        .step-line {
+            position: absolute;
+            top: 16px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--glass-border);
+            z-index: 1
+        }
+
+        .step-item:first-child .step-line {
+            display: none
+        }
+
+        .step-item.done .step-circle {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: #fff
+        }
+
+        .step-item.done .step-line {
+            background: var(--primary-dark)
+        }
+
+        .step-item.active .step-circle {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary-dark);
+            color: #fff;
+            box-shadow: 0 0 0 4px rgba(74, 155, 209, .25)
+        }
+
+        .step-item.active .step-label {
+            color: var(--primary-dark)
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--amber-dark);
+            background: var(--amber-bg);
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif
+        }
+
+        .hero {
+            text-align: center
+        }
+
+        .hero h1 {
+            font-size: clamp(24px, 4.4vw, 38px);
+        }
+
+        .section-sub {
+            max-width: 640px;
+            margin: 0 auto 18px;
+            text-align: center;
+            font-size: 14.5px
+        }
+
+        .section-title {
+            font-size: clamp(24px, 4vw, 36px);
+            color: var(--ink);
+            margin: 0 0 8px
+        }
+
+        .section {
+            display: none
+        }
+
+        .section.active-view {
+            display: block;
+            animation: sectionFade .35s ease
+        }
+
+        @keyframes sectionFade {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(8px)
+        }
+
+        .problem-card {
+            text-align: left;
+            max-width: 680px;
+            margin: 20px auto 0
+        }
+
+        .problem-card p {
+            margin: 0 0 14px;
+            font-size: 15.5px
+        }
+
+        .problem-card b {
+            color: var(--primary-deep)
+        }
+
+        .rules-list {
+            list-style: none;
+            margin: 20px auto 0;
+            padding: 0;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .rules-list li {
+            font-size: 14px;
+            color: var(--muted);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            line-height: 1.5
+        }
+
+        .rules-list li::before {
+            content: "✕";
+            color: var(--danger);
+            font-weight: 700
+        }
+
+        .rules-list li.ok::before {
+            content: "✓";
+            color: var(--success)
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 999px;
+            padding: 13px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: var(--shadow-btn);
+            transition: .15s
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--primary-dark);
+            box-shadow: none;
+            border: 1.5px solid var(--primary);
+            padding: 11px 22px
+        }
+
+        .btn.small {
+            padding: 10px 18px;
+            font-size: 13px
+        }
+
+        .btn.pulse {
+            animation: btnPulse 1.2s ease-in-out infinite alternate
+        }
+
+        @keyframes btnPulse {
+            from {
+                box-shadow: var(--shadow-btn)
+            }
+
+            to {
+                box-shadow: 0 0 0 6px rgba(74, 155, 209, .3), var(--shadow-btn)
+            }
+        }
+
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px
+        }
+
+        .stat {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--muted)
+        }
+
+        .stat strong {
+            color: var(--ink)
+        }
+
+        .game-shell {
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .route-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-3);
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        .route-head .sub {
+            font-size: 12px;
+            color: var(--faint);
+            font-weight: 600
+        }
+
+        .route {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: wrap;
+            padding: 30px 14px 18px;
+            min-height: 150px;
+            background: linear-gradient(180deg, var(--bg-3), var(--bg-4));
+            border-radius: 14px
+        }
+
+        .stop-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .stop {
+            position: relative;
+            width: 118px;
+            min-height: 96px;
+            background: #fff;
+            border: 2.5px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 22px 8px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-align: center;
+            transition: border-color .2s, box-shadow .2s, transform .2s;
+            box-shadow: 0 8px 16px -10px rgba(23, 50, 77, .35)
+        }
+
+        .stop-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12.5px;
+            color: var(--ink);
+            line-height: 1.25
+        }
+
+        .stop-next {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--faint);
+            line-height: 1.3;
+            word-break: break-word
+        }
+
+        .stop-tag {
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Poppins', sans-serif;
+            font-size: 8.5px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            padding: 2px 8px;
+            border-radius: 999px;
+            white-space: nowrap
+        }
+
+        .stop-tag.head {
+            background: var(--primary-dark);
+            color: #fff
+        }
+
+        .stop-tag.tail {
+            background: var(--amber-dark);
+            color: #fff
+        }
+
+        .stop.here {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 4px rgba(234, 140, 54, .3);
+            transform: translateY(-4px)
+        }
+
+        .stop.here::after {
+            content: "🛵 YOU ARE HERE";
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--amber-dark);
+            white-space: nowrap;
+            letter-spacing: .04em
+        }
+
+        .stop.newborn {
+            animation: stopIn .5s ease
+        }
+
+        @keyframes stopIn {
+            0% {
+                opacity: 0;
+                transform: scale(.6)
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        .arrow {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            flex-shrink: 0;
+            padding-bottom: 4px
+        }
+
+        .arrow.dead {
+            color: var(--faint)
+        }
+
+        .how-to {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1.5px dashed var(--primary);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 12.5px;
+            color: var(--muted)
+        }
+
+        .how-to b {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--primary-deep)
+        }
+
+        .how-to code {
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: rgba(74, 155, 209, .1);
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-size: 11.5px
+        }
+
+        .hold-status {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-deep);
+            background: rgba(255, 255, 255, .55);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 9px 12px
+        }
+
+        .mini-chain {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            margin: 16px auto 4px
+        }
+
+        .mini-note {
+            position: relative;
+            background: #fff;
+            border: 2px solid var(--glass-border);
+            border-radius: 9px;
+            padding: 11px 8px 6px;
+            width: 108px;
+            text-align: center
+        }
+
+        .mini-note b {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            color: var(--ink);
+            line-height: 1.2
+        }
+
+        .mini-note span {
+            font-size: 9.5px;
+            color: var(--faint);
+            font-weight: 600
+        }
+
+        .mini-note.here {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(234, 140, 54, .25)
+        }
+
+        .mini-note.tail-mini {
+            border-color: var(--amber-dark)
+        }
+
+        .mini-arrow {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            flex-shrink: 0
+        }
+
+        .move-list {
+            list-style: none;
+            margin: 10px 0 0;
+            padding: 0;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 9px
+        }
+
+        .move-list li {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 11px;
+            padding: 10px 13px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        .move-list b {
+            color: var(--primary-deep)
+        }
+
+        .cost-legend {
+            display: inline-flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .cost-chip {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--muted);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 3px 10px
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--primary-deep);
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 999px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .3s;
+            z-index: 90;
+            max-width: 90vw;
+            text-align: center;
+            font-size: 13.5px
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(31, 46, 55, .5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 95;
+            padding: 20px
+        }
+
+        .modal-overlay.show {
+            display: flex
+        }
+
+        .modal-box {
+            background: #fff;
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 30px 28px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(23, 50, 77, .22)
+        }
+
+        .modal-eyebrow {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--amber-dark);
+            margin-bottom: 12px
+        }
+
+        .modal-box p {
+            font-size: 14.5px;
+            color: var(--muted);
+            margin: 0 0 8px
+        }
+
+        .modal-punch {
+            font-weight: 700;
+            color: var(--ink)
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #E39A7D, var(--danger));
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(217, 113, 79, .3)
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px)
+        }
+
+        .qgrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 8px
+        }
+
+        .qcard {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px 20px 20px;
+            box-shadow: var(--shadow-card);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform .15s
+        }
+
+        .qcard:hover {
+            transform: translateY(-3px)
+        }
+
+        .q-num {
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--primary)
+        }
+
+        .q-text {
+            font-size: 14.5px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-weight: 600
+        }
+
+        .learning-flow {
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: left
+        }
+
+        .learning-flow>*+* {
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px dashed var(--glass-border)
+        }
+
+        .learning-flow h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--primary-dark);
+            margin: 0 0 8px
+        }
+
+        .learning-flow p {
+            font-size: 14px
+        }
+
+        .key-learnings h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--primary-deep);
+            text-align: center
+        }
+
+        .kl-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .kl-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            text-align: left
+        }
+
+        .kl-item+.kl-item {
+            padding-top: 14px;
+            border-top: 1px dotted var(--glass-border)
+        }
+
+        .kl-icon {
+            font-size: 20px;
+            flex-shrink: 0
+        }
+
+        .kl-item b {
+            display: block;
+            font-size: 13.5px;
+            color: var(--primary-deep);
+            margin-bottom: 3px
+        }
+
+        .kl-item p {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .compare-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 18px
+        }
+
+        .compare-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center
+        }
+
+        .compare-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .compare-sub {
+            font-size: 12.5px;
+            color: var(--faint);
+            margin-top: 4px
+        }
+
+        .confetti-field {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 100
+        }
+
+        .confetti-field i {
+            position: absolute;
+            top: -3%;
+            display: block;
+            width: 10px;
+            height: 16px;
+            border-radius: 3px;
+            animation: cfall linear forwards;
+            opacity: .95
+        }
+
+        .confetti-field i:nth-child(odd) {
+            border-radius: 50%
+        }
+
+        @keyframes cfall {
+            0% {
+                transform: translate3d(0, 0, 0) rotate(0deg)
+            }
+
+            100% {
+                transform: translate3d(var(--sway, 40px), 105vh, 0) rotate(720deg)
+            }
+        }
+
+        code {
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+    
+
+        /* ---- Garbage Collection game board ---- */
+        .root-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .root-chip {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            background: var(--card-bg);
+            border: 1.5px solid var(--primary);
+            border-radius: 999px;
+            padding: 7px 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: var(--shadow-card)
+        }
+
+        .root-chip .r-arrow {
+            color: var(--amber-dark);
+            font-weight: 800
+        }
+
+        .arrow-legend {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .lg-chip {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 4px 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .lg-chip .sw {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        .studio-field {
+            position: relative;
+            height: 380px;
+            background: linear-gradient(180deg, var(--bg-3), var(--bg-4));
+            border: 1.5px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        .arrows {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none
+        }
+
+        .card-node {
+            position: absolute;
+            width: 92px;
+            height: 66px;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border: 2.5px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            cursor: pointer;
+            text-align: center;
+            z-index: 2;
+            box-shadow: 0 8px 16px -10px rgba(23, 50, 77, .35);
+            transition: border-color .2s, box-shadow .2s, transform .2s;
+            user-select: none
+        }
+
+        .card-node:hover {
+            transform: translate(-50%, -50%) translateY(-3px)
+        }
+
+        .card-node.rooted {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 4px rgba(234, 140, 54, .3)
+        }
+
+        .card-node.live {
+            border-color: var(--success);
+            box-shadow: 0 0 0 4px rgba(75, 122, 74, .25)
+        }
+
+        .card-node.locked {
+            cursor: default
+        }
+
+        .nd-tag {
+            font-family: 'Poppins', sans-serif;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--faint)
+        }
+
+        .nd-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--ink);
+            line-height: 1.2
+        }
+
+        .card-node.sweeping {
+            animation: sweepOut .5s forwards;
+            pointer-events: none
+        }
+
+        .card-node.swept {
+            display: none
+        }
+
+        .card-node.wrong {
+            animation: shake .4s
+        }
+
+        @keyframes sweepOut {
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(.35) rotate(8deg)
+            }
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translate(-50%, -50%)
+            }
+
+            20% {
+                transform: translate(-50%, -50%) translateX(-7px)
+            }
+
+            40% {
+                transform: translate(-50%, -50%) translateX(7px)
+            }
+
+            60% {
+                transform: translate(-50%, -50%) translateX(-5px)
+            }
+
+            80% {
+                transform: translate(-50%, -50%) translateX(5px)
+            }
+        }
+
+        .field-note {
+            text-align: center;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--primary-deep)
+        }
+
+        .speed-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .speed-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--faint)
+        }
+
+        .speed-select {
+            padding: 7px 12px;
+            border: 1.5px solid var(--primary);
+            border-radius: 999px;
+            background: var(--card-bg);
+            color: var(--primary-dark);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12.5px;
+            cursor: pointer
+        }
+
+        @media (max-width: 700px) {
+            .studio-field {
+                height: 330px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="stepper" id="stepper">
+            <div class="step-item active" id="step-1"><span class="step-line"></span><span
+                    class="step-circle">1</span><span class="step-label">The Puzzle</span></div>
+            <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span
+                    class="step-label">The Briefing</span></div>
+            <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span
+                    class="step-label">The Studio</span></div>
+            <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span
+                    class="step-label">Case Notes</span></div>
+            <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span
+                    class="step-label">The Method</span></div>
+            <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span
+                    class="step-label">New Cases</span></div>
+        </div>
+
+        <section class="section active-view" id="sec-puzzle">
+            <div class="hero">
+                <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 1 · The Puzzle</span>
+                <h1>Her studio is full, and nobody knows why.</h1>
+            </div>
+            <div class="card problem-card">
+                <p>Zara designs posters in a little print studio app. Every poster she makes is a
+                    <b>board</b>, and every board can <b>point to other boards</b>: a poster keeps a logo board, a
+                    palette board, a gradient board. Three things are pinned up on her screen right now, the
+                    <b>Editing now</b> board, the <b>Clipboard</b>, and the <b>Undo pile</b>.</p>
+                <p>Feeling tidy, Zara deletes a folder of old drafts. Yet the studio's workspace never seems to shrink.
+                    New posters get made faster than space comes back, and the app starts crawling. She calls the
+                    manager: "I removed those drafts, so where is all this memory going?"</p>
+                <p>The workspace holds far more boards than the ones she can see. Only the boards you can <b>reach by
+                        following the arrows</b> from the pins are actually in use. Everything else sits there, taking
+                    space, with no one pointing at it at all. How can the studio tell which boards to throw away, and
+                    how should it sweep them out?</p>
+            </div>
+            <div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button>
+            </div>
+        </section>
+
+        <section class="section" id="sec-briefing">
+            <div class="hero">
+                <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 2 · The Briefing</span>
+                <h1>Follow the Arrows</h1>
+            </div>
+            <div class="card" style="text-align:center;max-width:680px;margin:0 auto">
+                <p style="color:var(--muted);font-size:14.5px">Every board in the workspace is a box. Some boxes are
+                    <b style="color:var(--primary-deep)">pinned</b> by the studio (Editing now, Clipboard, Undo pile).
+                    Arrows run from one board to another, each arrow is a <i>reference</i>. A board is in use
+                    <b style="color:var(--primary-deep)">only if you can walk from a pin to it</b>, following arrows.</p>
+
+                <h4 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your three moves</h4>
+                <ul class="move-list">
+                    <li><b>👀 Inspect.</b> Follow the arrows in your head from every pin and decide which boards they
+                        reach.</li>
+                    <li><b>🧹 Sweep.</b> Click any board with no path from a pin to free its space.</li>
+                    <li><b>💡 Scan.</b> Press the hint to check which boards really are still in use.</li>
+                </ul>
+
+                <h4 style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your mission</h4>
+                <ul class="move-list">
+                    <li><b>1 · Trace.</b> For each board, find whether some pin reaches it.</li>
+                    <li><b>2 · Sweep junk.</b> Free every board no pin can reach.</li>
+                    <li><b>3 · Clear all scenes.</b> Finish all three studio scenes.</li>
+                </ul>
+
+                <div class="cost-legend">
+                    <span class="cost-chip">Sweep junk = space freed</span><span
+                        class="cost-chip">Sweep a live board = mistake</span><span class="cost-chip">Scan = 1 reveal</span>
+                </div>
+                <p style="font-size:14px;color:var(--primary-deep);font-weight:600;margin-top:10px">A board is only
+                    garbage if <b>no pin can lead to it</b>. Reachable means it stays.</p>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn"
+                    id="btn-briefing-start">Enter the Studio ▶</button></div>
+        </section>
+
+        <section class="section" id="sec-studio">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3
+                · The Studio</span>
+            <h2 class="section-title">Sweep the Unreachable</h2>
+            <p class="section-sub">Every box is one board, and every arrow is a reference from one board to another.
+                The pinned chips at the top are the studio's roots. Sweep the boards that no pin can reach, keep every
+                board a pin can reach.</p>
+            <div class="game-shell">
+                <div class="stats">
+                    <span class="stat">Freed: <strong id="s-free">0</strong>/<span id="s-garbage">0</span></span>
+                    <span class="stat">Mistakes: <strong id="s-mist">0</strong></span>
+                    <span class="stat">Scene: <strong id="s-scene">1</strong>/3</span>
+                    <span class="stat">Mode: <strong id="s-mode">Manual</strong></span>
+                </div>
+                <div class="how-to">
+                    <span>If board A has an arrow to board B, then A holds a reference to B. Start from each pin and
+                        follow the arrows. Every board you still touch is reachable, so it stays. Any board no pin
+                        reaches is junk: click it to sweep it.</span>
+                </div>
+                <div class="root-bar" id="root-bar"></div>
+                <div class="arrow-legend">
+                    <span class="lg-chip"><span class="sw" style="background:var(--amber)"></span> Pin: this board is held by a root</span>
+                    <span class="lg-chip"><span class="sw" style="background:var(--primary-deep)"></span> Arrow: one board uses another</span>
+                    <span class="lg-chip"><span class="sw" style="background:var(--success)"></span> Ring (shown when you Scan): reachable, keep it</span>
+                </div>
+                <div class="studio-field" id="studio-field"></div>
+                <p class="field-note" id="field-note">Sweep the junk, keep what the pins reach.</p>
+                <div class="section-nav" style="margin-top:14px">
+                    <button class="btn ghost small" id="btn-hint">💡 Scan</button>
+                    <button class="btn ghost small" id="btn-auto">▶ Auto Sweep</button>
+                    <button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
+                    <button class="btn ghost small" id="btn-reset">↺ New Round</button>
+                </div>
+                <div class="section-nav" style="margin-top:4px">
+                    <button class="btn ghost small" id="btn-scene-next" style="display:none">Next Scene ➜</button>
+                </div>
+<div class="speed-row">
+                    <span class="speed-label">Speed</span>
+                    <select id="speed-select" class="speed-select" title="Playback speed">
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="1.75">1.75x</option>
+                    <option value="2">2x</option>
+                    </select>
+                </div>
+                <div id="mission-banner"
+                    style="margin-top:14px;padding:14px 16px;border-radius:12px;background:#FFF3E6;border:1.5px solid var(--glass-border);text-align:center;font-size:13px">
+                    <span style="font-weight:800;color:var(--amber-dark)">🎯 Mission:</span> <span id="mission-text"
+                        style="color:var(--ink)">Sweep every unreachable board in all three scenes.</span>
+                    <span id="mission-status" style="font-weight:700;color:var(--muted)">· in progress</span>
+                    <div style="margin-top:8px;font-size:12.5px;color:var(--muted)">
+                        <span id="chk-scene-1">◻ Clear Scene 1</span> ·
+                        <span id="chk-scene-2">◻ Clear Scene 2</span> ·
+                        <span id="chk-scene-3">◻ Clear Scene 3</span>
+                    </div>
+                    <div id="mission-done"
+                        style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(75,122,74,.12);border:1.5px solid var(--success);font-weight:800;color:var(--success);font-size:14px">
+                        ✅ Studio Compacted</div>
+                </div>
+                <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--primary-deep);background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:10px;padding:10px 14px;display:none"
+                    id="game-hint"></p>
+                <div class="section-nav" style="margin-top:16px">
+                    <button class="btn ghost small" id="btn-studio-back">⬅ Back</button>
+                    <button class="btn" id="btn-studio-continue">Continue to Case Notes ➜</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="sec-notes">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4
+                · Case Notes</span>
+            <h2 class="section-title">What did you notice?</h2>
+            <p class="section-sub">No single right answer. Just what you saw in the studio.</p>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · Judging a board</span><span class="q-text">Before the
+                        scan, how did you decide a board was junk? Did you count the arrows pointing at it, follow all
+                        paths from the pins, or guess from its name?</span></div>
+                <div class="qcard"><span class="q-num">02 · The pinned chain</span><span class="q-text">A board far
+                        from any pin, say behind four arrows, still had to stay. What made it reachable, and what does
+                        that tell you about how far "reach" can travel?</span></div>
+                <div class="qcard"><span class="q-num">03 · The swept board</span><span class="q-text">When you swept a
+                        junk board, did any other board change? Its name was gone, but the boards it pointed at maybe
+                        still had other paths to them.</span></div>
+                <div class="qcard"><span class="q-num">04 · An arrow to junk</span><span class="q-text">One junk board
+                        held an arrow pointing at another junk board. Both were garbage anyway. Why didn't that arrow
+                        save either of them?</span></div>
+                <div class="qcard"><span class="q-num">05 · Reach, not use</span><span class="q-text">A board a pin
+                        reaches survives even if Zara hasn't touched it in weeks. Being reachable and being actively
+                        used are different. Which one did the studio care about?</span></div>
+                <div class="qcard"><span class="q-num">06 · Beyond the studio</span><span class="q-text">Where else do
+                        things linger until nothing points at them: closed browser tabs, app filters, layers in a photo
+                        editor, your phone's "recently edited" list?</span></div>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn"
+                    id="btn-notes-continue">Continue to The Method ➜</button></div>
+        </section>
+
+        <section class="section" id="sec-method">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5
+                · The Method</span>
+            <h2 class="section-title">A tidy studio is quieter than a tidy desk</h2>
+            <p class="section-sub">Your studio never "empties on purpose". It finds what can't be reached, then clears
+                it. Here's the name.</p>
+            <div class="hero" style="margin-bottom:6px">
+                <div style="font-size:46px">🧹</div>
+                <h2>Garbage Collection</h2>
+            </div>
+            <div class="learning-flow" style="margin-top:10px">
+                <h4>Definition</h4>
+                <p><strong>Garbage collection is the automatic process of finding the memory a program can no longer
+                        reach from its roots and freeing it.</strong> Like the studio, what the pins can still reach
+                    stays, everything else gets swept.</p>
+                <h4>Mechanism</h4>
+                <p><code>mark</code>: start from every root and walk all references, flagging what you touch;
+                    <code>sweep</code>: walk the workspace and free every unmarked object. Reachable stays, unreachable
+                    goes.</p>
+                <h4>Vocabulary</h4>
+                <p><code>root</code>: the pins, live references the program holds, <code>reference</code>: an arrow to
+                    another object, <code>reachability</code>: a path from a root, <code>garbage</code>: unreachable
+                    memory, <code>mark</code>: tracing reachable objects, <code>sweep</code>: freeing the rest.</p>
+            </div>
+            <div class="comp" style="max-width:640px;margin:40px auto 28px;text-align:left">
+                <div class="compare-cards">
+                    <div class="compare-card"><span class="compare-title">Returning memory by hand</span><span
+                            class="compare-sub">You must remember to free every board you finish. Miss one, it sits
+                            forever; free one twice, the program falls over. The workload hides in your code.</span></div>
+                    <div class="compare-card"><span class="compare-title">Automatic collection</span><span
+                            class="compare-sub">Just drop the last arrow to a board. The collector traces from the pins
+                            and frees it later, in the background, and you only think about reachability.</span></div>
+                </div>
+                <div class="key-learnings">
+                    <h3>🔑 Key Learnings</h3>
+                    <div class="kl-grid">
+                        <div class="kl-item"><span class="kl-icon">📍</span>
+                            <div><b>Liveness Is Inherited</b>
+                                <p>An object is not kept because it is important, but because some root reaches it.
+                                    Delete the last path and it becomes garbage, no matter how big or young it is.</p>
+                            </div>
+                        </div>
+                        <div class="kl-item"><span class="kl-icon">🔗</span>
+                            <div><b>Cycles Need Tracing</b>
+                                <p>Two garbage boards pointing at each other look alive if you only count incoming
+                                    arrows. Mark and sweep walks from roots, so a ring with no root connection is
+                                    collected anyway.</p>
+                            </div>
+                        </div>
+                        <div class="kl-item"><span class="kl-icon">♻️</span>
+                            <div><b>Reach, Not Intention</b>
+                                <p>You cannot free a board by wishing it away; you can only drop the references to it.
+                                    The collector decides the rest, which is why leaks are almost always forgotten
+                                    references, not forgotten frees.</p>
+                            </div>
+                        </div>
+                        <div class="kl-item"><span class="kl-icon">⏱️</span>
+                            <div><b>Collection Is Deferred</b>
+                                <p>Junk boards do not vanish the moment Zara stops using them. The collector runs
+                                    later, which is why a program can grow before memory is quietly reclaimed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn"
+                    id="btn-method-continue">Continue to New Cases ➜</button></div>
+        </section>
+
+        <section class="section" id="sec-cases">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6
+                · New Cases</span>
+            <h2 class="section-title">Spot the reachable, sweep the rest</h2>
+            <p class="section-sub">New situations, same reachability question.</p>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · App event</span><span class="q-text">A music app removes a
+                        song from a playlist. If the song is still pointed at by the "now playing" queue, is it
+                        garbage, and should it be freed right away?</span></div>
+                <div class="qcard"><span class="q-num">02 · The leak</span><span class="q-text">A photo viewer keeps a
+                        reference to the last 1,000 edits "just in case". Usage time never frees them. Is it the
+                        collecting that is failing, or the retained root?</span></div>
+                <div class="qcard"><span class="q-num">03 · Two references</span><span class="q-text">A document is
+                        referenced by an open panel and by "autosave". One closes. Is the document garbage now? What is
+                        the role of the second reference?</span></div>
+                <div class="qcard"><span class="q-num">04 · The ring</span><span class="q-text">Three cache boards point
+                        to each other in a circle, and nothing else points to any of them. Would a collector that only
+                        counted incoming arrows ever free them?</span></div>
+                <div class="qcard"><span class="q-num">05 · When to collect</span><span class="q-text">Sweeping mid
+                        slide while a user drags might freeze the frame. Some runtimes wait until memory pressure.
+                        What decides a good moment to run a collection pass?</span></div>
+                <div class="qcard"><span class="q-num">06 · Manual freedom</span><span class="q-text">A library with no
+                        collector (like plain C) hands the full task to you. What kinds of mistakes does that free you
+                        to make, and does "reachable" still apply?</span></div>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
+                    id="btn-cases-finish">Restart ↻</button></div>
+        </section>
+    </div>
+
+<div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-eyebrow">Wait:</div>
+            <p>Leaving this chapter resets your current progress on this page.</p>
+            <p class="modal-punch">Do you want to leave?</p>
+            <div class="modal-actions">
+                <button class="btn ghost" id="btn-modal-stay">Stay Here</button>
+                <button class="btn btn-danger" id="btn-modal-leave">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function () {
+
+            var SECTIONS = [
+                { name: 'sec-puzzle', step: 1 },
+                { name: 'sec-briefing', step: 2 },
+                { name: 'sec-studio', step: 3 },
+                { name: 'sec-notes', step: 4 },
+                { name: 'sec-method', step: 5 },
+                { name: 'sec-cases', step: 6 }
+            ];
+            var sectionIndex = 0;
+            var pendingSection = null;
+
+            var SCENES = [
+                {
+                    roots: [{ chip: '🖥️ Editing now', to: 'a' }, { chip: '📋 Clipboard', to: 'e' }],
+                    nodes: [
+                        { id: 'a', tag: 'POSTER', label: 'poster-A', x: 18, y: 24 },
+                        { id: 'b', tag: 'LOGO', label: 'logo-B', x: 40, y: 24 },
+                        { id: 'c', tag: 'PALETTE', label: 'palette-C', x: 62, y: 24 },
+                        { id: 'd', tag: 'DRAFT', label: 'draft-D', x: 84, y: 24 },
+                        { id: 'e', tag: 'CLIP', label: 'clip-X', x: 30, y: 74 },
+                        { id: 'f', tag: 'CLIP', label: 'clip-Y', x: 50, y: 74 },
+                        { id: 'g', tag: 'BANNER', label: 'banner-G', x: 70, y: 74 },
+                        { id: 'h', tag: 'MOOD', label: 'mood-H', x: 88, y: 74 }
+                    ],
+                    refs: [['a', 'b'], ['a', 'c'], ['b', 'd'], ['c', 'd']]
+                },
+                {
+                    roots: [{ chip: '🖥️ Editing now', to: 'a1' }, { chip: '📋 Clipboard', to: 'q1' }],
+                    nodes: [
+                        { id: 'a1', tag: 'POSTER', label: 'poster-1', x: 10, y: 22 },
+                        { id: 'a2', tag: 'COVER', label: 'cover-2', x: 30, y: 22 },
+                        { id: 'a3', tag: 'THUMB', label: 'thumb-3', x: 50, y: 22 },
+                        { id: 'a4', tag: 'BANNER', label: 'banner-4', x: 70, y: 22 },
+                        { id: 'a5', tag: 'POSTER', label: 'poster-5', x: 90, y: 22 },
+                        { id: 'q1', tag: 'DRAFT', label: 'draft-1', x: 10, y: 50 },
+                        { id: 'q2', tag: 'PALETTE', label: 'palette-2', x: 30, y: 50 },
+                        { id: 'q3', tag: 'GRAD', label: 'grad-3', x: 50, y: 50 },
+                        { id: 'r1', tag: 'CLIP', label: 'clip-1', x: 70, y: 74 },
+                        { id: 'r2', tag: 'LOGO', label: 'logo-2', x: 90, y: 74 }
+                    ],
+                    refs: [['a1', 'a2'], ['a2', 'a3'], ['a3', 'a4'], ['q1', 'q2'], ['q2', 'q3'], ['a1', 'q2']]
+                },
+                {
+                    roots: [{ chip: '🖥️ Editing now', to: 'h1' }, { chip: '📋 Clipboard', to: 'c1' }],
+                    nodes: [
+                        { id: 'h1', tag: 'HERO', label: 'hero-1', x: 10, y: 22 },
+                        { id: 'h2', tag: 'HERO', label: 'hero-2', x: 30, y: 22 },
+                        { id: 'h3', tag: 'HERO', label: 'hero-3', x: 50, y: 22 },
+                        { id: 'h4', tag: 'HERO', label: 'hero-4', x: 70, y: 22 },
+                        { id: 'h5', tag: 'HERO', label: 'hero-5', x: 90, y: 22 },
+                        { id: 'c1', tag: 'CARD', label: 'card-1', x: 10, y: 74 },
+                        { id: 'c2', tag: 'CARD', label: 'card-2', x: 30, y: 74 },
+                        { id: 'c3', tag: 'CARD', label: 'card-3', x: 50, y: 74 },
+                        { id: 'c4', tag: 'CARD', label: 'card-4', x: 70, y: 74 },
+                        { id: 'c5', tag: 'CARD', label: 'card-5', x: 90, y: 74 }
+                    ],
+                    refs: [['h1', 'h2'], ['h2', 'h3'], ['h3', 'h4'], ['c1', 'c2'], ['c2', 'c3'], ['h2', 'c2']]
+                }
+            ];
+
+            var field = document.getElementById('studio-field');
+            var rootBar = document.getElementById('root-bar');
+            var sFree = document.getElementById('s-free');
+            var sGarbage = document.getElementById('s-garbage');
+            var sMist = document.getElementById('s-mist');
+            var sScene = document.getElementById('s-scene');
+            var sMode = document.getElementById('s-mode');
+            var gameHint = document.getElementById('game-hint');
+            var missionStatus = document.getElementById('mission-status');
+            var missionDone = document.getElementById('mission-done');
+            var btnSceneNext = document.getElementById('btn-scene-next');
+            var btnAuto = document.getElementById('btn-auto');
+            var btnPause = document.getElementById('btn-pause');
+            var btnReset = document.getElementById('btn-reset');
+            var speedSel = document.getElementById('speed-select');
+
+            var sceneIdx = 0;
+            var scene = null;
+            var reachable = {};
+            var garbageList = [];
+            var freeCount = 0;
+            var mistakeCount = 0;
+            var done = false;
+            var sweptIds = {};
+            var nodesById = {};
+            var cardEls = {};
+            var autoOn = false;
+            var paused = false;
+            var autoTimer = null;
+            var timeline = [];
+            var timelineIdx = 0;
+            var hintTimer = null;
+            var reachMeta = null;
+            var studioIntroShown = false;
+
+            function reachPaths(sc) {
+                var adj = {};
+                sc.refs.forEach(function (r) {
+                    (adj[r[0]] = adj[r[0]] || []).push(r[1]);
+                });
+                var seen = {};
+                var prev = {};
+                var rootFor = {};
+                var q = [];
+                sc.roots.forEach(function (r) {
+                    if (!seen[r.to]) {
+                        seen[r.to] = 1;
+                        rootFor[r.to] = r.chip;
+                        q.push(r.to);
+                    }
+                });
+                while (q.length) {
+                    var cur = q.shift();
+                    (adj[cur] || []).forEach(function (nx) {
+                        if (!seen[nx]) {
+                            seen[nx] = 1;
+                            prev[nx] = cur;
+                            rootFor[nx] = rootFor[cur];
+                            q.push(nx);
+                        }
+                    });
+                }
+                return { seen: seen, prev: prev, rootFor: rootFor };
+            }
+
+            function toast(msg) {
+                var t = document.getElementById('toast');
+                t.textContent = msg;
+                t.classList.add('show');
+                clearTimeout(t._timer);
+                t._timer = setTimeout(function () {
+                    t.classList.remove('show');
+                }, 2600);
+            }
+
+function confetti() {
+                if (document.getElementById('confetti-layer')) return;
+                var layer = document.createElement('div');
+                layer.id = 'confetti-layer';
+                layer.className = 'confetti-field';
+                var cols = ['#f4d03f', '#e74c3c', '#2ecc71', '#3498db', '#9b59b6', '#ff6b81'];
+                for (var i = 0; i < 160; i++) {
+                    var p = document.createElement('i');
+                    p.style.left = (Math.random() * 100) + '%';
+                    p.style.background = cols[Math.floor(Math.random() * cols.length)];
+                    var r = 5 + Math.random() * 6;
+                    p.style.width = r + 'px';
+                    p.style.height = (r * 0.5) + 'px';
+                    p.style.animationDelay = (Math.random() * 0.6) + 's';
+                    p.style.animationDuration = (1.8 + Math.random() * 2.2) + 's';
+                    layer.appendChild(p);
+                }
+                document.body.appendChild(layer);
+                setTimeout(function () {
+                    if (layer.parentNode) layer.parentNode.removeChild(layer);
+                }, 4200);
+            }
+
+            function computeArrows() {
+                var svg = document.getElementById('arrows');
+                if (!svg) return;
+                var fRect = field.getBoundingClientRect();
+                if (!fRect.width) return;
+                var els = svg.querySelectorAll('line');
+                for (var i = 0; i < els.length; i++) {
+                    var ln = els[i];
+                    var a = nodesById[ln.getAttribute('data-f')];
+                    if (ln.getAttribute('data-root') === '1') {
+                        var nd = cardEls[a.id];
+                        var r = nd.getBoundingClientRect();
+                        var cx = r.left + r.width / 2 - fRect.left;
+                        ln.setAttribute('x1', cx);
+                        ln.setAttribute('y1', 0);
+                        ln.setAttribute('x2', cx);
+                        ln.setAttribute('y2', r.top - fRect.top + 4);
+                    } else {
+                        var fa = cardEls[ln.getAttribute('data-f')];
+                        var ta = cardEls[ln.getAttribute('data-t')];
+                        var rf = fa.getBoundingClientRect();
+                        var rt = ta.getBoundingClientRect();
+                        ln.setAttribute('x1', rf.left + rf.width / 2 - fRect.left);
+                        ln.setAttribute('y1', rf.top + rf.height / 2 - fRect.top);
+                        ln.setAttribute('x2', rt.left + rt.width / 2 - fRect.left);
+                        ln.setAttribute('y2', rt.top + rt.height / 2 - fRect.top);
+                    }
+                }
+            }
+
+            function initScene(idx) {
+                scene = SCENES[idx];
+                sceneIdx = idx;
+                var pool = scene.nodes.map(function (n) {
+                    return { tag: n.tag, label: n.label };
+                });
+                for (var pi = pool.length - 1; pi > 0; pi--) {
+                    var pj = Math.floor(Math.random() * (pi + 1));
+                    var tmp = pool[pi];
+                    pool[pi] = pool[pj];
+                    pool[pj] = tmp;
+                }
+                scene.nodes.forEach(function (n, i) {
+                    n.tag = pool[i].tag;
+                    n.label = pool[i].label;
+                });
+                var rp = reachPaths(scene);
+                reachable = rp.seen;
+                reachMeta = rp;
+                garbageList = scene.nodes.filter(function (n) {
+                    return !reachable[n.id];
+                }).map(function (n) {
+                    return n.id;
+                });
+                freeCount = 0;
+                mistakeCount = 0;
+                done = false;
+                sweptIds = {};
+                nodesById = {};
+                cardEls = {};
+                scene.nodes.forEach(function (n) {
+                    nodesById[n.id] = n;
+                });
+                stopAuto(true);
+
+                var mark = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                mark.setAttribute('id', 'arrows');
+                mark.setAttribute('class', 'arrows');
+                var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                var head = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                head.setAttribute('id', 'ahead');
+                head.setAttribute('viewBox', '0 0 10 10');
+                head.setAttribute('refX', '8.5');
+                head.setAttribute('refY', '5');
+                head.setAttribute('markerWidth', '6');
+                head.setAttribute('markerHeight', '6');
+                head.setAttribute('orient', 'auto');
+                var hp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+hp.setAttribute('d', 'M0 0 L10 5 L0 10 z');
+                hp.setAttribute('fill', '#22496B');
+                head.appendChild(hp);
+                defs.appendChild(head);
+                mark.appendChild(defs);
+
+                scene.refs.forEach(function (r) {
+                    var ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    ln.setAttribute('data-f', r[0]);
+                    ln.setAttribute('data-t', r[1]);
+ln.setAttribute('stroke', '#22496B');
+                    ln.setAttribute('stroke-width', '2.5');
+                    ln.setAttribute('marker-end', 'url(#ahead)');
+                    mark.appendChild(ln);
+                });
+                scene.roots.forEach(function (r) {
+                    var ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    ln.setAttribute('data-root', '1');
+                    ln.setAttribute('data-f', r.to);
+                    ln.setAttribute('stroke', '#EA8C36');
+                    ln.setAttribute('stroke-width', '3');
+                    ln.setAttribute('marker-end', 'url(#ahead)');
+                    mark.appendChild(ln);
+                });
+
+                field.innerHTML = '';
+                field.appendChild(mark);
+                scene.nodes.forEach(function (n) {
+                    var card = document.createElement('div');
+                    card.className = 'card-node' + (reachable[n.id] ? ' live' : '');
+                    card.id = 'nd-' + n.id;
+                    card.setAttribute('data-id', n.id);
+                    card.style.left = n.x + '%';
+                    card.style.top = n.y + '%';
+                    card.innerHTML = '<span class="nd-tag">' + n.tag + '</span><span class="nd-name">' + n.label + '</span>';
+                    card.addEventListener('click', function () {
+                        onCardClick(n.id);
+                    });
+                    field.appendChild(card);
+                    cardEls[n.id] = card;
+                });
+                scene.nodes.forEach(function (n) {
+                    cardEls[n.id].classList.remove('live');
+                });
+                scene.roots.forEach(function (r) {
+                    if (cardEls[r.to]) cardEls[r.to].classList.add('rooted');
+                });
+
+                rootBar.innerHTML = '';
+                scene.roots.forEach(function (r) {
+                    var chip = document.createElement('span');
+                    chip.className = 'root-chip';
+                    chip.innerHTML = r.chip + ' <span class="r-arrow">⇣</span>';
+                    rootBar.appendChild(chip);
+                });
+
+                sGarbage.textContent = garbageList.length;
+                sFree.textContent = '0';
+                sMist.textContent = '0';
+                sScene.textContent = (sceneIdx + 1) + '/3';
+                sMode.textContent = 'Manual';
+                btnAuto.textContent = '▶ Auto Sweep';
+                btnPause.disabled = true;
+                btnPause.textContent = '⏸ Pause';
+                gameHint.style.display = 'none';
+                btnSceneNext.style.display = 'none';
+                missionStatus.textContent = '· in progress';
+                missionStatus.style.color = 'var(--muted)';
+                missionDone.style.display = 'none';
+                document.getElementById('field-note').textContent = 'Sweep the junk, keep what the pins reach. Not sure? Press 💡 Scan.';
+
+                requestAnimationFrame(computeArrows);
+            }
+
+            function onCardClick(id) {
+                if (autoOn || done || sweptIds[id]) return;
+                if (reachable[id]) {
+                    mistakeCount++;
+                    sMist.textContent = mistakeCount;
+                    var el = cardEls[id];
+                    el.classList.remove('wrong');
+                    void el.offsetWidth;
+                    el.classList.add('wrong');
+                    var labelMap = {};
+                    scene.nodes.forEach(function (n) {
+                        labelMap[n.id] = n.label;
+                    });
+                    var chain = [labelMap[id]];
+                    var cur = id;
+                    while (reachMeta.prev[cur] && chain.length < 9) {
+                        cur = reachMeta.prev[cur];
+                        chain.unshift(labelMap[cur]);
+                    }
+                    toast('Keep it: ' + reachMeta.rootFor[id] + ' reaches ' + chain.join(' -> ') + ', so it stays.');
+                } else {
+                    sweepCard(id);
+                }
+            }
+
+            function sweepCard(id) {
+                if (sweptIds[id]) return;
+                sweptIds[id] = 1;
+                var el = cardEls[id];
+                el.classList.add('sweeping');
+                setTimeout(function () {
+                    el.classList.remove('sweeping');
+                    el.classList.add('swept');
+                }, 500);
+                freeCount++;
+                sFree.textContent = freeCount;
+                if (freeCount === garbageList.length) {
+                    winRound();
+                }
+            }
+
+            function winRound() {
+                stopAuto(true);
+                done = true;
+                missionDone.style.display = 'block';
+                missionStatus.textContent = '· scene ' + (sceneIdx + 1) + ' cleared';
+                missionStatus.style.color = 'var(--success)';
+                document.getElementById('chk-scene-' + (sceneIdx + 1)).textContent = '✅ Clear Scene ' + (sceneIdx + 1);
+                document.getElementById('chk-scene-' + (sceneIdx + 1)).style.color = 'var(--success)';
+                confetti();
+                if (sceneIdx < SCENES.length - 1) {
+                    btnSceneNext.style.display = 'inline-block';
+                    toast('Scene cleared. Swept ' + garbageList.length + ' unreachable boards.');
+                } else {
+                    toast('All scenes cleared. The studio is compacted.');
+                }
+            }
+
+            function showHint() {
+                if (autoOn || done) return;
+                clearTimeout(hintTimer);
+                scene.nodes.forEach(function (n) {
+                    if (reachable[n.id]) cardEls[n.id].classList.add('live');
+                });
+                document.getElementById('field-note').textContent = 'Scan: ' + Object.keys(reachable).length + ' boards are in use right now, a pin reaches them. Sweep the others.';
+                hintTimer = setTimeout(function () {
+                    scene.nodes.forEach(function (n) {
+                        if (reachable[n.id] && !sweptIds[n.id]) cardEls[n.id].classList.remove('live');
+                    });
+                    document.getElementById('field-note').textContent = 'Sweep the junk, keep what the pins reach. Not sure? Press 💡 Scan.';
+                }, 2400);
+            }
+
+            function startAuto() {
+                if (autoOn || done) return;
+                autoOn = true;
+                paused = false;
+                timeline = [];
+                timelineIdx = 0;
+                scene.nodes.forEach(function (n) {
+                    if (reachable[n.id]) timeline.push({ act: 'live', id: n.id });
+                });
+                garbageList.forEach(function (id) {
+                    timeline.push({ act: 'sweep', id: id });
+                });
+                sMode.textContent = 'Auto';
+                btnAuto.textContent = '⏹ Stop';
+                btnPause.disabled = false;
+                document.querySelectorAll('.card-node').forEach(function (el) {
+                    el.classList.add('locked');
+                });
+                autoStep();
+            }
+
+            function autoStep() {
+                if (!autoOn || paused) return;
+                if (timelineIdx >= timeline.length) {
+                    stopAuto(true);
+                    return;
+                }
+                var item = timeline[timelineIdx];
+                if (item.act === 'live') {
+                    if (!sweptIds[item.id]) cardEls[item.id].classList.add('live');
+                    timelineIdx++;
+                    scheduleNext(autoStep, 640 / speedSel.value);
+                } else {
+                    document.getElementById('field-note').textContent = 'Sweeping ' + cardEls[item.id].querySelector('.nd-name').textContent + ' ...';
+                    sweepCard(item.id);
+                    timelineIdx++;
+                    scheduleNext(autoStep, 640 / speedSel.value);
+                }
+            }
+
+            function scheduleNext(fn, ms) {
+                if (autoTimer) clearTimeout(autoTimer);
+                autoTimer = setTimeout(function () {
+                    autoTimer = null;
+                    fn();
+                }, ms);
+            }
+
+            function stopAuto(fullStop) {
+                if (autoTimer) {
+                    clearTimeout(autoTimer);
+                    autoTimer = null;
+                }
+                autoOn = false;
+                paused = false;
+                btnAuto.textContent = '▶ Auto Sweep';
+                btnPause.disabled = true;
+                btnPause.textContent = '⏸ Pause';
+                field.classList.remove('locked');
+                document.querySelectorAll('.card-node').forEach(function (el) {
+                    el.classList.remove('locked');
+                });
+                if (!done) sMode.textContent = 'Manual';
+            }
+
+            function togglePause() {
+                if (!autoOn || done) return;
+                if (paused) {
+                    paused = false;
+                    btnPause.textContent = '⏸ Pause';
+                    toast('Resumed. Continuing the sweep.');
+                    autoStep();
+                } else {
+                    paused = true;
+                    btnPause.textContent = '▶ Resume';
+                    if (autoTimer) {
+                        clearTimeout(autoTimer);
+                        autoTimer = null;
+                    }
+                    toast('Paused.');
+                }
+            }
+
+            function introStudio() {
+                if (studioIntroShown || autoOn || done || sceneIdx !== 0) return;
+                studioIntroShown = true;
+                setTimeout(function () {
+                    if (autoOn) return;
+                    scene.nodes.forEach(function (n) {
+                        if (reachable[n.id]) cardEls[n.id].classList.add('live');
+                    });
+                    document.getElementById('field-note').textContent = 'Example: the ringed boards are reachable from a pin, so they stay. Sweep every board without a ring.';
+                    setTimeout(function () {
+                        scene.nodes.forEach(function (n) {
+                            if (reachable[n.id] && !sweptIds[n.id]) cardEls[n.id].classList.remove('live');
+                        });
+                        document.getElementById('field-note').textContent = 'Sweep the junk, keep what the pins reach. Not sure? Press 💡 Scan.';
+                    }, 3200);
+                }, 400);
+            }
+
+            function restartCase() {
+                stopAuto(true);
+                ['1', '2', '3'].forEach(function (n) {
+                    var el = document.getElementById('chk-scene-' + n);
+                    el.textContent = '◻ Clear Scene ' + n;
+                    el.style.color = '';
+                });
+                studioIntroShown = false;
+                initScene(0);
+                goto(0);
+            }
+
+            function newRound() {
+                stopAuto(true);
+                initScene(sceneIdx);
+            }
+
+            function goto(idx) {
+                SECTIONS.forEach(function (s, i) {
+                    var el = document.getElementById(s.name);
+                    el.classList.toggle('active-view', i === idx);
+                    var step = document.getElementById('step-' + (i + 1));
+                    step.classList.toggle('active', i === idx);
+                });
+                sectionIndex = idx;
+                if (idx === 2) {
+                    requestAnimationFrame(computeArrows);
+                    introStudio();
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+function askLeave(target) {
+                pendingSection = target;
+                var fwd = target > sectionIndex;
+                document.getElementById('btn-modal-leave').textContent = fwd ? 'Continue' : 'Go Back';
+                document.querySelector('.modal-punch').textContent = fwd ? 'Do you want to continue?' : 'Do you want to go back?';
+                document.getElementById('modal').classList.add('show');
+            }
+
+            document.getElementById('btn-puzzle-continue').addEventListener('click', function () {
+                goto(1);
+            });
+
+            function wireModal() {
+                var modal = document.getElementById('modal');
+                document.getElementById('btn-modal-stay').addEventListener('click', function () {
+                    modal.classList.remove('show');
+                });
+document.getElementById('btn-modal-leave').addEventListener('click', function () {
+                    modal.classList.remove('show');
+                    if (pendingSection !== null) {
+                        stopAuto(true);
+                        newRound();
+                        goto(pendingSection);
+                    }
+                });
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) modal.classList.remove('show');
+                });
+            }
+
+            wireModal();
+
+            [['btn-briefing-back', 0], ['btn-briefing-start', 2], ['btn-notes-back', 2], ['btn-notes-continue', 4], ['btn-method-back', 3], ['btn-method-continue', 5], ['btn-cases-back', 4]].forEach(function (pair) {
+                document.getElementById(pair[0]).addEventListener('click', function () {
+                    goto(pair[1]);
+                });
+            });
+
+document.getElementById('btn-studio-back').addEventListener('click', function () {
+                askLeave(1);
+            });
+            document.getElementById('btn-studio-continue').addEventListener('click', function () {
+                askLeave(3);
+            });
+
+            btnAuto.addEventListener('click', function () {
+                if (autoOn) {
+                    stopAuto(false);
+                } else {
+                    startAuto();
+                }
+            });
+            btnPause.addEventListener('click', togglePause);
+            btnReset.addEventListener('click', newRound);
+            document.getElementById('btn-hint').addEventListener('click', showHint);
+            btnSceneNext.addEventListener('click', function () {
+                if (sceneIdx < SCENES.length - 1) {
+                    initScene(sceneIdx + 1);
+                }
+            });
+            document.getElementById('btn-cases-finish').addEventListener('click', restartCase);
+
+            window.addEventListener('resize', computeArrows);
+
+            initScene(0);
+            goto(0);
+
+        })();
+    </script>
+</body>
+
+</html>
