@@ -1,0 +1,2824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Century Vault · A Bucket Sort Case Study</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-9M9C5T1Y9R');</script>
+    <style>
+        :root {
+            --bg-1: #FDF4EC;
+            --bg-2: #F3F0FA;
+            --bg-3: #EAF2FA;
+            --bg-4: #DCE9F6;
+            --ink: #1F2E37;
+            --muted: #54666D;
+            --faint: #93A5AB;
+            --primary: #4A9BD1;
+            --primary-dark: #2B6FA3;
+            --primary-deep: #22496B;
+            --amber: #EA8C36;
+            --amber-dark: #C96F1F;
+            --amber-bg: #FBE9DA;
+            --danger: #D9714F;
+            --success: #4B7A4A;
+            --card-bg: rgba(255, 255, 255, .78);
+            --glass-border: #D9E5F2;
+            --glass-bg: rgba(255, 255, 255, .4);
+            --shadow-card: 0 14px 34px -18px rgba(23, 50, 77, .35);
+            --shadow-btn: 0 16px 28px -12px rgba(43, 111, 163, .5);
+            --radius: 18px;
+            --paper: #FFFDF7;
+            --paper-line: #E4DCC8;
+            --cabinet: linear-gradient(160deg, #6E7F8F 0%, #56676F 55%, #47575E 100%)
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            background: linear-gradient(180deg, var(--bg-1), var(--bg-2) 42%, var(--bg-3));
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            margin: 0
+        }
+
+        h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-deep);
+            margin: 0 0 10px
+        }
+
+        p {
+            line-height: 1.65;
+            color: var(--muted);
+            margin: 0
+        }
+
+        button {
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer
+        }
+
+        code {
+            font-family: inherit;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+
+        .wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 96px 20px 70px
+        }
+
+        /* ---------- STEPPER ---------- */
+        .stepper {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-3);
+            color: var(--primary-deep);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--glass-border);
+            transition: .25s;
+            z-index: 2
+        }
+
+        .step-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+            text-align: center;
+            letter-spacing: .03em;
+            font-family: 'Poppins', sans-serif
+        }
+
+        .step-line {
+            position: absolute;
+            top: 16px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--glass-border);
+            z-index: 1
+        }
+
+        .step-item:first-child .step-line {
+            display: none
+        }
+
+        .step-item.done .step-circle {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: #fff
+        }
+
+        .step-item.done .step-line {
+            background: var(--primary-dark)
+        }
+
+        .step-item.active .step-circle {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-color: var(--primary-dark);
+            color: #fff;
+            box-shadow: 0 0 0 4px rgba(74, 155, 209, .25)
+        }
+
+        .step-item.active .step-label {
+            color: var(--primary-dark)
+        }
+
+        @media (max-width: 640px) {
+            .step-item .step-label {
+                display: none
+            }
+        }
+
+        /* ---------- SECTIONS ---------- */
+        .section {
+            display: none;
+            animation: fade .4s ease
+        }
+
+        .section.active-view {
+            display: block
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-deep);
+            margin: 0 0 10px
+        }
+
+        p {
+            color: var(--muted);
+            line-height: 1.65;
+            margin: 0 0 12px;
+            font-size: 14.5px
+        }
+
+        /* ---------- SHARED SECTION CHROME ---------- */
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--amber-dark);
+            background: var(--amber-bg);
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif
+        }
+
+        .hero {
+            text-align: center
+        }
+
+        .hero h1 {
+            font-size: clamp(24px, 4.4vw, 38px);
+        }
+
+        .section-sub {
+            max-width: 640px;
+            margin: 0 auto 18px;
+            text-align: center;
+            font-size: 14.5px
+        }
+
+        .section-title {
+            font-size: clamp(24px, 4vw, 36px);
+            color: var(--ink);
+            margin: 0 0 8px;
+            text-align: center
+        }
+
+        .section {
+            display: none
+        }
+
+        .section.active-view {
+            display: block;
+            animation: sectionFade .35s ease
+        }
+
+        @keyframes sectionFade {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(8px)
+        }
+
+        .problem-card {
+            text-align: left;
+            max-width: 680px;
+            margin: 20px auto 0
+        }
+
+        .problem-card p {
+            margin: 0 0 14px;
+            font-size: 15.5px
+        }
+
+        .problem-card b {
+            color: var(--primary-deep)
+        }
+
+        .rules-list {
+            list-style: none;
+            margin: 20px auto 0;
+            padding: 0;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .rules-list li {
+            font-size: 14px;
+            color: var(--muted);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            line-height: 1.5
+        }
+
+        .rules-list li::before {
+            content: "✕";
+            color: var(--danger);
+            font-weight: 700
+        }
+
+        .rules-list li.ok::before {
+            content: "✓";
+            color: var(--success)
+        }
+
+        .move-list {
+            list-style: none;
+            margin: 10px 0 0;
+            padding: 0;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 9px
+        }
+
+        .move-list li {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 11px;
+            padding: 10px 13px;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        .move-list b {
+            color: var(--primary-deep)
+        }
+
+        .cost-legend {
+            display: inline-flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .cost-chip {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--muted);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 3px 10px
+        }
+
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 999px;
+            padding: 13px 24px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: var(--shadow-btn);
+            transition: .15s
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px)
+        }
+
+        .btn:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--primary-dark);
+            box-shadow: none;
+            border: 1.5px solid var(--primary);
+            padding: 11px 22px
+        }
+
+        .btn.small {
+            padding: 10px 18px;
+            font-size: 13px
+        }
+
+        .btn.pulse {
+            animation: btnPulse 1.2s ease-in-out infinite alternate
+        }
+
+        @keyframes btnPulse {
+            from {
+                box-shadow: var(--shadow-btn)
+            }
+
+            to {
+                box-shadow: 0 0 0 6px rgba(74, 155, 209, .3), var(--shadow-btn)
+            }
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px
+        }
+
+        /* ---------- GAME SHELL ---------- */
+        .game-shell {
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px
+        }
+
+        .stat {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--muted)
+        }
+
+        .stat strong {
+            color: var(--ink)
+        }
+
+        .how-to {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+            background: var(--card-bg);
+            border: 1.5px solid var(--primary);
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 13.5px;
+            color: var(--muted);
+            max-width: 720px;
+            margin: 0 auto 16px;
+            box-shadow: var(--shadow-card)
+        }
+
+        .how-to b {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11.5px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--primary-deep);
+            text-align: center
+        }
+
+        .how-to p {
+            margin: 0
+        }
+
+        .how-steps {
+            margin: 6px 0 0;
+            padding: 0 0 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px
+        }
+
+        .how-steps li {
+            line-height: 1.5
+        }
+
+        .how-steps li b {
+            text-transform: none;
+            letter-spacing: 0;
+            font-family: 'Inter', sans-serif
+        }
+
+        .phase-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px
+        }
+
+        .phase-chip {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border-radius: 999px;
+            padding: 7px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .03em
+        }
+
+        /* ---------- YEAR RIBBON ---------- */
+        .ribbon {
+            background: #fff;
+            border: 1.5px solid var(--primary);
+            border-radius: 14px;
+            padding: 12px 16px 30px
+        }
+
+        .ribbon-scroll {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 2px
+        }
+
+        .ribbon-caption {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--primary-deep);
+            margin-bottom: 0;
+            text-align: center
+        }
+
+        .ribbon-caption b {
+            color: var(--amber-dark)
+        }
+
+        .ribbon-track {
+            position: relative;
+            height: 20px;
+            margin-top: 26px;
+            min-width: 480px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--bg-3), var(--bg-4));
+            border: 1.5px solid var(--glass-border)
+        }
+
+        .ribbon-band {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-right: 2px dashed rgba(34, 73, 107, .3)
+        }
+
+        .ribbon-band.last {
+            border-right: none
+        }
+
+        .ribbon-band span {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 5px;
+            font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: var(--amber-bg);
+            border-radius: 4px;
+            padding: 2px 5px;
+            white-space: nowrap;
+            transform: translateX(-2px)
+        }
+
+        .ribbon-band.last span {
+            left: auto;
+            right: 0
+        }
+
+        .ribbon-dot {
+            position: absolute;
+            top: -7px;
+            width: 14px;
+            height: 14px;
+            margin-left: -7px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2.5px solid var(--primary);
+            box-shadow: 0 3px 8px rgba(23, 50, 77, .25);
+            cursor: pointer;
+            transition: transform .18s ease, opacity .25s ease, box-shadow .18s ease
+        }
+
+        .ribbon-dot:hover {
+            transform: scale(1.25)
+        }
+
+        .ribbon-dot.picked {
+            background: var(--amber);
+            border-color: var(--amber-dark);
+            transform: scale(1.4);
+            box-shadow: 0 0 0 5px rgba(234, 140, 54, .25)
+        }
+
+        .ribbon-dot.filed {
+            opacity: .3;
+            transform: scale(.75)
+        }
+
+        .ribbon-dot.hinted {
+            box-shadow: 0 0 0 5px rgba(75, 122, 74, .3);
+            border-color: var(--success)
+        }
+
+        /* ---------- PILE + INDEX CARDS ---------- */
+        .pile-wrap {
+            margin-bottom: 20px
+        }
+
+        .pile-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--faint);
+            text-align: center;
+            margin-bottom: 9px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center
+        }
+
+        .pile-label::before,
+        .pile-label::after {
+            content: "";
+            height: 1px;
+            flex: 1;
+            max-width: 120px;
+            background: var(--glass-border)
+        }
+
+        .pile {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 74px;
+            padding: 16px 14px 14px;
+            background:
+                repeating-linear-gradient(0deg, transparent 0 27px, rgba(74, 155, 209, .07) 27px 28px),
+                var(--glass-bg);
+            border: 1.5px dashed var(--primary);
+            border-radius: 14px
+        }
+
+        .card-year {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 12px 9px 9px;
+            background: var(--paper);
+            background-image: repeating-linear-gradient(180deg, transparent 0 20px, var(--paper-line) 20px 21px);
+            border: 1px solid #D9CFB4;
+            border-radius: 4px 10px 10px 4px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 8px 14px -10px rgba(23, 50, 77, .6), inset 3px 0 0 rgba(217, 113, 79, .35);
+            transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease
+        }
+
+        .card-year .hole {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: rgba(23, 50, 77, .16);
+            box-shadow: inset 0 1px 2px rgba(23, 50, 77, .3);
+            flex-shrink: 0
+        }
+
+        .card-year .cy {
+            font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--primary-deep);
+            letter-spacing: .02em
+        }
+
+        .card-year .ctag {
+            font-family: 'Poppins', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #fff;
+            background: var(--primary-dark);
+            border-radius: 999px;
+            padding: 2px 7px;
+            opacity: 0;
+            transition: opacity .25s ease;
+            white-space: nowrap
+        }
+
+        .card-year.filed .ctag {
+            opacity: 1
+        }
+
+        .pile .card-year {
+            transform: rotate(var(--r, 0deg))
+        }
+
+        .card-year:hover:not(.locked) {
+            transform: translateY(-4px) rotate(0deg);
+            border-color: var(--primary);
+            box-shadow: 0 14px 22px -12px rgba(23, 50, 77, .7), inset 3px 0 0 rgba(217, 113, 79, .35)
+        }
+
+        .card-year.picked {
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(234, 140, 54, .35), 0 16px 26px -12px rgba(23, 50, 77, .8);
+            transform: translateY(-8px) rotate(0deg) scale(1.07);
+            z-index: 3
+        }
+
+        .card-year.hinted {
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(75, 122, 74, .35)
+        }
+
+        .card-year.locked {
+            cursor: default
+        }
+
+        .card-year.placing {
+            animation: place .5s ease
+        }
+
+        @keyframes place {
+            0% {
+                transform: translateY(-8px) scale(1.07)
+            }
+
+            55% {
+                transform: translateY(-4px) scale(1.02)
+            }
+
+            100% {
+                transform: none
+            }
+        }
+
+        /* FLIP: during a reorder glide the card must not also be running its
+           hover/picked transform transition, or the two fight each other. */
+        .card-year.flipping {
+            transition: none;
+            z-index: 4
+        }
+
+        .card-year.flipping:hover {
+            transform: none
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card-year.flipping {
+                transition: none
+            }
+        }
+
+        .shake {
+            animation: shake .38s ease
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            20% {
+                transform: translateX(-6px)
+            }
+
+            40% {
+                transform: translateX(6px)
+            }
+
+            60% {
+                transform: translateX(-4px)
+            }
+
+            80% {
+                transform: translateX(4px)
+            }
+        }
+
+        /* ---------- CABINET ---------- */
+        .cabinet {
+            background: var(--cabinet);
+            border-radius: 18px;
+            padding: 16px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, .28), 0 20px 40px -22px rgba(23, 50, 77, .8)
+        }
+
+        .cabinet-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 0 4px
+        }
+
+        .cabinet-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .82)
+        }
+
+        .drawers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(172px, 1fr));
+            gap: 12px
+        }
+
+        .drawer {
+            position: relative;
+            background: linear-gradient(180deg, #7E909C 0%, #64757F 100%);
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 12px;
+            padding: 10px 10px 11px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 8px 16px -10px rgba(0, 0, 0, .6);
+            transition: transform .18s ease, box-shadow .18s ease, outline-color .18s ease;
+            outline: 2.5px dashed transparent;
+            outline-offset: 3px
+        }
+
+        .drawer .handle {
+            position: absolute;
+            top: 12px;
+            right: 10px;
+            width: 26px;
+            height: 7px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #C9D6DE, #8FA1AC);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .35)
+        }
+
+        .drawer-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 9px;
+            padding-right: 30px
+        }
+
+        .drawer-label {
+            font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #22303A;
+            background: linear-gradient(180deg, #FFFDF3, #F0EAD6);
+            border-radius: 4px;
+            padding: 3px 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+            letter-spacing: .02em
+        }
+
+        .drawer-count {
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .88);
+            background: rgba(0, 0, 0, .22);
+            border-radius: 999px;
+            padding: 3px 9px
+        }
+
+        .drawer-target {
+            outline-color: var(--amber);
+            transform: translateY(-3px)
+        }
+
+        .drawer-target .drawer-label {
+            background: linear-gradient(180deg, #FFF3DF, #FFE2BC)
+        }
+
+        .drawer-ok {
+            outline-color: var(--success)
+        }
+
+        .drawer-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            min-height: 60px;
+            padding: 7px;
+            border-radius: 8px;
+            background: rgba(28, 40, 48, .55);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, .45)
+        }
+
+        .drawer-cards .card-year {
+            background: var(--paper);
+            padding: 6px 9px 6px 7px;
+            box-shadow: 0 4px 8px -5px rgba(0, 0, 0, .7)
+        }
+
+        .drawer-cards .card-year .cy {
+            font-size: 12.5px
+        }
+
+        .drawer-cards .card-year .hole {
+            width: 8px;
+            height: 8px
+        }
+
+        .drawer-end {
+            margin-top: 8px;
+            border: 1.5px dashed rgba(255, 255, 255, .4);
+            border-radius: 8px;
+            padding: 6px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, .72);
+            cursor: pointer;
+            transition: all .16s ease
+        }
+
+        .drawer-end:hover {
+            border-color: #fff;
+            color: #fff
+        }
+
+        .drawer-end.armed {
+            border-color: var(--success);
+            color: #DCF0D8;
+            background: rgba(75, 122, 74, .45)
+        }
+
+        .drawer-order-ok .drawer-label {
+            box-shadow: 0 0 0 2px var(--success), 0 1px 2px rgba(0, 0, 0, .25)
+        }
+
+        .drawer-order-ok .drawer-count {
+            background: var(--success)
+        }
+
+        .empty-drawer {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .45);
+            font-style: italic;
+            align-self: center;
+            margin: 0 auto
+        }
+
+        .field-note {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-deep);
+            margin: 16px 0 0;
+            min-height: 20px
+        }
+
+        .speed-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 12px
+        }
+
+        .speed-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--faint)
+        }
+
+        .speed-select {
+            padding: 7px 12px;
+            border: 1.5px solid var(--primary);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--primary-dark);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12.5px;
+            cursor: pointer
+        }
+
+        /* ---------- DONE PANEL ---------- */
+        .done-panel {
+            display: none;
+            margin-top: 18px;
+            background: linear-gradient(135deg, rgba(75, 122, 74, .14), rgba(74, 155, 209, .1));
+            border: 1.5px solid var(--success);
+            border-radius: 14px;
+            padding: 20px 22px;
+            text-align: center
+        }
+
+        .done-panel.show {
+            display: block;
+            animation: fade .35s ease
+        }
+
+        .done-panel h4 {
+            font-size: 16px;
+            color: var(--success);
+            margin-bottom: 6px
+        }
+
+        .done-panel p {
+            font-size: 14px;
+            margin-bottom: 12px
+        }
+
+        .tally {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 12px
+        }
+
+        .tally-chip {
+            background: #fff;
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 6px 13px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--primary-deep)
+        }
+
+        /* ---------- QUESTIONS ---------- */
+        .qgrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 8px
+        }
+
+        @media (max-width: 760px) {
+            .qgrid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .qcard {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px 20px 20px;
+            box-shadow: var(--shadow-card);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform .15s
+        }
+
+        .qcard:hover {
+            transform: translateY(-3px)
+        }
+
+        .q-num {
+            font-weight: 800;
+            font-size: 12px;
+            color: var(--primary)
+        }
+
+        .q-text {
+            font-size: 14.5px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-weight: 600
+        }
+
+        .case-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px
+        }
+
+        .case-list li {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 13px 16px;
+            margin-bottom: 10px;
+            font-size: 13.5px;
+            color: var(--muted);
+            line-height: 1.6;
+            text-align: left
+        }
+
+        .case-list li b {
+            color: var(--ink)
+        }
+
+        /* ---------- LEARNING FLOW ---------- */
+        .learning-flow {
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: left
+        }
+
+        .learning-flow>*+* {
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px dashed var(--glass-border)
+        }
+
+        .learning-flow h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--primary-dark);
+            margin: 0 0 8px
+        }
+
+        .learning-flow p {
+            font-size: 14px
+        }
+
+        .mech-steps {
+            list-style: none;
+            counter-reset: mech;
+            margin: 8px 0 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .mech-steps li {
+            counter-increment: mech;
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 14px 12px 46px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--ink);
+            text-align: left
+        }
+
+        .mech-steps li::before {
+            content: counter(mech);
+            position: absolute;
+            left: 14px;
+            top: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+            margin-top: 8px
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 13px 15px 12px;
+            text-align: left;
+            box-shadow: 0 10px 22px -16px rgba(23, 50, 77, .3)
+        }
+
+        .vocab-term {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-deep);
+            margin-bottom: 7px
+        }
+
+        .vocab-term code,
+        .mech-steps li code {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--primary-deep);
+            background: rgba(74, 155, 209, .08);
+            padding: 1px 6px;
+            border-radius: 6px
+        }
+
+        .vocab-def {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .key-learnings h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--primary-deep);
+            text-align: center
+        }
+
+        .kl-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .kl-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            text-align: left
+        }
+
+        .kl-item+.kl-item {
+            padding-top: 14px;
+            border-top: 1px dotted var(--glass-border)
+        }
+
+        .kl-icon {
+            font-size: 20px;
+            flex-shrink: 0
+        }
+
+        .kl-item b {
+            display: block;
+            font-size: 13.5px;
+            color: var(--primary-deep);
+            margin-bottom: 3px
+        }
+
+        .kl-item p {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .code {
+            font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+            font-size: 13px;
+            background: rgba(74, 155, 209, .12);
+            color: var(--primary-deep);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 600
+        }
+
+        .compare-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 18px 0 0
+        }
+
+        @media (max-width: 620px) {
+            .compare-cards {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .compare-card {
+            background: var(--card-bg);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center
+        }
+
+        .compare-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            color: var(--faint);
+            display: block;
+            margin-bottom: 5px
+        }
+
+        .compare-big {
+            font-family: 'Poppins', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary-deep);
+            display: block;
+            margin-bottom: 4px
+        }
+
+        .compare-sub {
+            font-size: 12.5px;
+            color: var(--muted)
+        }
+
+        /* ---------- MODAL ---------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(31, 46, 55, .5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 95;
+            padding: 20px
+        }
+
+        .modal-overlay.show {
+            display: flex
+        }
+
+        .modal-box {
+            background: #fff;
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 30px 28px;
+            max-width: 440px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(23, 50, 77, .22)
+        }
+
+        .modal-eyebrow {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--amber-dark);
+            margin-bottom: 12px
+        }
+
+        .modal-box p {
+            font-size: 14.5px;
+            color: var(--muted);
+            margin: 0 0 8px
+        }
+
+        .modal-punch {
+            font-weight: 700;
+            color: var(--ink)
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 18px;
+            flex-wrap: wrap
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #E39A7D, var(--danger));
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(217, 113, 79, .3)
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px)
+        }
+
+        /* ---------- TOAST ---------- */
+        .toast {
+            position: fixed;
+            bottom: 26px;
+            left: 50%;
+            transform: translateX(-50%) translateY(18px);
+            background: var(--primary-deep);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 12px 20px;
+            border-radius: 999px;
+            box-shadow: 0 10px 26px rgba(23, 50, 77, .3);
+            opacity: 0;
+            pointer-events: none;
+            transition: all .28s ease;
+            z-index: 90;
+            max-width: 90vw;
+            text-align: center
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        /* ---------- CONFETTI ---------- */
+        .confetti {
+            position: fixed;
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            top: -20px;
+            z-index: 85;
+            pointer-events: none;
+            animation: fall linear forwards
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(720deg);
+                opacity: .15
+            }
+        }
+
+        @media (max-width: 700px) {
+            .pile {
+                min-height: 60px
+            }
+
+            .ribbon-dot {
+                width: 10px;
+                height: 10px;
+                margin-left: -5px;
+                top: -5px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="stepper" id="stepper">
+            <div class="step-item active" id="step-1"><span class="step-line"></span><span
+                    class="step-circle">1</span><span class="step-label">The Puzzle</span></div>
+            <div class="step-item" id="step-2"><span class="step-line"></span><span
+                    class="step-circle">2</span><span class="step-label">The Briefing</span></div>
+            <div class="step-item" id="step-3"><span class="step-line"></span><span
+                    class="step-circle">3</span><span class="step-label">The Vault</span></div>
+            <div class="step-item" id="step-4"><span class="step-line"></span><span
+                    class="step-circle">4</span><span class="step-label">Case Notes</span></div>
+            <div class="step-item" id="step-5"><span class="step-line"></span><span
+                    class="step-circle">5</span><span class="step-label">The Method</span></div>
+            <div class="step-item" id="step-6"><span class="step-line"></span><span
+                    class="step-circle">6</span><span class="step-label">New Cases</span></div>
+        </div>
+
+        <!-- ============ CHAPTER 1: PUZZLE ============ -->
+        <section class="section active-view" id="sec-puzzle">
+            <div class="hero">
+                <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 1 · The Puzzle</span>
+                <h1>The records office has 10,000 cards and one afternoon.</h1>
+            </div>
+            <div class="card problem-card">
+                <p>Rhea works in the records office of a national statistics bureau. Over the years, births were
+                    written onto cards: a name, a date of birth. Today a researcher wants them in
+                    <b>date order</b>, and Rhea has one afternoon to do it.</p>
+                <p>The slow way is the way she already knows. Take a card, hold it against every other card, ask
+                    "which is earlier?", and swap. Do that to all of them. She has done the arithmetic in her head
+                    before: for one card you might look at thousands of others, and you do it ten thousand times.</p>
+                <p>Then her supervisor shows her the wall behind her desk. It is not a shelf, it is a filing
+                    <b>cabinet</b>, and every <b>drawer</b> is labelled with a <b>range of years</b>. "Put each card
+                    in the drawer that covers its year. You will never have to compare two cards from different
+                    drawers again. Only the cards inside the same drawer need lining up."</p>
+                <p>Rhea still has to open every drawer and order the cards within it. The question is: why is that
+                    faster, and when would it not be faster at all?</p>
+            </div>
+            <ul class="rules-list">
+                <li class="ok">Read the drawer label to place a card. No comparing needed.</li>
+                <li class="ok">Only cards inside the same drawer ever get compared.</li>
+                <li>Compare every card against every other card, one at a time.</li>
+                <li>Sort the whole list again from scratch after each single swap.</li>
+            </ul>
+            <div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button>
+            </div>
+        </section>
+
+        <!-- ============ CHAPTER 2: BRIEFING ============ -->
+        <section class="section" id="sec-briefing">
+            <div class="hero">
+                <span class="eyebrow" style="display:inline-flex;margin:0 auto 12px;">Chapter 2 · The Briefing</span>
+                <h1>Two passes, not one long fight</h1>
+            </div>
+            <div class="card" style="text-align:center;max-width:720px;margin:0 auto">
+                <p style="color:var(--muted);font-size:14.5px">Every card shows a
+                    <b style="color:var(--primary-deep)">year</b>. The drawers are labelled with
+                    <b style="color:var(--primary-deep)">equal ranges</b> of years, so the label alone tells you
+                    which drawer a card belongs in. You never compare a card to a card to find its drawer.</p>
+
+                <h4
+                    style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your two passes</h4>
+                <ul class="move-list">
+                    <li><b>Pass 1, Spread.</b> Click a card so it lifts off the table, then click the drawer whose
+                        label covers that year. The card flies in and shows the drawer it landed in.</li>
+                    <li><b>Pass 2, Order.</b> Inside a drawer, click the card that is in the wrong spot, then click
+                        the card it belongs in front of. Or click the end strip to place it last. That is insertion
+                        sort: each card is slid into place among the cards already in its drawer.</li>
+                    <li><b>Stuck?</b> Press Hint and the right drawer or neighbour will light up.</li>
+                </ul>
+                <p style="font-size:13px;color:var(--muted);margin:-6px 0 14px">If two cards show the same year,
+                    they can sit in either order. Twins happen.</p>
+
+                <h4
+                    style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin:22px 0 2px">Your mission</h4>
+                <ul class="move-list">
+                    <li><b>Finish all three shifts</b> to see the full pattern, or skip ahead whenever you like.</li>
+                    <li><b>Compare the saving.</b> Each finished shift reports how much comparing the drawers
+                        saved you. Compare that number across the three shifts.</li>
+                </ul>
+
+                <div class="cost-legend">
+                    <span class="cost-chip">Filing = 1 hand step</span>
+                    <span class="cost-chip">Ordering = 1 step per neighbour you look at</span>
+                    <span class="cost-chip">Hint = free highlight</span>
+                </div>
+                <p style="font-size:14px;color:var(--primary-deep);font-weight:600;margin-top:10px">A card belongs in a
+                    drawer because <b>its own year says so</b>. The drawer label decides, never a comparison.</p>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn"
+                    id="btn-briefing-start">Enter the Vault ▶</button></div>
+        </section>
+
+        <!-- ============ CHAPTER 3: THE VAULT ============ -->
+        <section class="section" id="sec-vault">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3
+                · The Vault</span>
+            <h2 class="section-title">Spread first, then order</h2>
+            <p class="section-sub" id="scene-story">The cards are on the table. Each drawer is labelled with a range
+                of years.</p>
+            <div class="how-to">
+                <b>How the vault works</b>
+                <p>The ribbon is the whole range of years. Each labelled band is one drawer, and every dot is one card
+                    sitting at its year on the range.</p>
+                <ol class="how-steps">
+                    <li><b>Pass 1, Spread:</b> click a card to lift it, then click the drawer whose band covers its year.
+                    </li>
+                    <li><b>Pass 2, Order:</b> inside a drawer, click the card that is in the wrong spot, then click the
+                        card it belongs in front of. Or click the end strip to place it last.</li>
+                    <li><b>Stuck?</b> press Hint and the right drawer or neighbour lights up. Press Reset to start the
+                        round over.</li>
+                </ol>
+            </div>
+            <div class="game-shell">
+                <div class="stats">
+                    <span class="stat">Shift: <strong id="s-scene">1</strong>/3</span>
+                    <span class="stat">Filed: <strong id="s-filed">0</strong>/<span id="s-total">0</span></span>
+                    <span class="stat">Hand steps: <strong id="s-steps">0</strong></span>
+                    <span class="stat">Mistakes: <strong id="s-mist">0</strong></span>
+                    <span class="stat">Busiest drawer: <strong id="s-busiest">0</strong></span>
+                    <span class="stat">Mode: <strong id="s-mode">Manual</strong></span>
+                </div>
+
+                <div class="phase-bar">
+                    <span class="phase-chip" id="phase-chip">Pass 1 of 2 · Spread into drawers</span>
+                </div>
+
+                <div class="ribbon">
+                    <div class="ribbon-caption">Every year on the range · click a dot to lift that card</div>
+                    <div class="ribbon-scroll">
+                        <div class="ribbon-track" id="ribbon-track"></div>
+                    </div>
+                </div>
+
+                <div class="pile-wrap">
+                    <div class="pile-label" id="pile-label">Unsorted table</div>
+                    <div class="pile" id="pile"></div>
+                </div>
+
+                <div class="cabinet">
+                    <div class="cabinet-top">
+                        <span class="cabinet-name">The cabinet</span>
+                        <span class="cabinet-name" id="cabinet-range"></span>
+                    </div>
+                    <div class="drawers" id="drawers"></div>
+                </div>
+
+                <p class="field-note" id="field-note">Pick a card, then click the drawer its year belongs to.</p>
+
+                <div class="section-nav" style="margin-top:4px">
+                    <button class="btn ghost small" id="btn-hint">💡 Hint</button>
+                    <button class="btn ghost small" id="btn-auto">▶ Auto Sort</button>
+                    <button class="btn ghost small" id="btn-pause" disabled>⏸ Pause</button>
+                    <button class="btn ghost small" id="btn-reset">↺ New Round</button>
+                </div>
+                <div class="speed-row">
+                    <span class="speed-label">Speed</span>
+                    <select id="speed-select" class="speed-select" title="Playback speed">
+                        <option value="0.25">0.25x</option>
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                </div>
+
+                <div class="done-panel" id="done-panel">
+                    <h4 id="done-title">Shift complete</h4>
+                    <p id="done-lesson"></p>
+                    <div class="tally">
+                        <span class="tally-chip" id="t-steps">Your hand steps: 0</span>
+                        <span class="tally-chip" id="t-inside">Work left inside the drawers: 0</span>
+                        <span class="tally-chip" id="t-naive">Compare-everything would need: 0</span>
+                        <span class="tally-chip" id="t-speedup">Saving: 0x</span>
+                        <span class="tally-chip" id="t-buckets">Drawers used: 0</span>
+                    </div>
+                    <div class="section-nav" style="margin-top:0">
+                        <button class="btn ghost small" id="btn-scene-replay">↺ Replay Shift</button>
+                        <button class="btn small" id="btn-scene-next" style="display:none">Next Shift ➜</button>
+                        <button class="btn small" id="btn-case-notes" style="display:none">Go to Case Notes ➜</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-nav" style="margin-top:16px">
+                <button class="btn ghost small" id="btn-vault-back">⬅ Back</button>
+                <button class="btn" id="btn-vault-skip">Continue to Case Notes ➜</button>
+            </div>
+        </section>
+
+        <!-- ============ CHAPTER 4: CASE NOTES ============ -->
+        <section class="section" id="sec-notes">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4
+                · Case Notes</span>
+            <h2 class="section-title">What did you notice?</h2>
+            <p class="section-sub">No single right answer. Just what you saw in the vault.</p>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · Filing without comparing</span><span class="q-text">To put
+                        1947 in a drawer, you never asked "is 1947 bigger than this other card?". What did you read
+                        instead, and what made that cheaper?</span></div>
+                <div class="qcard"><span class="q-num">02 · Only one drawer to fight</span><span class="q-text">Once the
+                        cards were filed, ordering never had to compare cards from two different drawers. Why is
+                        that already most of the work done?</span></div>
+                <div class="qcard"><span class="q-num">03 · The fullest drawer</span><span class="q-text">Look at the
+                        busiest drawer in each shift. The cards inside it are the only ones still being compared, so
+                        which shift felt heaviest, and why?</span></div>
+                <div class="qcard"><span class="q-num">04 · The saving figure</span><span class="q-text">The
+                        completion panel reported a saving every time, but Shift 1 saved far more than Shift 3. Shift
+                        3 even had more cards. What actually changed?</span></div>
+                <div class="qcard"><span class="q-num">05 · Equal ranges</span><span class="q-text">All the drawers
+                        covered the same span of years. What would happen if the ranges were uneven, so some drawers
+                        were far wider than others?</span></div>
+                <div class="qcard"><span class="q-num">06 · Beyond the vault</span><span class="q-text">Where else do
+                        people sort by putting things into labelled ranges first: exam marks into grade bands, photos
+                        into year folders, parcels into weight classes?</span></div>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn"
+                    id="btn-notes-continue">Continue to The Method ➜</button></div>
+        </section>
+
+        <!-- ============ CHAPTER 5: THE METHOD ============ -->
+        <section class="section" id="sec-method">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5
+                · The Method</span>
+            <h2 class="section-title">A wall of drawers beats one long queue of comparisons</h2>
+            <p class="section-sub">Rhea never "sorted faster". She changed the shape of the job. Here is the name.</p>
+            <div class="hero" style="margin-bottom:6px">
+                <div style="font-size:44px">🗄</div>
+                <h2>Bucket Sort</h2>
+            </div>
+            <div class="learning-flow" style="margin-top:10px">
+                <h4>Definition</h4>
+                <p><strong>Bucket sort spreads the values into buckets by range first, then orders each bucket,
+                        usually with insertion sort.</strong> Like the cabinet, a value finds its own drawer by reading
+                    its own range, so no value is ever compared against a value in another bucket.</p>
+                <h4>Mechanism</h4>
+                <ol class="mech-steps">
+                    <li><code>spread</code> each value into its bucket by reading its own range. The formula
+                        <code>bucket(v) = floor((v - min) / width)</code> picks the drawer in one step, no comparisons.</li>
+                    <li><code>order each bucket</code> with <b>insertion sort</b>: slide each card into place among the
+                        ones already in that drawer.</li>
+                    <li><code>concatenate</code> the ordered buckets in range order: drawer one, then the next, and so
+                        on, into one sorted list.</li>
+                    <li><code>count the cost</code>: one step per value to spread, plus the sorting that now happens
+                        only inside each bucket.</li>
+                </ol>
+                <h4>Vocabulary</h4>
+                <div class="vocab-grid">
+                    <div class="vocab-card"><div class="vocab-term"><code>bucket</code></div><div
+                            class="vocab-def">One labelled range of values, the drawer a card reads its way into.</div>
+                    </div>
+                    <div class="vocab-card"><div class="vocab-term"><code>bucket width</code></div><div
+                            class="vocab-def">How wide each labelled range is; equal widths keep every drawer short.
+                    </div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>bucket distribution</code></div><div
+                            class="vocab-def">How the values spread across buckets: even, or clumped into one.</div>
+                    </div>
+                    <div class="vocab-card"><div class="vocab-term"><code>insertion sort</code></div><div
+                            class="vocab-def">The simple internal sort used to order each bucket.</div></div>
+                    <div class="vocab-card"><div class="vocab-term"><code>O(n + k)</code></div><div
+                            class="vocab-def">The cost when values spread evenly and k buckets keep each list short.
+                    </div></div>
+                </div>
+            </div>
+            <div class="comp">
+                <div class="compare-cards">
+                    <div class="compare-card">
+                        <span class="compare-title">Compare everything</span>
+                        <span class="compare-big">n² / 2</span>
+                        <span class="compare-sub">Every card meets every other card. With 10,000 cards that is about
+                            50 million looks.</span>
+                    </div>
+                    <div class="compare-card">
+                        <span class="compare-title">Spread, then order</span>
+                        <span class="compare-big">n + k</span>
+                        <span class="compare-sub">One step to find the drawer, then only the cards sharing a drawer
+                            get compared.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="key-learnings">
+                <h3>Key Learnings</h3>
+                <div class="kl-grid">
+                    <div class="kl-item"><span class="kl-icon">📦</span>
+                        <div><b>Range Beats Comparison</b>
+                            <p>A value does not need to be measured against anything to find its drawer. It reads its
+                                own number and the label on the drawer, and that single step places it.</p>
+                        </div>
+                    </div>
+                    <div class="kl-item"><span class="kl-icon">🚪</span>
+                        <div><b>Only One Drawer to Fight</b>
+                            <p>Once a card is filed, it is never compared against a card in another drawer again. Every
+                                remaining comparison is already local.</p>
+                        </div>
+                    </div>
+                    <div class="kl-item"><span class="kl-icon">📊</span>
+                        <div><b>Distribution Is the Whole Trick</b>
+                            <p>Even spread means every drawer stays short and the savings are huge. Clumped values put
+                                almost everything in one drawer, and you are back to sorting one long list.</p>
+                        </div>
+                    </div>
+                    <div class="kl-item"><span class="kl-icon">🏷️</span>
+                        <div><b>Buckets Must Be Decided First</b>
+                            <p>Bucket sort needs to know the range and the width before it starts. When those are
+                                unknown or the values are strings, another method wins.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn"
+                    id="btn-method-continue">Continue to New Cases ➜</button></div>
+        </section>
+
+        <!-- ============ CHAPTER 6: NEW CASES ============ -->
+        <section class="section" id="sec-cases">
+            <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6
+                · New Cases</span>
+            <h2 class="section-title">Put the method to work</h2>
+            <p class="section-sub">Real situations where sorting by range first helps, or quietly fails. For each one,
+                decide whether a bucket belongs, and why.</p>
+            <h4
+                style="font-family:'Poppins',sans-serif;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);text-align:center;margin:26px 0 12px">Try these on paper</h4>
+            <div class="qgrid">
+                <div class="qcard"><span class="q-num">01 · Bad buckets</span><span class="q-text">You sort exam
+                        marks with bucket sort. Most students score between 70 and 80. Which bucket does the work,
+                        and what does that do to your running time?</span></div>
+                <div class="qcard"><span class="q-num">02 · Choosing width</span><span class="q-text">Values run
+                        from 0 to 900 and you have 900 of them. If you make 10 buckets, how many values land in
+                        each, and is that the choice you would make?</span></div>
+                <div class="qcard"><span class="q-num">03 · Inside the drawer</span><span class="q-text">Why does
+                        it not matter much which sorting algorithm you use inside a bucket, as long as the values
+                        spread evenly?</span></div>
+                <div class="qcard"><span class="q-num">04 · Counting instead</span><span class="q-text">A friend
+                        says "if the values are whole numbers from 0 to 100, just count them". Which sort is that,
+                        and how is it different from what Rhea did?</span></div>
+                <div class="qcard"><span class="q-num">05 · A drawer for every mark</span><span class="q-text">A teacher
+                        draws one bucket for every mark, 0 right up to 99, but the class only ever scores between
+                        78 and 82. How many of those drawers will ever hold a card, and what does drawing 95 empty
+                        drawers really cost the sort?</span></div>
+                <div class="qcard"><span class="q-num">06 · Names not numbers</span><span class="q-text">Bucket sort
+                        places a value by reading its own number. Which step breaks the moment you try it on last
+                        names, and what would you reach for instead?</span></div>
+            
+            <div class="qcard"><span class="q-num">07 · Two cards, one comparison</span><span class="q-text">A drawer holding two cards needs one comparison between them; a drawer holding one needs none. If the data spreads so no drawer ever holds more than two, how many comparisons does the whole sort need, and why does that stay small even with ten thousand cards?</span></div>
+            <div class="qcard"><span class="q-num">08 · The year that came late</span><span class="q-text">A card is found after the drawers are labelled, with a year that falls between two existing drawers. Can bucket sort still place it without relabelling everything? What must bucket sort know before it starts that a comparison sort never has to know?</span></div>
+            <div class="qcard"><span class="q-num">09 · Marks on the edge</span><span class="q-text">An exam mark of exactly 80 sits where two grade bands meet. Who decides which drawer owns it, and what goes wrong if two drawers follow different rules at that same line? How would a comparison sort avoid the argument entirely?</span></div></div>
+            <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn"
+                    id="btn-restart-journey">Restart the Whole Journey</button></div>
+        </section>
+    </div>
+
+    <!-- ============ MODAL: LEAVE WARNING ============ -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-eyebrow">Wait:</div>
+            <p>Leaving this chapter resets your current progress on this page.</p>
+            <p class="modal-punch">Do you want to leave?</p>
+            <div class="modal-actions">
+                <button class="btn ghost" id="btn-modal-stay">Stay Here</button>
+                <button class="btn btn-danger" id="btn-modal-leave">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function () {
+            "use strict";
+
+            /* ================= SHIFTS ================= */
+            var SCENES = [
+                {
+                    title: 'Shift 1 · A well spread century',
+                    story: 'Four decades of cards, and the years arrive evenly. Most drawers end up with a similar number of cards.',
+                    min: 1900,
+                    width: 10,
+                    buckets: 4,
+                    cards: [1903, 1912, 1921, 1935, 1908, 1925, 1919, 1930, 1901, 1915, 1928, 1938],
+                    lesson: 'Values spread evenly, so every drawer stays short. You spent one step per card to find its drawer, and only a little more to order inside each one.'
+                },
+                {
+                    title: 'Shift 2 · The clumped decade',
+                    story: 'Same cabinet, same drawer labels, but the years clump. One decade swallows far more cards than the rest.',
+                    min: 1930,
+                    width: 10,
+                    buckets: 3,
+                    cards: [1931, 1932, 1933, 1934, 1935, 1944, 1946, 1947, 1955, 1959],
+                    lesson: 'The drawers did not help evenly. The busiest drawer held more than the others combined, so that is where all the ordering work landed.'
+                },
+                {
+                    title: 'Shift 3 · One drawer takes everything',
+                    story: 'Two decades, and nearly every card is from the 1960s. Some years appear twice, because twins happen. Same two drawers as before, and the split is useless.',
+                    min: 1950,
+                    width: 10,
+                    buckets: 2,
+                    cards: [1952, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1961, 1963, 1966, 1969],
+                    lesson: 'Thirteen of fourteen cards landed in one drawer, so almost all the comparing still had to happen. Compare the saving with Shift 1: spreading bought almost nothing. Clumps, not card counts, are what break this sort.'
+                }
+            ];
+
+            var SECTIONS = ['sec-puzzle', 'sec-briefing', 'sec-vault', 'sec-notes', 'sec-method', 'sec-cases'];
+            var sectionIndex = 0;
+            var pendingSection = null;
+
+            var sceneIdx = 0;
+            var phase = 'spread';
+            var done = false;
+
+            var pileEls = [];
+            var drawerEls = [];
+            var dotEls = [];
+            var cardState = [];
+            var pickedId = null;
+            var stepCount = 0;
+            var mistakeCount = 0;
+            var filedCount = 0;
+
+            var autoOn = false;
+            var paused = false;
+            var autoTimer = null;
+            var timeline = [];
+            var timelineIdx = 0;
+
+            var vaultIntroShown = false;
+
+            var pileEl = document.getElementById('pile');
+            var drawersEl = document.getElementById('drawers');
+            var ribbonEl = document.getElementById('ribbon-track');
+            var fieldNote = document.getElementById('field-note');
+            var phaseChip = document.getElementById('phase-chip');
+            var donePanel = document.getElementById('done-panel');
+            var btnAuto = document.getElementById('btn-auto');
+            var btnPause = document.getElementById('btn-pause');
+            var speedSel = document.getElementById('speed-select');
+            var sMode = document.getElementById('s-mode');
+
+            /* ================= HELPERS ================= */
+            function bucketOf(v, sc) {
+                var idx = Math.floor((v - sc.min) / sc.width);
+                if (idx < 0) idx = 0;
+                if (idx > sc.buckets - 1) idx = sc.buckets - 1;
+                return idx;
+            }
+
+            function labelOf(sc, b) {
+                var lo = sc.min + b * sc.width;
+                return lo + '-' + (lo + sc.width - 1);
+            }
+
+            function shortLabel(sc, b) {
+                var lo = sc.min + b * sc.width;
+                return String(lo).slice(0, 3) + 's';
+            }
+
+            function shuffle(arr) {
+                var a = arr.slice();
+                for (var i = a.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var t = a[i];
+                    a[i] = a[j];
+                    a[j] = t;
+                }
+                return a;
+            }
+
+            var toastTimer = null;
+            function toast(msg) {
+                var t = document.getElementById('toast');
+                t.textContent = msg;
+                t.classList.add('show');
+                if (toastTimer) clearTimeout(toastTimer);
+                toastTimer = setTimeout(function () {
+                    t.classList.remove('show');
+                }, 2800);
+            }
+
+            function celebrate() {
+                var colors = ['#EA8C36', '#4A9BD1', '#4B7A4A', '#D9714F', '#2B6FA3'];
+                for (var i = 0; i < 46; i++) {
+                    var c = document.createElement('div');
+                    c.className = 'confetti';
+                    c.style.left = (Math.random() * 100) + 'vw';
+                    c.style.background = colors[i % colors.length];
+                    c.style.animationDuration = (1.7 + Math.random() * 1.1) + 's';
+                    c.style.animationDelay = (Math.random() * .35) + 's';
+                    document.body.appendChild(c);
+                    (function (node) {
+                        setTimeout(function () {
+                            if (node && node.parentNode) node.parentNode.removeChild(node);
+                        }, 3400);
+                    })(c);
+                }
+            }
+
+            /* ================= BUILD ================= */
+            function buildScene() {
+                var sc = SCENES[sceneIdx];
+
+                document.getElementById('scene-story').textContent = sc.story;
+                var span = sc.width * sc.buckets;
+                document.getElementById('cabinet-range').textContent =
+                    sc.min + ' to ' + (sc.min + span - 1) + ' · ' + sc.buckets + ' drawers';
+
+                pileEl.innerHTML = '';
+                drawersEl.innerHTML = '';
+                ribbonEl.innerHTML = '';
+                pileEls = [];
+                drawerEls = [];
+                dotEls = [];
+
+                // ribbon bands (one per drawer)
+                for (var rb = 0; rb < sc.buckets; rb++) {
+                    var band = document.createElement('div');
+                    band.className = 'ribbon-band' + (rb === sc.buckets - 1 ? ' last' : '');
+                    band.style.left = (rb / sc.buckets * 100) + '%';
+                    band.style.width = (100 / sc.buckets) + '%';
+                    band.innerHTML = '<span>' + labelOf(sc, rb) + '</span>';
+                    ribbonEl.appendChild(band);
+                }
+
+                // drawers
+                for (var b = 0; b < sc.buckets; b++) {
+                    (function (bIdx) {
+                        var d = document.createElement('div');
+                        d.className = 'drawer';
+                        d.setAttribute('data-b', bIdx);
+                        d.innerHTML =
+                            '<span class="handle"></span>' +
+                            '<div class="drawer-head"><span class="drawer-label">' + labelOf(sc, bIdx) +
+                            '</span><span class="drawer-count">0 cards</span></div>' +
+                            '<div class="drawer-cards"><span class="empty-drawer">empty</span></div>' +
+                            '<div class="drawer-end">end of drawer</div>';
+                        drawersEl.appendChild(d);
+                        drawerEls.push(d);
+                        wireDrawer(d, bIdx);
+                    })(b);
+                }
+
+                // cards
+                var order = shuffle(sc.cards);
+                for (var i = 0; i < order.length; i++) {
+                    (function (v, idx) {
+                        var el = document.createElement('div');
+                        el.className = 'card-year';
+                        el.setAttribute('data-v', v);
+                        el.setAttribute('data-idx', idx);
+                        el.style.setProperty('--r', ((idx % 5) - 2) * 1.4 + 'deg');
+                        el.innerHTML = '<span class="hole"></span><span class="cy">' + v +
+                            '</span><span class="ctag"></span>';
+                        el.addEventListener('click', function () {
+                            onCardActivate(idx, el);
+                        });
+                        pileEl.appendChild(el);
+                        pileEls[idx] = el;
+                    })(order[i], i);
+                }
+
+                cardState = order.map(function (v) {
+                    return { v: v, b: bucketOf(v, sc), filed: false };
+                });
+
+                // ribbon dots
+                for (var d2 = 0; d2 < order.length; d2++) {
+                    (function (v, idx) {
+                        var dot = document.createElement('div');
+                        dot.className = 'ribbon-dot';
+                        dot.setAttribute('data-idx', idx);
+                        dot.title = 'Year ' + v;
+                        dot.style.left = (span > 1 ? (v - sc.min) / (span - 1) * 100 : 50) + '%';
+                        dot.addEventListener('click', function () {
+                            if (!cardState[idx].filed) onCardActivate(idx, pileEls[idx]);
+                        });
+                        ribbonEl.appendChild(dot);
+                        dotEls[idx] = dot;
+                    })(order[d2], d2);
+                }
+
+                refreshAll();
+            }
+
+            function wireDrawer(d, bIdx) {
+                // One listener per drawer. Clicks on cards are handled by the card itself,
+                // so they must not be treated as an insert target here.
+                d.addEventListener('click', function (ev) {
+                    if (done || autoOn) return;
+                    if (ev.target.closest && ev.target.closest('.card-year')) return;
+                    if (ev.target.classList.contains('drawer-end')) {
+                        onDrawerEndClick(bIdx, d);
+                        return;
+                    }
+                    onDrawerClick(bIdx, d);
+                });
+            }
+
+            /* ================= CARD INTERACTION ================= */
+            function onCardActivate(idx, el) {
+                if (done || autoOn) return;
+                var inDrawer = !!(el.parentNode && el.parentNode.classList &&
+                    el.parentNode.classList.contains('drawer-cards'));
+
+                if (!inDrawer) {
+                    // still on the table: this is a Pass 1 pick
+                    if (phase !== 'spread') return;
+                    if (pickedId === idx) {
+                        clearPick();
+                        return;
+                    }
+                    clearPick();
+                    pickUp(idx);
+                    fieldNote.textContent = cardState[idx].v + ' belongs in the ' +
+                        labelOf(SCENES[sceneIdx], cardState[idx].b) + ' drawer. Click that drawer.';
+                    return;
+                }
+
+                // inside a drawer: Pass 2
+                if (pickedId === null || pickedId === idx) {
+                    if (pickedId === idx) {
+                        clearPick();
+                        return;
+                    }
+                    clearPick();
+                    pickUp(idx);
+                    fieldNote.textContent = cardState[idx].v + ' is picked up. Click the card it should sit in front of, or the end strip.';
+                    return;
+                }
+                onInsertClick(idx, el);
+            }
+
+            function pickUp(idx) {
+                pickedId = idx;
+                pileEls[idx].classList.add('picked');
+                if (dotEls[idx]) dotEls[idx].classList.add('picked');
+            }
+
+            function clearPick() {
+                if (pickedId === null) return;
+                pileEls[pickedId].classList.remove('picked');
+                if (dotEls[pickedId]) dotEls[pickedId].classList.remove('picked');
+                document.querySelectorAll('.drawer-end.armed').forEach(function (el) {
+                    el.classList.remove('armed');
+                });
+                document.querySelectorAll('.drawer-target').forEach(function (el) {
+                    el.classList.remove('drawer-target');
+                });
+                document.querySelectorAll('.card-year.hinted').forEach(function (el) {
+                    el.classList.remove('hinted');
+                });
+                document.querySelectorAll('.ribbon-dot.hinted').forEach(function (el) {
+                    el.classList.remove('hinted');
+                });
+                pickedId = null;
+            }
+
+            /* ================= MOVE ANIMATION =================
+               Reordering inside a drawer has to read as a slide, not a jump.
+               This is a FLIP pass: measure where every card in the list sits,
+               run the DOM change, then glide each card from its old box to the
+               new one. Cards that shift to make room glide too. */
+            var MOVE_MS = 340;
+
+            function flipMove(list, mutate, ms) {
+                var reduce = window.matchMedia &&
+                    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                var items = Array.prototype.slice.call(list.querySelectorAll('.card-year'));
+                // A freshly filed card still carries the .placing landing bounce,
+                // which also drives transform. Drop it so the glide owns the
+                // transform for the length of the slide.
+                for (var p = 0; p < items.length; p++) items[p].classList.remove('placing');
+                var before = {};
+                for (var i = 0; i < items.length; i++) {
+                    var r = items[i].getBoundingClientRect();
+                    before[items[i].getAttribute('data-idx')] = { x: r.left, y: r.top };
+                }
+                mutate();
+                if (reduce) return;
+                var after = list.querySelectorAll('.card-year');
+                for (var j = 0; j < after.length; j++) {
+                    var el = after[j];
+                    var b = before[el.getAttribute('data-idx')];
+                    if (!b) continue;
+                    var r2 = el.getBoundingClientRect();
+                    var dx = b.x - r2.left;
+                    var dy = b.y - r2.top;
+                    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) continue;
+                    glide(el, dx, dy, ms);
+                }
+            }
+
+            function glide(el, dx, dy, ms) {
+                el.classList.add('flipping');
+                if (typeof el.animate === 'function') {
+                    var anim = el.animate([
+                        { transform: 'translate(' + dx + 'px,' + dy + 'px)' },
+                        { transform: 'translate(0px, 0px)' }
+                    ], { duration: ms, easing: 'cubic-bezier(.22,.9,.28,1)' });
+                    var done = function () {
+                        el.classList.remove('flipping');
+                    };
+                    anim.addEventListener('finish', done);
+                    anim.addEventListener('cancel', done);
+                    return;
+                }
+                // fallback for engines without the Web Animations API
+                el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+                void el.offsetWidth;
+                el.style.transition = 'transform ' + ms + 'ms cubic-bezier(.22,.9,.28,1)';
+                el.style.transform = 'translate(0px, 0px)';
+                window.setTimeout(function () {
+                    el.classList.remove('flipping');
+                    el.style.transition = '';
+                    el.style.transform = '';
+                }, ms + 40);
+            }
+
+            /* ================= PASS 1: FILE INTO A DRAWER ================= */
+            function onDrawerClick(b, drawerEl) {
+                if (phase !== 'spread') {
+                    fieldNote.textContent = 'Pick a card inside a drawer first, then click where it belongs.';
+                    return;
+                }
+                if (pickedId === null) {
+                    fieldNote.textContent = 'Pick a card from the table first.';
+                    return;
+                }
+                var st = cardState[pickedId];
+                if (st.b !== b) {
+                    registerMistake(drawerEl, st.v + ' is not in ' + labelOf(SCENES[sceneIdx], b) +
+                        '. Its label covers ' + labelOf(SCENES[sceneIdx], st.b) + '.');
+                    return;
+                }
+                stepCount++;
+                fileInto(pickedId, b);
+            }
+
+            function fileInto(idx, b) {
+                var sc = SCENES[sceneIdx];
+                var st = cardState[idx];
+                var el = pileEls[idx];
+                el.classList.add('filed', 'placing');
+                el.querySelector('.ctag').textContent = shortLabel(sc, b);
+                drawerEls[b].querySelector('.drawer-cards').appendChild(el);
+                st.filed = true;
+                filedCount++;
+                clearPick();
+                setTimeout(function () {
+                    el.classList.remove('placing');
+                }, 520);
+                refreshAll();
+                if (phase === 'spread' && filedCount === cardState.length) {
+                    setPhase('order');
+                    toast('Everything is filed. Now order the cards inside each drawer.');
+                } else if (phase === 'order') {
+                    checkFinished();
+                }
+            }
+
+            /* ================= PASS 2: ORDER INSIDE A DRAWER ================= */
+            function onInsertClick(targetIdx, targetEl) {
+                var st = cardState[pickedId];
+                var el = pileEls[pickedId];
+                var list = targetEl.parentNode;
+                var targetV = Number(targetEl.getAttribute('data-v'));
+                // Pass 2 only ever reorders within one drawer, so refuse to move a
+                // card into a drawer it was never filed in.
+                if (st.b !== Number(list.closest('.drawer').getAttribute('data-b'))) {
+                    registerMistake(targetEl, st.v + ' belongs in the ' +
+                        labelOf(SCENES[sceneIdx], st.b) + ' drawer, not this one.');
+                    return;
+                }
+                if (st.v > targetV) {
+                    registerMistake(targetEl, st.v + ' is later than ' + targetV + ', so it cannot sit in front of it.');
+                    return;
+                }
+                var prev = targetEl.previousElementSibling;
+                var prevV = prev ? Number(prev.getAttribute('data-v')) : null;
+                if (prevV !== null && prevV > st.v) {
+                    registerMistake(targetEl, st.v + ' does not fit between ' + prevV + ' and ' + targetV + '.');
+                    return;
+                }
+                stepCount += list.querySelectorAll('.card-year').length;
+                // drop the lift before measuring, so the slide starts from the
+                // card's resting box rather than the raised picked position
+                el.classList.remove('picked');
+                flipMove(list, function () {
+                    list.insertBefore(el, targetEl);
+                }, MOVE_MS);
+                clearPick();
+                refreshAll();
+                checkFinished();
+            }
+
+            function onDrawerEndClick(b, drawerEl) {
+                if (phase !== 'order') {
+                    onDrawerClick(b, drawerEl);
+                    return;
+                }
+                if (pickedId === null) {
+                    fieldNote.textContent = 'Pick a card from inside a drawer first.';
+                    return;
+                }
+                var st = cardState[pickedId];
+                var list = drawerEl.querySelector('.drawer-cards');
+                if (st.b !== b) {
+                    registerMistake(drawerEl, st.v + ' belongs in the ' +
+                        labelOf(SCENES[sceneIdx], st.b) + ' drawer, not this one.');
+                    return;
+                }
+                var cards = list.querySelectorAll('.card-year');
+                var lastV = cards.length ? Number(cards[cards.length - 1].getAttribute('data-v')) : null;
+                if (lastV !== null && lastV > st.v) {
+                    registerMistake(cards[cards.length - 1],
+                        st.v + ' is earlier than ' + lastV + ', so it cannot go at the end yet.');
+                    return;
+                }
+                stepCount += cards.length;
+                pileEls[pickedId].classList.remove('picked');
+                flipMove(list, function () {
+                    list.appendChild(pileEls[pickedId]);
+                }, MOVE_MS);
+                clearPick();
+                refreshAll();
+                checkFinished();
+            }
+
+            /* ================= REFRESH ================= */
+            function refreshAll() {
+                refreshDrawers();
+                refreshPile();
+                setStats();
+            }
+
+            function refreshDrawers() {
+                for (var b = 0; b < drawerEls.length; b++) {
+                    var list = drawerEls[b].querySelector('.drawer-cards');
+                    var cards = list.querySelectorAll('.card-year');
+                    var cnt = drawerEls[b].querySelector('.drawer-count');
+                    cnt.textContent = cards.length + (cards.length === 1 ? ' card' : ' cards');
+                    drawerEls[b].classList.toggle('drawer-order-ok', cards.length > 1 && isOrdered(list));
+                    if (cards.length === 0) {
+                        if (!list.querySelector('.empty-drawer')) {
+                            var e = document.createElement('span');
+                            e.className = 'empty-drawer';
+                            e.textContent = 'empty';
+                            list.appendChild(e);
+                        }
+                    } else {
+                        var em = list.querySelector('.empty-drawer');
+                        if (em) list.removeChild(em);
+                    }
+                }
+            }
+
+            function isOrdered(list) {
+                var cards = list.querySelectorAll('.card-year');
+                for (var i = 1; i < cards.length; i++) {
+                    if (Number(cards[i].getAttribute('data-v')) < Number(cards[i - 1].getAttribute('data-v'))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function refreshPile() {
+                for (var i = 0; i < pileEls.length; i++) {
+                    var filed = cardState[i].filed;
+                    // Only hide it while it still sits on the table. Once it has been
+                    // moved into a drawer it must stay visible.
+                    var stillOnTable = pileEls[i].parentNode === pileEl;
+                    pileEls[i].style.display = stillOnTable && filed ? 'none' : '';
+                    if (dotEls[i]) dotEls[i].classList.toggle('filed', filed);
+                }
+                var left = cardState.filter(function (c) { return !c.filed; }).length;
+                document.getElementById('pile-label').textContent = left ?
+                    'Unsorted table · ' + left + ' left' : 'Table cleared';
+            }
+
+            function setStats() {
+                var sc = SCENES[sceneIdx];
+                document.getElementById('s-filed').textContent = filedCount;
+                document.getElementById('s-total').textContent = sc.cards.length;
+                document.getElementById('s-steps').textContent = stepCount;
+                document.getElementById('s-mist').textContent = mistakeCount;
+                document.getElementById('s-busiest').textContent = busiestDrawer();
+                document.getElementById('s-scene').textContent = sceneIdx + 1;
+            }
+
+            function busiestDrawer() {
+                var best = 0;
+                for (var b = 0; b < drawerEls.length; b++) {
+                    var n = drawerEls[b].querySelectorAll('.card-year').length;
+                    if (n > best) best = n;
+                }
+                return best;
+            }
+
+            function drawersUsed() {
+                var n = 0;
+                for (var b = 0; b < drawerEls.length; b++) {
+                    if (drawerEls[b].querySelectorAll('.card-year').length > 0) n++;
+                }
+                return n;
+            }
+
+            function insideWork() {
+                var total = 0;
+                for (var b = 0; b < drawerEls.length; b++) {
+                    var m = drawerEls[b].querySelectorAll('.card-year').length;
+                    total += (m * (m - 1)) / 2;
+                }
+                return total;
+            }
+
+            function naiveComparisons() {
+                var n = SCENES[sceneIdx].cards.length;
+                return (n * (n - 1)) / 2;
+            }
+
+            function setPhase(p) {
+                phase = p;
+                if (p === 'spread') {
+                    phaseChip.textContent = 'Pass 1 of 2 · Spread into drawers';
+                    fieldNote.textContent = 'Pick a card, then click the drawer its year belongs to.';
+                } else {
+                    phaseChip.textContent = 'Pass 2 of 2 · Order inside each drawer';
+                    fieldNote.textContent = 'Pick the card that is out of place, then click the card it belongs in front of.';
+                }
+            }
+
+            function registerMistake(targetEl, msg) {
+                mistakeCount++;
+                setStats();
+                if (targetEl && targetEl.classList) {
+                    targetEl.classList.remove('shake');
+                    void targetEl.offsetWidth;
+                    targetEl.classList.add('shake');
+                }
+                toast(msg);
+            }
+
+            function checkFinished() {
+                if (done || phase !== 'order') return;
+                var allOrdered = drawerEls.every(function (d) {
+                    return isOrdered(d.querySelector('.drawer-cards'));
+                });
+                if (allOrdered) finishScene();
+            }
+
+            function finishScene() {
+                if (done) return;
+                done = true;
+                stopAuto(true);
+                document.querySelectorAll('.card-year').forEach(function (el) {
+                    el.classList.add('locked');
+                });
+                var inside = insideWork();
+                var naive = naiveComparisons();
+                var ratio = inside > 0 ? naive / inside : naive;
+                document.getElementById('done-title').textContent = SCENES[sceneIdx].title + ' done';
+                document.getElementById('done-lesson').textContent = SCENES[sceneIdx].lesson;
+                document.getElementById('t-steps').textContent = 'Your hand steps: ' + stepCount;
+                document.getElementById('t-inside').textContent = 'Work left inside the drawers: ' + inside;
+                document.getElementById('t-naive').textContent = 'Compare-everything would need: ' + naive;
+                document.getElementById('t-speedup').textContent = 'Saving: ' +
+                    (ratio >= 10 ? Math.round(ratio) + 'x or more' : ratio.toFixed(1) + 'x');
+                document.getElementById('t-buckets').textContent = 'Drawers used: ' + drawersUsed() +
+                    ' of ' + SCENES[sceneIdx].buckets;
+                var nextBtn = document.getElementById('btn-scene-next');
+                var notesBtn = document.getElementById('btn-case-notes');
+                if (sceneIdx < SCENES.length - 1) {
+                    nextBtn.style.display = '';
+                    notesBtn.style.display = 'none';
+                } else {
+                    nextBtn.style.display = 'none';
+                    notesBtn.style.display = '';
+                }
+                donePanel.classList.add('show');
+                fieldNote.textContent = 'Shift complete. ' + inside + ' comparisons were left inside the drawers, versus ' +
+                    naive + ' if every card had met every other card.';
+                celebrate();
+            }
+
+            /* ================= HINT ================= */
+            function giveHint() {
+                if (done || autoOn) return;
+                var sc = SCENES[sceneIdx];
+
+                if (phase === 'spread') {
+                    if (pickedId === null) {
+                        for (var i = 0; i < cardState.length; i++) {
+                            if (!cardState[i].filed) {
+                                pickUp(i);
+                                fieldNote.textContent = 'Start with ' + cardState[i].v +
+                                    '. Which drawer label covers that year?';
+                                return;
+                            }
+                        }
+                        return;
+                    }
+                    var st = cardState[pickedId];
+                    drawerEls[st.b].classList.add('drawer-target');
+                    if (dotEls[pickedId]) dotEls[pickedId].classList.add('hinted');
+                    fieldNote.textContent = st.v + ' goes in the ' + labelOf(sc, st.b) + ' drawer (outlined).';
+                    return;
+                }
+
+                if (pickedId === null) {
+                    var bad = null;
+                    for (var b = 0; b < drawerEls.length && !bad; b++) {
+                        var cards = drawerEls[b].querySelectorAll('.card-year');
+                        for (var j = 1; j < cards.length; j++) {
+                            if (Number(cards[j].getAttribute('data-v')) <
+                                Number(cards[j - 1].getAttribute('data-v'))) {
+                                bad = cards[j];
+                                break;
+                            }
+                        }
+                    }
+                    if (bad) {
+                        bad.classList.add('hinted');
+                        fieldNote.textContent = 'This card is out of place. Pick it up, then click where it belongs.';
+                    } else {
+                        fieldNote.textContent = 'Every drawer is already in order. Press Auto Sort to watch it again.';
+                    }
+                    return;
+                }
+
+                var p = cardState[pickedId];
+                var hostEl = pileEls[pickedId];
+                var sibs = hostEl.parentNode.querySelectorAll('.card-year');
+                var placed = false;
+                for (var m = 0; m < sibs.length; m++) {
+                    if (sibs[m] === hostEl) continue;
+                    var sv = Number(sibs[m].getAttribute('data-v'));
+                    var before = sibs[m].previousElementSibling;
+                    var beforeV = before ? Number(before.getAttribute('data-v')) : null;
+                    if (p.v <= sv && (beforeV === null || beforeV <= p.v)) {
+                        sibs[m].classList.add('hinted');
+                        fieldNote.textContent = p.v + ' belongs just before ' + sv + ' (outlined).';
+                        placed = true;
+                        break;
+                    }
+                }
+                if (!placed) {
+                    var host = hostEl.closest('.drawer');
+                    if (host) host.querySelector('.drawer-end').classList.add('armed');
+                    fieldNote.textContent = p.v + ' is the largest in this drawer. Use the end strip (outlined).';
+                }
+            }
+
+            /* ================= AUTO SORT ================= */
+            function startAuto() {
+                if (autoOn || done) return;
+                autoOn = true;
+                paused = false;
+                clearPick();
+                timeline = [];
+                timelineIdx = 0;
+
+                var sc = SCENES[sceneIdx];
+                for (var i = 0; i < cardState.length; i++) {
+                    if (!cardState[i].filed) timeline.push({ act: 'spread', idx: i });
+                }
+                for (var b = 0; b < sc.buckets; b++) timeline.push({ act: 'orderDrawer', b: b });
+
+                sMode.textContent = 'Auto';
+                btnAuto.textContent = '■ Stop';
+                btnPause.disabled = false;
+                document.querySelectorAll('.card-year').forEach(function (el) {
+                    el.classList.add('locked');
+                });
+                autoStep();
+            }
+
+            function autoStep() {
+                if (!autoOn || paused) return;
+                var sc = SCENES[sceneIdx];
+
+                if (timelineIdx >= timeline.length) {
+                    stopAuto(true);
+                    checkFinished();
+                    return;
+                }
+                var item = timeline[timelineIdx++];
+
+                if (item.act === 'spread') {
+                    var st = cardState[item.idx];
+                    if (st.filed) {
+                        scheduleNext(autoStep, 90 / speedSel.value);
+                        return;
+                    }
+                    var el = pileEls[item.idx];
+                    drawerEls[st.b].classList.add('drawer-target');
+                    pickUp(item.idx);
+                    fieldNote.textContent = 'Pass 1: ' + st.v + ' falls in ' + labelOf(sc, st.b) +
+                        '. One step, no comparisons.';
+                    scheduleNext(function () {
+                        drawerEls[st.b].classList.remove('drawer-target');
+                        stepCount++;
+                        fileInto(item.idx, st.b);
+                        scheduleNext(autoStep, 460 / speedSel.value);
+                    }, 640 / speedSel.value);
+                    return;
+                }
+
+                var b = item.b;
+                var list = drawerEls[b].querySelector('.drawer-cards');
+                var passes = item.passes || 0;
+                var cards = Array.prototype.slice.call(list.querySelectorAll('.card-year'));
+                var current = cards.map(function (c) {
+                    return Number(c.getAttribute('data-v'));
+                });
+                var sorted = current.slice().sort(function (x, y) {
+                    return x - y;
+                });
+                if (current.join(',') === sorted.join(',')) {
+                    scheduleNext(autoStep, 200 / speedSel.value);
+                    return;
+                }
+                var worst = 0;
+                for (var i = 1; i < current.length; i++) {
+                    if (current[i] < current[i - 1]) worst = i;
+                }
+                var moving = cards[worst];
+                var mv = Number(moving.getAttribute('data-v'));
+                var insertBefore = null;
+                for (var j = 0; j < cards.length; j++) {
+                    if (Number(cards[j].getAttribute('data-v')) > mv) {
+                        insertBefore = cards[j];
+                        break;
+                    }
+                }
+                moving.classList.add('picked');
+                fieldNote.textContent = 'Pass 2: ' + mv + ' is out of place. ' +
+                    (insertBefore ? 'It belongs in front of ' + Number(insertBefore.getAttribute('data-v')) + '.'
+                        : 'It is the largest here, so it goes at the end.');
+                var scanned = cards.length;
+                scheduleNext(function () {
+                    moving.classList.remove('picked');
+                    flipMove(list, function () {
+                        if (insertBefore) {
+                            list.insertBefore(moving, insertBefore);
+                        } else {
+                            list.appendChild(moving);
+                        }
+                    }, MOVE_MS);
+                    stepCount += scanned;
+                    refreshAll();
+                    if (!isOrdered(list) && passes < cards.length + 2) {
+                        timeline.splice(timelineIdx, 0, { act: 'orderDrawer', b: b, passes: passes + 1 });
+                    }
+                    scheduleNext(autoStep, 700 / speedSel.value);
+                }, 900 / speedSel.value);
+            }
+
+            function scheduleNext(fn, ms) {
+                if (autoTimer) clearTimeout(autoTimer);
+                autoTimer = setTimeout(function () {
+                    autoTimer = null;
+                    fn();
+                }, Math.max(40, ms));
+            }
+
+            function stopAuto(fullStop) {
+                if (autoTimer) {
+                    clearTimeout(autoTimer);
+                    autoTimer = null;
+                }
+                autoOn = false;
+                paused = false;
+                btnAuto.textContent = '▶ Auto Sort';
+                btnPause.disabled = true;
+                btnPause.textContent = '⏸ Pause';
+                document.querySelectorAll('.card-year').forEach(function (el) {
+                    el.classList.remove('locked');
+                });
+                if (!done) sMode.textContent = 'Manual';
+                if (fullStop) {
+                    document.querySelectorAll('.drawer-target').forEach(function (el) {
+                        el.classList.remove('drawer-target');
+                    });
+                }
+            }
+
+            function togglePause() {
+                if (!autoOn || done) return;
+                if (paused) {
+                    paused = false;
+                    btnPause.textContent = '⏸ Pause';
+                    toast('Resumed. Continuing the sort.');
+                    autoStep();
+                } else {
+                    paused = true;
+                    btnPause.textContent = '▶ Resume';
+                    if (autoTimer) {
+                        clearTimeout(autoTimer);
+                        autoTimer = null;
+                    }
+                    toast('Paused.');
+                }
+            }
+
+            /* ================= SHIFT LIFECYCLE ================= */
+            function initScene(idx) {
+                stopAuto(true);
+                sceneIdx = idx;
+                phase = 'spread';
+                done = false;
+                stepCount = 0;
+                mistakeCount = 0;
+                filedCount = 0;
+                pickedId = null;
+                vaultIntroShown = false;
+                donePanel.classList.remove('show');
+                document.getElementById('btn-scene-next').style.display = 'none';
+                document.getElementById('btn-case-notes').style.display = 'none';
+                sMode.textContent = 'Manual';
+                setPhase('spread');
+                buildScene();
+                setStats();
+            }
+
+            function newRound() {
+                initScene(sceneIdx);
+            }
+
+            function nextScene() {
+                if (sceneIdx < SCENES.length - 1) initScene(sceneIdx + 1);
+            }
+
+            function introVault() {
+                if (vaultIntroShown || autoOn || done || sceneIdx !== 0) return;
+                vaultIntroShown = true;
+                setTimeout(function () {
+                    if (autoOn || done) return;
+                    fieldNote.textContent = 'Example: 1912 goes in the 1910-1919 drawer because the drawer label covers it. No card was compared to any other to place it.';
+                    setTimeout(function () {
+                        if (autoOn || done) return;
+                        fieldNote.textContent = 'Pick a card, then click the drawer its year belongs to.';
+                    }, 3800);
+                }, 400);
+            }
+
+            /* ================= NAVIGATION ================= */
+            function goto(idx) {
+                SECTIONS.forEach(function (name, i) {
+                    var el = document.getElementById(name);
+                    el.classList.toggle('active-view', i === idx);
+                    var step = document.getElementById('step-' + (i + 1));
+                    step.classList.toggle('active', i === idx);
+                    step.classList.toggle('done', i < idx);
+                });
+                sectionIndex = idx;
+                if (idx === 2) {
+                    requestAnimationFrame(introVault);
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function wireModal() {
+                var modal = document.getElementById('modal');
+                document.getElementById('btn-modal-stay').addEventListener('click', function () {
+                    modal.classList.remove('show');
+                });
+                document.getElementById('btn-modal-leave').addEventListener('click', function () {
+                    modal.classList.remove('show');
+                    if (pendingSection !== null) {
+                        stopAuto(true);
+                        newRound();
+                        goto(pendingSection);
+                    }
+                });
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) modal.classList.remove('show');
+                });
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') modal.classList.remove('show');
+                });
+            }
+
+            /* ================= WIRING ================= */
+            function openWarn(next, label, question) {
+                pendingSection = next;
+                document.getElementById('btn-modal-leave').textContent = label;
+                document.querySelector('.modal-punch').textContent = question;
+                document.getElementById('modal').classList.add('show');
+            }
+
+            document.getElementById('btn-puzzle-continue').addEventListener('click', function () {
+                goto(1);
+            });
+            document.getElementById('btn-briefing-back').addEventListener('click', function () {
+                goto(0);
+            });
+            document.getElementById('btn-briefing-start').addEventListener('click', function () {
+                goto(2);
+            });
+            document.getElementById('btn-vault-skip').addEventListener('click', function () {
+                openWarn(3, 'Continue', 'Leaving the vault resets the shift you are on. Do you want to continue?');
+            });
+            document.getElementById('btn-vault-back').addEventListener('click', function () {
+                openWarn(1, 'Go Back', 'Leaving the vault resets the shift you are on. Do you want to go back?');
+            });
+            document.getElementById('btn-case-notes').addEventListener('click', function () {
+                goto(3);
+            });
+            document.getElementById('btn-scene-next').addEventListener('click', nextScene);
+            document.getElementById('btn-scene-replay').addEventListener('click', newRound);
+            document.getElementById('btn-notes-back').addEventListener('click', function () {
+                goto(2);
+            });
+            document.getElementById('btn-notes-continue').addEventListener('click', function () {
+                goto(4);
+            });
+            document.getElementById('btn-method-back').addEventListener('click', function () {
+                goto(3);
+            });
+            document.getElementById('btn-method-continue').addEventListener('click', function () {
+                goto(5);
+            });
+            document.getElementById('btn-cases-back').addEventListener('click', function () {
+                goto(4);
+            });
+            document.getElementById('btn-restart-journey').addEventListener('click', function () {
+                initScene(0);
+                goto(0);
+            });
+
+            document.getElementById('btn-hint').addEventListener('click', giveHint);
+            btnAuto.addEventListener('click', function () {
+                if (autoOn) stopAuto(true);
+                else startAuto();
+            });
+            btnPause.addEventListener('click', togglePause);
+            document.getElementById('btn-reset').addEventListener('click', newRound);
+
+            /* ---------- INIT ---------- */
+            initScene(0);
+            wireModal();
+        })();
+    </script>
+</body>
+</html>
