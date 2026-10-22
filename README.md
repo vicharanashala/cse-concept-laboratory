@@ -61,6 +61,8 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 11 | The Last Mile | ✅ Available |
 | 12 | 1 Bag, 3 Slots, 14 Classes | ✅ Available |
 | 13 | The Tower of Brahma | ✅ Available |
+| 14 | The Best Stretch | ✅ Available |
+| 15 | Campus Bites | ✅ Available |
 
 ## Repository Structure
 
