@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Bites: A Kitchen Rush Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   THEME: soft blue & orange, white cards, pill buttons.
+   ========================================================== */
+:root{
+  --bg-1:#FDF1E9; --bg-2:#EDF3FA; --bg-3:#E4EEFA; --bg-4:#D9E5F2;
+  --primary:#4A9BD1; --primary-dark:#2B6FA3; --primary-deep:#1B4A66;
+  --amber:#EA8C36; --amber-dark:#C96F1F;
+  --danger:#D9714F; --success:#4B7A4A; --violet:#EA8C36;
+  --ink:#1F2E37; --muted:#54666D; --faint:#93A5AB;
+  --card-bg:#FFFFFF;
+  --footer-bg:#22496B;
+  --glass-border:#D9E5F2;
+  --shadow-card:rgba(23,50,77,0.12); --shadow-btn:rgba(43,111,163,0.28);
+  --success-bg:#DCEAD8; --success-text:#274B26; --success-border:#4B7A4A;
+  --error-bg:#FBE1DC; --error-text:#8A3420; --error-border:#D9714F;
+  --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:'Inter', sans-serif;font-weight:400;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-2) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Poppins', sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{line-height:1.65;color:var(--muted);margin:0;}
+button{font-family:'Poppins', sans-serif;cursor:pointer;}
+button:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px 70px;}
+
+/* ---- stepper ---- */
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
+.step-circle{
+  width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;
+  font-family:'Poppins', sans-serif;
+}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins', sans-serif;}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1;}
+.step-item:first-child .step-line{display:none;}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.step-item.done .step-line{background:var(--primary-dark);}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25);}
+.step-item.active .step-label{color:var(--primary-dark);}
+
+/* ---- section framing ---- */
+.section{display:none;}
+.section.active-view{display:block;animation:sectionFade .35s ease;}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);
+  background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins', sans-serif;
+}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center;}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted);}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--ink);margin:0 0 12px;}
+
+.card{background:transparent;border:none;border-radius:0;box-shadow:none;padding:6px 0 0;}
+.btn{
+  border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 24px -10px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 28px -8px var(--shadow-btn);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none;text-align:left;}
+.btn.secondary.selected{border-color:var(--amber);background:#FBE9DA;color:var(--amber-dark);}
+.btn.secondary:disabled{opacity:.55;}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px;}
+.btn.small{padding:9px 18px;font-size:13px;}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+
+/* ---- Chapter 1: the case ---- */
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0;}
+.problem-card p{margin:0 0 14px;font-size:15.5px;}
+.problem-card p:last-child{margin-bottom:0;}
+.problem-card b{color:var(--primary-deep);}
+.story-lines{
+  text-align:left;max-width:680px;margin:26px auto 0;background:transparent;
+  border:none;border-radius:0;padding:0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.story-lines p{font-size:15px;}
+.story-lines .highlight{color:var(--amber-dark);font-weight:700;}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px;}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+.rules-list li::before{content:"\2715";color:var(--danger);font-weight:700;flex-shrink:0;}
+.rules-list li.ok::before{content:"\2022";color:var(--primary);}
+
+/* ---- game shell ---- */
+.game-shell{width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.topbar{
+  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  background:transparent;border:none;padding:4px 0;
+}
+.status-cluster{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
+.game-note{
+  max-width:640px;margin:0 auto 14px;text-align:center;font-size:13.5px;color:var(--primary-deep);
+  background:rgba(74,155,209,0.08);border:1px dashed var(--glass-border);border-radius:var(--radius-md);
+  padding:10px 16px;
+}
+.status-pill{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);}
+.status-pill.score{color:var(--amber-dark);font-weight:700;}
+
+.game-main{display:grid;grid-template-columns:1fr 220px;gap:14px;}
+@media(max-width:760px){.game-main{grid-template-columns:1fr;}.trail-panel{order:3;border-left:none;padding-left:0;border-top:1px dashed var(--glass-border);padding-top:14px;}}
+
+.explorer-panel{
+  background:transparent;border:none;border-radius:0;
+  padding:0;min-height:360px;display:flex;flex-direction:column;gap:16px;position:relative;
+}
+.dialogue-box{
+  display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);
+  border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 14px;
+}
+.dialogue-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--violet),#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.dialogue-text{font-size:14px;color:var(--ink);line-height:1.5;}
+.dialogue-text .speaker{font-size:11px;color:var(--violet);display:block;margin-bottom:2px;letter-spacing:.05em;font-weight:700;}
+
+.current-folder-heading{display:flex;align-items:center;gap:10px;}
+.current-folder-heading .folder-icon-lg{font-size:26px;}
+.current-folder-heading h2{font-size:20px;}
+
+/* ---- dish cards (the "orders" grid inside the game) ---- */
+.dish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:560px){.dish-grid{grid-template-columns:1fr;}}
+.dish-card{
+  background:#fff;border:1.5px solid var(--glass-border);border-radius:16px;padding:16px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+  transition:border-color .2s,transform .2s,box-shadow .2s;animation:cardPop .35s ease both;
+}
+@keyframes cardPop{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.dish-card .d-icon{font-size:30px;}
+.dish-card .d-name{font-weight:700;font-size:14px;color:var(--ink);}
+.dish-card .d-step{font-size:12px;color:var(--muted);min-height:32px;line-height:1.4;}
+.dish-card .d-progress-track{width:100%;height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;}
+.dish-card .d-progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--amber));transition:width .5s ease;}
+.dish-card .d-pct{font-size:11px;color:var(--faint);font-weight:700;}
+.dish-card.ready{border-color:var(--primary);box-shadow:0 10px 20px -14px var(--shadow-card);}
+.dish-card.cooking{border-color:var(--amber);}
+.dish-card.done{border-color:var(--success);}
+.dish-card button.d-work-btn{
+  border:1.5px solid var(--primary);background:#fff;color:var(--primary-dark);border-radius:999px;padding:8px 14px;
+  font-weight:700;font-size:12.5px;width:100%;transition:.15s;
+}
+.dish-card button.d-work-btn:hover:not(:disabled){border-color:var(--amber);transform:translateY(-1px);}
+.dish-card.cooking button.d-work-btn{background:#FBE9DA;color:var(--amber-dark);border-color:var(--amber);}
+.dish-card.done button.d-work-btn{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border);}
+.dish-card button.d-work-btn:disabled{cursor:default;opacity:.85;}
+
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px 10px;color:var(--muted);text-align:center;}
+.empty-state .eicon{font-size:44px;opacity:.7;}
+.empty-state p{font-size:14px;}
+
+.explorer-footer{display:flex;justify-content:flex-start;gap:10px;flex-wrap:wrap;}
+
+.flip-in{animation:flipIn .4s ease both;}
+@keyframes flipIn{from{opacity:0;transform:perspective(600px) rotateX(-8deg) translateY(6px);}to{opacity:1;transform:perspective(600px) rotateX(0) translateY(0);}}
+
+.trail-panel{
+  background:transparent;border:none;border-left:1px dashed var(--glass-border);border-radius:0;
+  padding:0 0 0 16px;display:flex;flex-direction:column;gap:10px;max-height:520px;
+}
+.trail-panel .trail-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;font-weight:700;}
+.tree-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-right:2px;}
+.order-board-item{margin-bottom:14px;}
+.order-board-item:last-child{margin-bottom:0;}
+.order-board-item .ob-head{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--primary-deep);margin-bottom:5px;}
+.order-board-item .ob-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;}
+.order-board-item .ob-steps li{font-size:11px;color:var(--faint);display:flex;gap:5px;align-items:flex-start;line-height:1.4;}
+.order-board-item .ob-steps li.done{color:var(--success);}
+.order-board-item .ob-steps li.current{color:var(--amber-dark);font-weight:700;}
+
+/* ---- control bar ---- */
+.control-bar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  background:transparent;border:none;border-top:1px dashed var(--glass-border);padding:16px 0 0;
+}
+.control-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.control-btn{
+  border:1.5px solid var(--primary);background:#fff;color:var(--primary-dark);border-radius:999px;padding:9px 18px;
+  font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px;font-family:inherit;
+  transition:transform .12s,background .15s,border-color .15s,opacity .15s;
+}
+.control-btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--amber);}
+.control-btn:disabled{opacity:.35;cursor:not-allowed;}
+.control-btn.play{background:var(--primary-dark);color:#fff;border-color:transparent;}
+.control-btn.pause{background:var(--amber);color:#fff;border-color:transparent;}
+.control-btn.auto{background:var(--amber);color:#fff;border-color:transparent;}
+.control-btn.auto.active{box-shadow:0 0 0 3px rgba(234,140,54,.35);}
+.control-btn.reset{
+  position:relative;background:transparent;color:var(--danger);border-color:var(--danger);
+  animation:resetGlow 2.2s ease-in-out infinite;
+}
+@keyframes resetGlow{0%,100%{box-shadow:0 0 0 0 rgba(217,113,79,.4);}50%{box-shadow:0 0 0 8px rgba(217,113,79,0);}}
+.control-btn.reset .r-spin{display:inline-block;transition:transform .4s;}
+.control-btn.reset:hover .r-spin{transform:rotate(180deg);}
+
+.speed-control{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px;}
+.speed-control button{width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-border);background:var(--bg-3);color:var(--primary-dark);font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.speed-control button:hover:not(:disabled){border-color:var(--amber);}
+.speed-control button:disabled{opacity:.3;cursor:not-allowed;}
+.speed-value{min-width:34px;text-align:center;color:var(--amber-dark);font-weight:700;}
+
+/* ---- overlays: pause / time-up (no answer collection) ---- */
+.overlay{position:fixed;inset:0;background:rgba(31,46,55,0.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.overlay.active{display:flex;animation:sectionFade .3s ease both;}
+.overlay-card{background:#fdfffe;border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:30px;max-width:460px;width:100%;text-align:center;display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 50px -20px rgba(23,50,77,.4);}
+.overlay-card h2{font-size:24px;}
+.overlay-card p{color:var(--muted);font-size:14.5px;line-height:1.55;}
+
+.achv-toast{
+  position:fixed;top:-90px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--amber);
+  border-radius:999px;padding:12px 22px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;
+  box-shadow:0 20px 50px -20px rgba(23,50,77,.4);z-index:80;transition:top .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.achv-toast.show{top:20px;}
+
+/* ---- completion ---- */
+.result-card{max-width:560px;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.result-icon{font-size:56px;}
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-chip{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 18px;min-width:110px;}
+.stat-chip .num{font-size:20px;color:var(--amber-dark);font-weight:800;}
+.stat-chip .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+
+/* ---- open question cards: reflection + exercise ---- */
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+.qcard{
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;
+  padding:22px 20px 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:190px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .18s,box-shadow .18s;
+}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38);}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary);letter-spacing:.03em;}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600;}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.qgrid{grid-template-columns:1fr;}.qcard{min-height:auto;padding:18px 18px 16px;}}
+.qcard.qcard-wide{grid-column:1 / -1;min-height:auto;}
+.timeline-layout{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.timeline-svg{width:100%;max-width:320px;flex-shrink:0;}
+.timeline-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px;}
+.timeline-legend span{display:inline-flex;align-items:center;gap:5px;}
+.leg-swatch{width:11px;height:11px;border-radius:3px;display:inline-block;}
+.timeline-questions{flex:1;min-width:220px;display:flex;flex-direction:column;gap:10px;}
+
+/* ---- Chapter: the method (concept + team demo), one continuous flow ---- */
+.learning-flow{max-width:640px;margin:0 auto;text-align:left;}
+.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border);}
+
+.concept-diagram-wrap{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.concept-board{position:relative;padding-top:52px;width:100%;max-width:420px;}
+.concept-avatar{
+  position:absolute;top:0;left:0;transform:translateX(-50%);font-size:26px;
+  transition:left .55s cubic-bezier(.4,1.5,.4,1);display:flex;flex-direction:column;align-items:center;z-index:4;
+}
+.concept-avatar span{font-size:10px;font-weight:800;color:var(--primary-deep);background:#fff;padding:2px 8px;
+  border-radius:999px;margin-top:2px;box-shadow:0 2px 6px rgba(0,0,0,.14);white-space:nowrap;}
+.concept-stations{display:flex;gap:10px;justify-content:center;}
+.concept-station{flex:1;background:#fff;border:2px solid var(--glass-border);border-radius:14px;padding:12px 10px;text-align:center;transition:.2s;}
+.concept-station.active{border-color:var(--amber);box-shadow:0 8px 18px -10px rgba(234,140,54,.5);}
+.concept-station.done{border-color:var(--success);}
+.concept-station .cs-icon{font-size:24px;}
+.concept-station .cs-name{font-size:11.5px;font-weight:700;color:var(--primary-deep);margin:4px 0 8px;}
+.concept-station .cs-track{height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;}
+.concept-station .cs-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--amber));transition:width .55s ease;}
+.concept-status{text-align:center;font-size:13px;font-weight:700;color:var(--primary-deep);min-height:18px;margin:2px 0 0;}
+
+.concept-summary{text-align:left;}
+.concept-summary-lead{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:8px;}
+.concept-summary ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.concept-summary li{font-size:13.5px;color:var(--muted);line-height:1.55;}
+.concept-summary strong{color:var(--amber-dark);}
+
+.method-part > * + *{margin-top:16px;}
+.part-head{text-align:center;}
+.part-head .eyebrow{margin-bottom:8px;}
+.part-head h3{font-size:19px;color:var(--primary-deep);}
+.compare-wrap h3{font-size:16px;color:var(--primary-deep);text-align:center;margin-bottom:12px;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.compare-col{background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;}
+.compare-col h4{font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 8px;color:var(--amber-dark);}
+.compare-col ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;}
+.compare-col li{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.compare-note{text-align:center;font-size:13px;margin-top:12px;}
+@media(max-width:560px){.compare-grid{grid-template-columns:1fr;}}
+
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center;}
+.kl-grid{display:flex;flex-direction:column;gap:14px;}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left;}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border);}
+.kl-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px;}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+a.btn{display:inline-block;text-decoration:none;}
+.scenario-badge{display:block;width:fit-content;margin:0 auto 14px;font-size:12px;font-weight:700;color:var(--primary-deep);background:#fff;border:1px solid var(--glass-border);border-radius:999px;padding:6px 14px;font-family:'Poppins',sans-serif;}
+.dish-card .d-cook{font-size:11px;font-weight:700;color:var(--amber-dark);background:#FBE9DA;padding:3px 10px;border-radius:999px;}
+.complete-explain{max-width:520px;font-size:14.5px;text-align:left;background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;color:var(--muted);line-height:1.6;}
+.complete-explain strong{color:var(--amber-dark);}
+.hidden{display:none!important;}
+
+@media(max-width:640px){
+  .wrap{padding:32px 14px 50px;}
+  .dish-card{min-width:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="stepper" id="stepper">
+    <div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Orders</span></div>
+    <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Shift</span></div>
+    <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Rush</span></div>
+    <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Order Notes</span></div>
+    <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Method</span></div>
+    <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">New Cases</span></div>
+  </div>
+
+  <!-- ================= CHAPTER 1: THE ORDERS ================= -->
+  <section class="section active-view" id="sec-puzzle">
+    <div class="hero">
+      <span class="eyebrow">Chapter 1 &middot; The Orders</span>
+      <h1>🍕 Doing More With Less</h1>
+    </div>
+    <div class="problem-card">
+      <p>Imagine you have several jobs to get done, but only a limited number of hands to do them. Some parts of a job take active effort, and other parts just need time to run on their own, like something baking, a file downloading, or water boiling.</p>
+      <p>If you sit and wait for each job to fully finish before starting the next one, you waste all the moments where nothing needed your attention. But if you juggle your attention across jobs, or bring in more hands to work alongside you, you can get more done.</p>
+      <p>Let's play a shift at a busy food truck and see exactly how that plays out. You'll be in charge of the kitchen.</p>
+      <p>Let's see what this looks like through a story 👇</p>
+    </div>
+    <div class="section-nav">
+      <button class="btn" id="btn-puzzle-continue">Continue to the Shift ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 2: THE SHIFT (story + rules) ================= -->
+  <section class="section" id="sec-briefing">
+    <div class="hero">
+      <span class="eyebrow">Chapter 2 &middot; Campus Bites</span>
+      <h1>The Fest-Day Rush</h1>
+    </div>
+
+    <div class="story-lines" id="intro-story-lines"><!-- filled by JS --></div>
+
+    <ul class="rules-list">
+      <li>Ravi's hands can only be on one step at a time.</li>
+      <li>Each dish's steps must be done in order, no skipping ahead.</li>
+      <li class="ok">Once something is baking, grilling, or blending, Ravi doesn't have to stand there, that's free time.</li>
+      <li class="ok">Keep Ravi busy. Idle time before an order is ready is wasted time.</li>
+    </ul>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-briefing-back">⬅ Back to the Orders</button>
+      <button class="btn" id="btn-briefing-start">Start the Shift ▶</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3 · SCENARIO 2 INTRO: THREE COOKS ================= -->
+  <section class="section" id="sec-team">
+    <div class="hero">
+      <span class="eyebrow">Chapter 3 &middot; Scenario 2 &middot; Three Cooks</span>
+      <h1>Reinforcements Arrive</h1>
+    </div>
+
+    <div class="story-lines">
+      <p>The queue outside hasn't shrunk, so the owner calls in two more cooks: <span class="highlight">Maya</span> and <span class="highlight">Arjun</span>.</p>
+      <p>The same three orders are waiting: Pizza, Burger, and Juice.</p>
+      <p>This time there are <span class="highlight">three cooks</span>. Ravi takes the pizza, Maya takes the burger, and Arjun takes the juice.</p>
+    </div>
+
+    <ul class="rules-list">
+      <li>Each cook only works on their own dish.</li>
+      <li>Each dish's steps must still be done in order, no skipping ahead.</li>
+      <li class="ok">All three cooks can work at the very same moment, nobody waits for a turn.</li>
+      <li class="ok">Click <b>Auto</b> and watch all three cooks go.</li>
+    </ul>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-team-back">⬅ Back to Scenario 1 Results</button>
+      <button class="btn" id="btn-team-start">Start Scenario 2 ▶</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3: THE RUSH (game) ================= -->
+  <section class="section" id="sec-search">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 &middot; The Rush</span>
+    <h2 class="section-title">Get All Three Orders Out</h2>
+    <span class="scenario-badge" id="scenario-badge">Scenario 1 of 2 &middot; One Cook</span>
+
+    <div class="section-nav" style="margin-top:0;margin-bottom:14px;">
+      <button class="btn ghost small" id="btn-case-back">⬅ Back to the Shift</button>
+      <button class="btn ghost small hidden" id="btn-game-s1">↺ Go to Scenario 1</button>
+    </div>
+
+    <div class="game-shell">
+
+      <p class="game-note" id="game-note">💡 Click <b>Auto</b> to sit back and watch the shift run itself. Use <b>Pause</b> whenever you want to take a break.</p>
+
+      <div class="topbar">
+        <div class="status-cluster">
+          <div class="status-pill score">★ <span id="score-value">0</span></div>
+          <div class="status-pill" id="pill-steps">👨‍🍳 <span id="steps-value">0</span>/15 steps done</div>
+        </div>
+      </div>
+
+      <div class="game-main">
+        <div class="explorer-panel">
+          <div class="dialogue-box">
+            <div class="dialogue-avatar" id="dialogue-avatar">👨‍🍳</div>
+            <div class="dialogue-text">
+              <span class="speaker" id="dialogue-speaker">RAVI</span>
+              <span id="dialogue-text">Alright, three orders, one me. Let's get moving.</span>
+            </div>
+          </div>
+
+          <div class="current-folder-heading">
+            <span class="folder-icon-lg" id="current-folder-icon">🍳</span>
+            <h2 id="current-folder-name">Ravi's Station</h2>
+          </div>
+
+          <div id="explorer-content"><div class="dish-grid" id="dish-grid"></div></div>
+        </div>
+
+        <aside class="trail-panel" id="trail-panel">
+          <span class="trail-label">📋 Order Board</span>
+          <div class="tree-scroll"><div id="order-board"></div></div>
+        </aside>
+      </div>
+
+      <div class="control-bar">
+        <div class="control-group">
+          <button class="control-btn pause" id="btn-pause">⏸ Pause</button>
+          <button class="control-btn play" id="btn-resume" disabled>▶ Resume</button>
+          <button class="control-btn reset" id="btn-reset"><span class="r-spin">⟲</span> Reset</button>
+          <button class="control-btn auto" id="btn-auto">⚡ Auto</button>
+        </div>
+        <div class="control-group">
+          <div class="speed-control">
+            <span>Speed</span>
+            <button id="speed-down" aria-label="Slower">−</button>
+            <span class="speed-value" id="speed-value">1×</span>
+            <button id="speed-up" aria-label="Faster">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3b: SHIFT COMPLETE ================= -->
+  <section class="section" id="sec-complete">
+    <div class="result-card">
+      <div class="result-icon" id="complete-icon">🎉</div>
+      <h2 id="complete-title">Order's up, all three are ready!</h2>
+      <p class="complete-explain" id="complete-explain"></p>
+      <div class="stat-row">
+        <div class="stat-chip"><div class="num" id="complete-score">0</div><div class="lbl">Score</div></div>
+        <div class="stat-chip"><div class="num" id="complete-steps">0</div><div class="lbl">Steps Done</div></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost hidden" id="btn-complete-s1">⬅ Back to Scenario 1</button>
+        <button class="btn ghost" id="btn-complete-replay">⟲ Run the Shift Again</button>
+        <button class="btn" id="btn-complete-continue">Continue to Order Notes ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 4: ORDER NOTES (reflection) ================= -->
+  <section class="section" id="sec-notes">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 &middot; Order Notes</span>
+    <h2 class="section-title">What did you notice?</h2>
+    <p class="section-sub">Sit with these for a moment, there's no single correct wording, just think them through in your own words.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Choosing What's Next</span><span class="q-text">When a step needed baking, grilling, or blending, what did you do instead of waiting for it to finish?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Handling the Wait</span><span class="q-text">What told you it was a good moment to switch to a different order?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Juggling Three Orders</span><span class="q-text">How did you decide which order to work on when more than one was ready for Ravi's attention?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Keeping Track</span><span class="q-text">How did you keep track of which step each order was on? What would you do if there were ten orders instead of three?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Explaining Your Strategy</span><span class="q-text">Imagine another cook has to take over your shift. What instructions would you give them about how to juggle the three orders?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-notes-back">⬅ Back to the Rush</button>
+        <button class="btn" id="btn-notes-continue">Continue to the Method ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 5: THE METHOD (mirrors the two game scenarios) ================= -->
+  <section class="section" id="sec-method">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 &middot; The Method</span>
+    <h2 class="section-title">How the two shifts really worked</h2>
+    <p class="section-sub">You ran the same three orders two different ways. Here's what each strategy is called, and what makes them different.</p>
+
+    <div class="hero" style="margin-bottom:6px;">
+      <div class="result-icon">🍳</div>
+      <h2>You Discovered: Concurrency &amp; Parallelism!</h2>
+    </div>
+
+    <div class="learning-flow">
+
+      <!-- Part 1: Scenario 1 -> Concurrency -->
+      <div class="method-part">
+        <div class="part-head">
+          <span class="eyebrow">Scenario 1 &middot; One Cook</span>
+          <h3>Concurrency</h3>
+        </div>
+        <div class="concept-diagram-wrap">
+          <div class="concept-board" id="m-one-cook-board">
+            <div class="concept-avatar" id="m-ravi-avatar">👨‍🍳<span>Ravi</span></div>
+            <div class="concept-stations">
+              <div class="concept-station" data-station="0">
+                <div class="cs-icon">🍕</div>
+                <div class="cs-name">Pizza</div>
+                <div class="cs-track"><div class="cs-fill" id="m-oc-bar-0"></div></div>
+              </div>
+              <div class="concept-station" data-station="1">
+                <div class="cs-icon">🍔</div>
+                <div class="cs-name">Burger</div>
+                <div class="cs-track"><div class="cs-fill" id="m-oc-bar-1"></div></div>
+              </div>
+              <div class="concept-station" data-station="2">
+                <div class="cs-icon">🧃</div>
+                <div class="cs-name">Juice</div>
+                <div class="cs-track"><div class="cs-fill" id="m-oc-bar-2"></div></div>
+              </div>
+            </div>
+          </div>
+          <p class="concept-status" id="m-oc-status">Press Replay to watch Ravi's shift one more time.</p>
+          <button class="btn ghost small" id="btn-replay-concurrency">↻ Replay Animation</button>
+        </div>
+        <div class="concept-summary">
+          <p class="concept-summary-lead">That's exactly the habit you built by hand during the first rush:</p>
+          <ul>
+            <li>Ravi starts a step, and if it needs the oven, grill, or blender, he moves to a <em>different</em> order instead of standing there.</li>
+            <li>He keeps circling back, checking what's ready and starting the next step.</li>
+            <li>Every order keeps inching forward, even though Ravi is only touching one thing at any instant.</li>
+            <li>The trick is using the waiting time on one task to make progress on another.</li>
+          </ul>
+          <p class="concept-summary-lead">That behavior has a name: <strong>Concurrency</strong>. It means handling multiple tasks during the same period, without necessarily doing them at the exact same instant.</p>
+        </div>
+      </div>
+
+      <!-- Part 2: Scenario 2 -> Parallelism -->
+      <div class="method-part">
+        <div class="part-head">
+          <span class="eyebrow">Scenario 2 &middot; Three Cooks</span>
+          <h3>Parallelism</h3>
+        </div>
+        <div class="concept-diagram-wrap">
+          <div class="concept-board" id="p-board">
+            <div class="concept-avatar" id="p-avatar-0">👨‍🍳<span>Ravi</span></div>
+            <div class="concept-avatar" id="p-avatar-1">👩‍🍳<span>Maya</span></div>
+            <div class="concept-avatar" id="p-avatar-2">🧑‍🍳<span>Arjun</span></div>
+            <div class="concept-stations">
+              <div class="concept-station" data-pstation="0">
+                <div class="cs-icon">🍕</div>
+                <div class="cs-name">Pizza</div>
+                <div class="cs-track"><div class="cs-fill" id="p-bar-0"></div></div>
+              </div>
+              <div class="concept-station" data-pstation="1">
+                <div class="cs-icon">🍔</div>
+                <div class="cs-name">Burger</div>
+                <div class="cs-track"><div class="cs-fill" id="p-bar-1"></div></div>
+              </div>
+              <div class="concept-station" data-pstation="2">
+                <div class="cs-icon">🧃</div>
+                <div class="cs-name">Juice</div>
+                <div class="cs-track"><div class="cs-fill" id="p-bar-2"></div></div>
+              </div>
+            </div>
+          </div>
+          <p class="concept-status" id="p-status">Press Replay to watch the three cooks work together.</p>
+          <button class="btn ghost small" id="btn-replay-parallelism">↻ Replay Animation</button>
+        </div>
+        <div class="concept-summary">
+          <p class="concept-summary-lead">In the second rush, the strategy changed completely:</p>
+          <ul>
+            <li>Ravi, Maya, and Arjun each took one order and stayed with it from start to finish.</li>
+            <li>All three were working at the same instant. Nobody had to switch dishes or wait for a turn.</li>
+            <li>The shift finished far sooner, because the work was split across three pairs of hands.</li>
+          </ul>
+          <p class="concept-summary-lead">That is <strong>Parallelism</strong>. It means multiple tasks genuinely running at the same time, because there are multiple workers to run them.</p>
+        </div>
+      </div>
+
+      <!-- Part 3: side-by-side -->
+      <div class="compare-wrap">
+        <h3>⚖️ Concurrency vs Parallelism</h3>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <h4>🍳 Concurrency (Scenario 1)</h4>
+            <ul>
+              <li>One worker: Ravi.</li>
+              <li>Tasks take turns, switching whenever one is waiting.</li>
+              <li>Only one thing is being touched at any instant.</li>
+              <li>About <em>managing</em> many tasks at once.</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <h4>⚡ Parallelism (Scenario 2)</h4>
+            <ul>
+              <li>Several workers: Ravi, Maya, and Arjun.</li>
+              <li>Each task has its own worker.</li>
+              <li>Many things are truly happening at the same instant.</li>
+              <li>About <em>doing</em> many tasks at once.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="compare-note">The two aren't rivals. A kitchen could have three cooks <em>and</em> let each one juggle several dishes, using both ideas together.</p>
+      </div>
+
+      <div class="key-learnings">
+        <h3>🔑 Key Learnings</h3>
+        <div class="kl-grid">
+          <div class="kl-item"><span class="kl-icon">🍳</span><div><b>Concurrency</b><p>One worker switches between tasks, using the waiting time on one to make progress on another.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">⚡</span><div><b>Parallelism</b><p>Multiple workers act at the same time, each one truly executing their own task simultaneously.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">✅</span><div><b>Why It Works</b><p>Waiting time, like something baking, doesn't have to be wasted time. Concurrency makes use of it with a single worker, and parallelism goes further by adding more workers.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">🌍</span><div><b>Where You'll See It</b><p>Operating systems, web servers, multi-core processors, and everyday multitasking all lean on these same two ideas.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-method-back">⬅ Back to Order Notes</button>
+      <button class="btn" id="btn-method-continue">Continue to New Cases ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 6: NEW CASES (exercise) ================= -->
+  <section class="section" id="sec-cases">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; New Cases</span>
+    <h2 class="section-title">Put the idea to the test</h2>
+    <p class="section-sub">New situations to think through using what you just discovered.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Decision-making</span><span class="q-text">Campus Bites receives six orders at once. The owner can assign one cook to handle tasks in turns or assign three cooks to prepare different orders simultaneously. What factors would you consider before choosing either arrangement? Could the three-cook arrangement still fail to finish orders faster?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Recognize the Pattern</span><span class="q-text">A single support agent handles chats with three different customers, replying to each one while the others are typing. Is this closer to concurrency or parallelism? Explain your reasoning.</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Spot the Misconception</span><span class="q-text">Someone says, "Concurrency just means using one CPU, and parallelism just means using more than one." What is wrong with this reasoning?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Resource constraints</span><span class="q-text">Three cooks are available, but the kitchen has only one oven. Which activities can the cooks perform concurrently while one order is baking? What would happen if all three orders needed the oven at the same time? Explain why adding more cooks might not reduce the total preparation time proportionally.</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Unfamiliar Application</span><span class="q-text">A laptop with a single processor core appears to run a browser, a music player, and a chat app all "at once." How might concurrency explain what's really happening?</span></div>
+        <div class="qcard"><span class="q-num">6 &middot; Optimize the Workflow</span><span class="q-text">Campus Bites receives several orders at once. Chopping vegetables, preparing sauces, and baking food take different amounts of time. How would you organize these activities to finish all the orders as quickly as possible? Would adding more cooks always help? Explain your approach.</span></div>
+        <div class="qcard"><span class="q-num">7 &middot; Choose the Better Strategy</span><span class="q-text">A food delivery app must process hundreds of orders. Some tasks involve waiting for payment confirmation, while others involve calculating bills. Would you handle all these tasks concurrently, execute some of them in parallel, or use a combination of both? How would you decide which approach offers the best performance?</span></div>
+        <div class="qcard qcard-wide">
+          <span class="q-num">8 &middot; Timeline analysis</span>
+          <div class="timeline-layout">
+            <svg class="timeline-svg" viewBox="0 0 300 130" xmlns="http://www.w3.org/2000/svg">
+              <text x="0" y="26" class="maze-label" font-size="12">🍕</text>
+              <rect x="18" y="14" width="40" height="18" rx="4" fill="#4A9BD1"></rect>
+              <rect x="58" y="14" width="90" height="18" rx="4" fill="#EA8C36" opacity="0.45"></rect>
+              <rect x="148" y="14" width="20" height="18" rx="4" fill="#4A9BD1"></rect>
+              <text x="0" y="64" class="maze-label" font-size="12">🍔</text>
+              <rect x="58" y="52" width="25" height="18" rx="4" fill="#4A9BD1"></rect>
+              <rect x="83" y="52" width="75" height="18" rx="4" fill="#EA8C36" opacity="0.45"></rect>
+              <rect x="168" y="52" width="25" height="18" rx="4" fill="#4A9BD1"></rect>
+              <text x="0" y="102" class="maze-label" font-size="12">🧃</text>
+              <rect x="83" y="90" width="25" height="18" rx="4" fill="#4A9BD1"></rect>
+              <rect x="108" y="90" width="60" height="18" rx="4" fill="#EA8C36" opacity="0.45"></rect>
+              <rect x="193" y="90" width="20" height="18" rx="4" fill="#4A9BD1"></rect>
+            </svg>
+            <div class="timeline-questions">
+              <span class="q-text">Suppose the three cooks can prepare three orders independently, but all orders must use the same oven.</span>
+              <span class="q-text">Draw a timeline showing when each cook is actively working and when each order is waiting or baking. Compare it with the original timeline shown here. Which tasks can overlap, and which resource limits the improvement in total completion time?</span>
+              <div class="timeline-legend">
+                <span><span class="leg-swatch" style="background:#4A9BD1;"></span>Ravi actively working</span>
+                <span><span class="leg-swatch" style="background:#EA8C36;opacity:.6;"></span>Cooking on its own</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-cases-back">⬅ Back to the Method</button>
+        <a class="btn ghost" id="btn-cases-home" href="../../index.html">Back CSE Concept Laboratory</a>
+        <button class="btn" id="btn-cases-finish">⟲ Restart from the beginning</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= OVERLAYS: pause / time-up ================= -->
+<div class="overlay" id="overlay-pause">
+  <div class="overlay-card">
+    <h2>⏸ Paused</h2>
+    <p>Take a breath. The orders aren't going anywhere.</p>
+    <div class="section-nav">
+      <button class="btn" id="btn-overlay-resume">▶ Resume</button>
+      <button class="btn ghost" id="btn-overlay-quit">Quit to the Shift</button>
+    </div>
+  </div>
+</div>
+
+<div class="achv-toast" id="achv-toast">
+  <span class="achv-icon">🏆</span>
+  <span id="achv-text">Achievement unlocked</span>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   NAVIGATION: 6-chapter stepper wrapping the game screens
+   ============================================================ */
+const STEP_FOR_SECTION = {
+  'sec-puzzle':1, 'sec-briefing':2, 'sec-team':3, 'sec-search':3, 'sec-complete':3, 'sec-notes':4, 'sec-method':5, 'sec-cases':6
+};
+function setStep(n){
+  for (let i = 1; i <= 6; i++){
+    const el = document.getElementById('step-' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view'));
+  document.getElementById(id).classList.add('active-view');
+  setStep(STEP_FOR_SECTION[id] || 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* =========================================================================
+   STORY DATA
+   ========================================================================= */
+function renderCaseStory(){
+  const INTRO_LINES = [
+    'It is fest day, and Campus Bites is slammed.',
+    'Three orders just came in at once: <span class="highlight">Pizza</span>, <span class="highlight">Burger</span>, and <span class="highlight">Juice</span>.',
+    'Ravi is the only cook on shift.',
+    'The clock is ticking, and the queue outside is only getting longer.',
+  ];
+  document.getElementById('intro-story-lines').innerHTML = INTRO_LINES.map(l => `<p>${l}</p>`).join('');
+}
+
+/* =========================================================================
+   RECIPE DATA: real steps per dish, not just "preparing pizza"
+   ========================================================================= */
+function makeDish(id, icon, name, steps){
+  return { id, icon, name, steps, currentStep:0, status:'ready', cookRemaining:0 };
+}
+function buildDishes(){
+  return [
+    makeDish('pizza','🍕','Pizza',[
+      { text:'Roll out the dough', type:'do' },
+      { text:'Spread the tomato sauce', type:'do' },
+      { text:'Add cheese and toppings', type:'do' },
+      { text:'Slide it into the oven to bake', type:'wait', ticks:8 },
+      { text:'Slice and plate it', type:'do' },
+    ]),
+    makeDish('burger','🍔','Burger',[
+      { text:'Toast the buns', type:'do' },
+      { text:'Grill the patty', type:'wait', ticks:7 },
+      { text:'Add lettuce, tomato, and cheese', type:'do' },
+      { text:'Stack the burger together', type:'do' },
+      { text:'Wrap and plate it', type:'do' },
+    ]),
+    makeDish('juice','🧃','Juice',[
+      { text:'Wash the fruit', type:'do' },
+      { text:'Chop the fruit', type:'do' },
+      { text:'Blend it up', type:'wait', ticks:5 },
+      { text:'Pour it into a cup', type:'do' },
+      { text:'Garnish and serve', type:'do' },
+    ]),
+  ];
+}
+const TOTAL_STEPS = 15;
+
+const DIALOGUE = {
+  start: "Alright, three orders, one me. Let's get moving.",
+  stepDone: ["Nice, that step's done.", "One step closer.", "Good, keep it moving."],
+  cookingStarted: ["That'll take a bit, let's work on something else.", "Alright, that's cooking on its own now.", "Set that going, on to the next thing."],
+  cookingFinished: (name) => `${name} just came off the heat, ready for the next step!`,
+  busy: ["That one's already cooking, let's work on something else.", "Still cooking, give it a moment."],
+  alreadyDone: ["That order's already finished!"],
+  multitasked: ["Nice, keeping busy while that cooks!"],
+  allDone: "Order's up! All three are ready!",
+};
+const COOKS = [
+  { name:'Ravi', icon:'👨‍🍳' }, { name:'Maya', icon:'👩‍🍳' }, { name:'Arjun', icon:'🧑‍🍳' },
+];
+const DIALOGUE2 = {
+  start: "Three cooks, three orders. Everyone take your dish, let's go!",
+  stepDone: ["Nice, that step's done.", "One step closer.", "Good, keep it moving."],
+  teamStep: ["All three of us, moving together!", "Everyone's working at once, this is fast!", "Three pairs of hands, three dishes moving."],
+  cookingStarted: ["That's cooking, my teammates are still working.", "Set it going, the others keep moving."],
+  cookingFinished: (name) => `${name} just came off the heat, ready for the next step!`,
+  busy: ["Still cooking, hang tight.", "Nothing to do on that one yet."],
+  alreadyDone: ["That order's already finished!"],
+  allDone: "Order's up! All three cooks finished their dishes!",
+};
+const SCENARIOS = {
+  1: { badge:'Scenario 1 of 2 · One Cook', icon:'🍳', heading:"Ravi's Station", speaker:'RAVI', avatar:'👨‍🍳',
+       backLabel:'⬅ Back to the Shift', quitLabel:'Quit to the Shift',
+       note:'💡 Click <b>Auto</b> to sit back and watch the shift run itself. Use <b>Pause</b> whenever you want to take a break.' },
+  2: { badge:'Scenario 2 of 2 · Three Cooks', icon:'👥', heading:"The Team's Kitchen", speaker:'THE TEAM', avatar:'👥',
+       backLabel:'⬅ Back to the Team Briefing', quitLabel:'Quit to the Briefing',
+       note:'💡 Each cook owns one dish. Click <b>Auto</b> to watch all three cooks work through their dishes together.' },
+};
+function currentDialogue(){ return state.scenario === 2 ? DIALOGUE2 : DIALOGUE; }
+function say(list){ return Array.isArray(list) ? list[Math.floor(Math.random() * list.length)] : list; }
+
+/* =========================================================================
+   GAME STATE
+   ========================================================================= */
+const state = {
+  scenario: 1, dishes: [], score: 0, stepsCompleted: 0, actionsTaken: 0,
+  status: 'idle', isAuto: false, autoId: null, cookTickId: null, autoSpeedIndex: 1,
+  achievements: new Set(),
+};
+const SPEED_STEPS = [
+  { label: '0.5×', ms: 1800, mult: 0.5 }, { label: '1×', ms: 1100, mult: 1 },
+  { label: '1.5×', ms: 750, mult: 1.5 }, { label: '2×', ms: 450, mult: 2 },
+];
+
+/* =========================================================================
+   RENDERING
+   ========================================================================= */
+function renderDish(dish){
+  const stepIdx = dish.currentStep;
+  const displayPct = dish.status === 'done' ? 100 : Math.round((stepIdx / dish.steps.length) * 100);
+  let stepLabel;
+  if (dish.status === 'done') stepLabel = 'All done!';
+  else if (dish.status === 'cooking') stepLabel = dish.steps[stepIdx].text + '…';
+  else stepLabel = dish.steps[stepIdx].text;
+
+  let btnLabel, btnDisabled = false;
+  if (dish.status === 'done'){ btnLabel = '✅ Order ready'; btnDisabled = true; }
+  else if (dish.status === 'cooking'){ btnLabel = '⏳ Cooking…'; btnDisabled = true; }
+  else { btnLabel = 'Work on this'; }
+
+  const card = document.createElement('div');
+  card.className = 'dish-card ' + dish.status;
+  card.innerHTML = `
+    <div class="d-icon">${dish.icon}</div>
+    <div class="d-name">${dish.name}</div>
+    ${dish.cook ? `<div class="d-cook">${dish.cook.icon} ${dish.cook.name}</div>` : ''}
+    <div class="d-step">${stepLabel}</div>
+    <div class="d-progress-track"><div class="d-progress-fill" style="width:${displayPct}%"></div></div>
+    <div class="d-pct">${dish.currentStep}/${dish.steps.length} steps</div>
+    <button class="d-work-btn" ${btnDisabled ? 'disabled' : ''}>${btnLabel}</button>
+  `;
+  card.querySelector('.d-work-btn').addEventListener('click', () => advanceDish(dish));
+  return card;
+}
+function renderKitchen(){
+  const grid = document.getElementById('dish-grid');
+  grid.innerHTML = '';
+  state.dishes.forEach(d => grid.appendChild(renderDish(d)));
+  renderOrderBoard();
+}
+function renderOrderBoard(){
+  const wrap = document.getElementById('order-board');
+  wrap.innerHTML = state.dishes.map(d => {
+    const stepsHtml = d.steps.map((s,i) => {
+      let cls = '';
+      if (i < d.currentStep || d.status==='done' && i <= d.currentStep) cls = 'done';
+      if (i === d.currentStep && d.status !== 'done') cls = 'current';
+      let icon = cls === 'done' ? '✓' : (cls === 'current' ? (d.status==='cooking' ? '⏳' : '▶') : '○');
+      return `<li class="${cls}"><span>${icon}</span><span>${s.text}</span></li>`;
+    }).join('');
+    return `<div class="order-board-item"><div class="ob-head">${d.icon} ${d.name} (${d.status==='done'?d.steps.length:d.currentStep}/${d.steps.length})</div><ul class="ob-steps">${stepsHtml}</ul></div>`;
+  }).join('');
+}
+function renderHUD(){
+  document.getElementById('score-value').textContent = state.score;
+  document.getElementById('steps-value').textContent = state.stepsCompleted;
+}
+function renderDialogue(text){ document.getElementById('dialogue-text').textContent = text; }
+function renderControls(){
+  const s = state.status;
+  document.getElementById('btn-pause').disabled = !(s === 'playing');
+  document.getElementById('btn-resume').disabled = !(s === 'paused');
+  document.getElementById('btn-auto').disabled = !(s === 'playing' || s === 'paused');
+  document.getElementById('btn-auto').classList.toggle('active', state.isAuto);
+  document.getElementById('btn-auto').textContent = state.isAuto ? '⏹ Stop Auto' : '⚡ Auto';
+  document.getElementById('speed-value').textContent = SPEED_STEPS[state.autoSpeedIndex].label;
+  document.getElementById('speed-down').disabled = state.autoSpeedIndex === 0;
+  document.getElementById('speed-up').disabled = state.autoSpeedIndex === SPEED_STEPS.length - 1;
+}
+
+/* =========================================================================
+   NAVIGATION / SHIFT FLOW
+   ========================================================================= */
+function applyScenarioUI(){
+  const sc = SCENARIOS[state.scenario];
+  document.getElementById('scenario-badge').textContent = sc.badge;
+  document.getElementById('game-note').innerHTML = sc.note;
+  document.getElementById('dialogue-speaker').textContent = sc.speaker;
+  document.getElementById('dialogue-avatar').textContent = sc.avatar;
+  document.getElementById('current-folder-icon').textContent = sc.icon;
+  document.getElementById('current-folder-name').textContent = sc.heading;
+  document.getElementById('btn-case-back').textContent = sc.backLabel;
+  document.getElementById('btn-overlay-quit').textContent = sc.quitLabel;
+  document.getElementById('btn-game-s1').classList.toggle('hidden', state.scenario !== 2);
+}
+function initLevel(sc){
+  state.scenario = (sc === 2) ? 2 : 1;
+  stopAuto(); stopCookTick();
+  document.getElementById('overlay-pause').classList.remove('active');
+  state.dishes = buildDishes();
+  if (state.scenario === 2) state.dishes.forEach((d, i) => { d.cook = COOKS[i]; });
+  state.score = 0; state.stepsCompleted = 0; state.actionsTaken = 0;
+  state.status = 'playing'; state.isAuto = false;
+  showSection('sec-search');
+  applyScenarioUI();
+  renderKitchen(); renderHUD();
+  renderDialogue(currentDialogue().start);
+  renderControls();
+  startCookTick();
+}
+function pauseMission(){
+  if (state.status !== 'playing') return;
+  state.status = 'paused'; stopAuto(true); stopCookTick();
+  document.getElementById('overlay-pause').classList.add('active');
+  renderControls();
+}
+function resumeMission(){
+  if (state.status !== 'paused') return;
+  state.status = 'playing';
+  if (state.isAuto) startAutoInterval();
+  startCookTick();
+  document.getElementById('overlay-pause').classList.remove('active');
+  renderControls();
+}
+function resetMission(){ stopAuto(); stopCookTick(); initLevel(state.scenario); }
+function quitToBriefing(){
+  stopAuto(); stopCookTick();
+  document.getElementById('overlay-pause').classList.remove('active');
+  state.status = 'idle';
+  showSection(state.scenario === 2 ? 'sec-team' : 'sec-briefing');
+}
+function performStep(dish){
+  if (dish.status === 'done' || dish.status === 'cooking') return null;
+  const step = dish.steps[dish.currentStep];
+  state.score += 10;
+  state.actionsTaken++;
+  if (step.type === 'wait'){
+    dish.status = 'cooking';
+    dish.cookRemaining = step.ticks;
+    return 'wait';
+  }
+  dish.currentStep++;
+  state.stepsCompleted++;
+  if (dish.currentStep >= dish.steps.length){ dish.status = 'done'; }
+  return 'do';
+}
+function advanceDish(dish){
+  if (state.status !== 'playing') return;
+  const D = currentDialogue();
+  if (dish.status === 'done'){ renderDialogue(say(D.alreadyDone)); return; }
+  if (dish.status === 'cooking'){ renderDialogue(say(D.busy)); return; }
+
+  const anyOtherCooking = state.scenario === 1 && state.dishes.some(d => d !== dish && d.status === 'cooking');
+  const result = performStep(dish);
+  renderDialogue(result === 'wait' ? say(D.cookingStarted) : say(D.stepDone));
+
+  if (anyOtherCooking) unlockAchievement('multitasker', 'Multi-tasker, you kept busy while something cooked!');
+  maybeUnlockAchievement();
+  renderKitchen(); renderHUD();
+  checkAllDone();
+}
+function advanceAll(){
+  if (state.status !== 'playing' || state.scenario !== 2) return;
+  const ready = state.dishes.filter(d => d.status === 'ready');
+  if (!ready.length){ renderDialogue(say(DIALOGUE2.busy)); return; }
+  ready.forEach(performStep);
+  if (ready.length >= 2) unlockAchievement('team', 'Team Player, all your cooks worked at the same time!');
+  renderDialogue(ready.length > 1 ? say(DIALOGUE2.teamStep) : say(DIALOGUE2.stepDone));
+  maybeUnlockAchievement();
+  renderKitchen(); renderHUD();
+  checkAllDone();
+}
+function renderComplete(){
+  const two = state.scenario === 2;
+  document.getElementById('complete-icon').textContent = two ? '👥' : '🎉';
+  document.getElementById('complete-title').textContent = two ? 'Three cooks, three orders, all done!' : "Order's up, all three are ready!";
+  document.getElementById('complete-explain').innerHTML = two
+    ? 'With three cooks, Ravi, Maya, and Arjun each took one order and worked on it at the same time. Nobody had to switch between dishes, so all three orders were ready much sooner.'
+    : 'Ravi finished all three orders on his own by switching to another dish whenever something was baking, grilling, or blending. Now let\'s see what changes when the owner brings in some help.';
+  document.getElementById('btn-complete-s1').classList.toggle('hidden', !two);
+  document.getElementById('btn-complete-replay').textContent = two ? '⟲ Run Scenario 2 Again' : '⟲ Run Scenario 1 Again';
+  document.getElementById('btn-complete-continue').textContent = two ? 'Continue to Order Notes ➜' : 'Continue to Scenario 2: Three Cooks ➜';
+  document.getElementById('complete-score').textContent = state.score;
+  document.getElementById('complete-steps').textContent = state.stepsCompleted;
+}
+function checkAllDone(){
+  if (state.dishes.every(d => d.status === 'done')){
+    state.status = 'complete'; stopAuto(); stopCookTick();
+    unlockAchievement('chef', 'Master Chef, all three orders are up!');
+    renderComplete();
+    renderDialogue(currentDialogue().allDone);
+    setTimeout(() => showSection('sec-complete'), 550);
+  }
+}
+
+/* =========================================================================
+   COOKING HEARTBEAT: dishes that are "cooking" progress on their own
+   ========================================================================= */
+function startCookTick(){
+  stopCookTick();
+  state.cookTickId = setInterval(cookTick, 200);
+}
+function stopCookTick(){
+  if (state.cookTickId){ clearInterval(state.cookTickId); state.cookTickId = null; }
+}
+function cookTick(){
+  if (state.status !== 'playing') return;
+  const mult = SPEED_STEPS[state.autoSpeedIndex].mult;
+  let changed = false;
+  state.dishes.forEach(d => {
+    if (d.status === 'cooking'){
+      d.cookRemaining -= mult;
+      if (d.cookRemaining <= 0){
+        d.currentStep++;
+        state.stepsCompleted++;
+        changed = true;
+        if (d.currentStep >= d.steps.length){ d.status = 'done'; }
+        else { d.status = 'ready'; }
+        renderDialogue(currentDialogue().cookingFinished(d.name));
+      }
+    }
+  });
+  if (changed){ renderKitchen(); renderHUD(); checkAllDone(); }
+}
+
+/* =========================================================================
+   AUTO MODE
+   ========================================================================= */
+function toggleAuto(){
+  if (state.status !== 'playing' && state.status !== 'paused') return;
+  state.isAuto = !state.isAuto;
+  if (state.isAuto){ if (state.status === 'playing') startAutoInterval(); } else { stopAuto(); }
+  renderControls();
+}
+function startAutoInterval(){ stopAutoIntervalOnly(); state.autoId = setInterval(autoStep, SPEED_STEPS[state.autoSpeedIndex].ms); }
+function stopAutoIntervalOnly(){ if (state.autoId){ clearInterval(state.autoId); state.autoId = null; } }
+function stopAuto(keepFlag){ stopAutoIntervalOnly(); if (!keepFlag) state.isAuto = false; }
+function autoStep(){
+  if (state.status !== 'playing' || !state.isAuto) return;
+  if (state.scenario === 2){
+    if (state.dishes.some(d => d.status === 'ready')) advanceAll();
+    return;
+  }
+  const ready = state.dishes.find(d => d.status === 'ready');
+  if (ready){ advanceDish(ready); }
+  else if (state.dishes.every(d => d.status === 'done')){ stopAuto(); renderControls(); }
+}
+function changeSpeed(delta){
+  const next = state.autoSpeedIndex + delta;
+  if (next < 0 || next >= SPEED_STEPS.length) return;
+  state.autoSpeedIndex = next;
+  if (state.isAuto && state.status === 'playing') startAutoInterval();
+  renderControls();
+}
+
+/* =========================================================================
+   ACHIEVEMENTS
+   ========================================================================= */
+function unlockAchievement(key, label){
+  if (state.achievements.has(key)) return;
+  state.achievements.add(key);
+  const toast = document.getElementById('achv-toast');
+  document.getElementById('achv-text').textContent = label;
+  toast.classList.add('show');
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+}
+function maybeUnlockAchievement(){
+  if (state.actionsTaken === 1) unlockAchievement('first-step', 'First Steps, first prep step done!');
+}
+
+/* =========================================================================
+   CHAPTER 5: Concurrency reveal animation (illustrative, replayable)
+   ========================================================================= */
+const ONE_COOK_STEPS = [
+  { station:0, addTo:35, label:"Ravi starts the pizza…" },
+  { station:1, addTo:30, label:"While the pizza cooks, Ravi starts the burger…" },
+  { station:2, addTo:25, label:"While the burger cooks, Ravi starts the juice…" },
+  { station:0, addTo:70, label:"Ravi checks back on the pizza…" },
+  { station:1, addTo:65, label:"…then back to the burger…" },
+  { station:2, addTo:60, label:"…then the juice…" },
+  { station:0, addTo:100, label:"Pizza is ready! 🍕" },
+  { station:1, addTo:100, label:"Burger is ready! 🍔" },
+  { station:2, addTo:100, label:"Juice is ready! 🧃" },
+];
+let mOcRunning = false;
+const mOcBoard = document.getElementById('m-one-cook-board');
+const mOcStations = [0,1,2].map(n => mOcBoard.querySelector(`.concept-station[data-station="${n}"]`));
+const mRaviAvatar = document.getElementById('m-ravi-avatar');
+function positionAvatar(avatarEl, stationEl, boardEl){
+  const br = boardEl.getBoundingClientRect();
+  const sr = stationEl.getBoundingClientRect();
+  avatarEl.style.left = (sr.left - br.left + sr.width/2) + 'px';
+}
+function resetConcurrencyBoard(){
+  mOcStations.forEach(s => s.classList.remove('active','done'));
+  [0,1,2].forEach(n => { document.getElementById('m-oc-bar-' + n).style.width = '0%'; });
+  positionAvatar(mRaviAvatar, mOcStations[0], mOcBoard);
+  document.getElementById('m-oc-status').textContent = 'Press Replay to watch Ravi\'s shift one more time.';
+}
+function playConcurrencyAnimation(){
+  if (mOcRunning) return;
+  mOcRunning = true;
+  resetConcurrencyBoard();
+  document.getElementById('btn-replay-concurrency').disabled = true;
+  let i = 0;
+  function step(){
+    if (i >= ONE_COOK_STEPS.length){
+      mOcRunning = false;
+      mOcStations.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+      document.getElementById('m-oc-status').textContent = 'All three orders are ready! 🎉';
+      document.getElementById('btn-replay-concurrency').disabled = false;
+      return;
+    }
+    const st = ONE_COOK_STEPS[i];
+    const stationEl = mOcStations[st.station];
+    mOcStations.forEach(s => s.classList.remove('active'));
+    stationEl.classList.add('active');
+    positionAvatar(mRaviAvatar, stationEl, mOcBoard);
+    document.getElementById('m-oc-status').textContent = st.label;
+    setTimeout(() => {
+      document.getElementById('m-oc-bar-' + st.station).style.width = st.addTo + '%';
+      i++;
+      setTimeout(step, 620);
+    }, 400);
+  }
+  step();
+}
+window.addEventListener('resize', () => {
+  const activeStation = mOcBoard.querySelector('.concept-station.active') || mOcStations[0];
+  positionAvatar(mRaviAvatar, activeStation, mOcBoard);
+});
+
+/* =========================================================================
+   CHAPTER 5: Parallelism reveal animation (three cooks, simultaneous)
+   ========================================================================= */
+const pBoard = document.getElementById('p-board');
+const pStations = [0,1,2].map(n => pBoard.querySelector(`.concept-station[data-pstation="${n}"]`));
+const pAvatars = [0,1,2].map(n => document.getElementById('p-avatar-' + n));
+let pRunning = false, pPlayedThisVisit = false;
+const P_LABELS = [
+  'Ravi, Maya, and Arjun each pick up their own order…',
+  'All three are working at the very same moment…',
+  'No switching, each cook stays with their dish…',
+  'Almost there, all three moving together…',
+  'All three orders are ready at the same time! 🎉',
+];
+function positionParallelAvatars(){ pAvatars.forEach((a, i) => positionAvatar(a, pStations[i], pBoard)); }
+function resetParallelBoard(){
+  pStations.forEach(s => s.classList.remove('active','done'));
+  [0,1,2].forEach(n => { document.getElementById('p-bar-' + n).style.width = '0%'; });
+  positionParallelAvatars();
+  document.getElementById('p-status').textContent = 'Press Replay to watch the three cooks work together.';
+}
+function playParallelAnimation(){
+  if (pRunning) return;
+  pRunning = true;
+  resetParallelBoard();
+  document.getElementById('btn-replay-parallelism').disabled = true;
+  pStations.forEach(s => s.classList.add('active'));
+  let i = 0;
+  function step(){
+    if (i >= P_LABELS.length){
+      pRunning = false;
+      pStations.forEach(s => { s.classList.remove('active'); s.classList.add('done'); });
+      document.getElementById('btn-replay-parallelism').disabled = false;
+      return;
+    }
+    document.getElementById('p-status').textContent = P_LABELS[i];
+    [0,1,2].forEach(n => { document.getElementById('p-bar-' + n).style.width = ((i + 1) * 20) + '%'; });
+    i++;
+    setTimeout(step, 900);
+  }
+  setTimeout(step, 300);
+}
+window.addEventListener('resize', positionParallelAvatars);
+if ('IntersectionObserver' in window){
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !pPlayedThisVisit && document.getElementById('sec-method').classList.contains('active-view')){
+        pPlayedThisVisit = true;
+        playParallelAnimation();
+      }
+    });
+  }, { threshold: 0.6 }).observe(pBoard);
+}
+
+/* =========================================================================
+   EVENT WIRING
+   ========================================================================= */
+document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click', () => initLevel(1));
+document.getElementById('btn-case-back').addEventListener('click', quitToBriefing);
+
+document.getElementById('btn-pause').addEventListener('click', pauseMission);
+document.getElementById('btn-resume').addEventListener('click', resumeMission);
+document.getElementById('btn-reset').addEventListener('click', resetMission);
+document.getElementById('btn-auto').addEventListener('click', toggleAuto);
+document.getElementById('speed-down').addEventListener('click', () => changeSpeed(-1));
+document.getElementById('speed-up').addEventListener('click', () => changeSpeed(1));
+
+document.getElementById('btn-overlay-resume').addEventListener('click', resumeMission);
+document.getElementById('btn-overlay-quit').addEventListener('click', quitToBriefing);
+
+document.getElementById('btn-complete-replay').addEventListener('click', () => initLevel(state.scenario));
+document.getElementById('btn-complete-s1').addEventListener('click', () => initLevel(1));
+document.getElementById('btn-game-s1').addEventListener('click', () => initLevel(1));
+document.getElementById('btn-complete-continue').addEventListener('click', () => {
+  showSection(state.scenario === 1 ? 'sec-team' : 'sec-notes');
+});
+document.getElementById('btn-team-back').addEventListener('click', () => showSection('sec-complete'));
+document.getElementById('btn-team-start').addEventListener('click', () => initLevel(2));
+
+document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-complete'));
+document.getElementById('btn-notes-continue').addEventListener('click', () => {
+  showSection('sec-method');
+  pPlayedThisVisit = false;
+  resetConcurrencyBoard();
+  resetParallelBoard();
+  playConcurrencyAnimation();
+});
+
+document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click', () => showSection('sec-cases'));
+document.getElementById('btn-replay-concurrency').addEventListener('click', playConcurrencyAnimation);
+document.getElementById('btn-replay-parallelism').addEventListener('click', playParallelAnimation);
+
+document.getElementById('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
+document.getElementById('btn-cases-finish').addEventListener('click', () => {
+  stopAuto(); stopCookTick();
+  state.scenario = 1; state.status = 'idle';
+  showSection('sec-puzzle');
+});
+
+/* ---------------- initial paint ---------------- */
+renderCaseStory();
+
+})();
+</script>
+</body>
+</html>
