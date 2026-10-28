@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Stuck Payment: Interactive Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF3FA;--pb:#D9E5F2;--text:#1F2E37;--dim:#54666D;--faint:#93A5AB;--blue:#4A9BD1;--bd:#2B6FA3;--bl:#8FCBEF;--or:#A85D1A;--ob:#EA8C36;--ban:#22496B;--sb:#DCEAD8;--st:#274B26;--sbr:#4B7A4A;--eb:#FBE1DC;--et:#8A3420;--ebr:#D9714F}
+*{box-sizing:border-box}html,body{margin:0;background:linear-gradient(180deg,#FDF1E9,var(--bg) 400px);color:var(--text);font-family:Inter,sans-serif;min-height:100%}
+h2{margin:0 0 6px;font-size:26px}h2,h3,button{font-family:Poppins,sans-serif}button{cursor:pointer}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+.btn{border:0;border-radius:999px;padding:12px 26px;font-size:15px;font-weight:600;transition:.15s}.btn:focus-visible,select:focus-visible,input:focus-visible,.opt:focus-visible{outline:3px solid var(--bd);outline-offset:2px}.btn:disabled{opacity:.4;cursor:not-allowed}
+.p{background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;box-shadow:0 8px 20px rgba(43,111,163,.28)}.p:hover:not(:disabled){transform:translateY(-2px)}.s{background:transparent;color:var(--bd);border:1.5px solid var(--blue)}.d{background:linear-gradient(135deg,#E0703F,#C1462A);color:#fff}
+.top{position:sticky;top:0;z-index:40;background:rgba(237,243,250,.92);border-bottom:1px solid var(--pb);padding:12px 20px;display:flex;align-items:center;gap:16px}
+.back{background:0;border:0;color:var(--dim);font:600 14px Inter;padding:8px 14px;border-radius:999px}.back.h{visibility:hidden}
+.prog{flex:1;display:flex;justify-content:center;align-items:center;gap:6px}.c{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--pb);background:#fff;color:var(--faint);display:flex;align-items:center;justify-content:center;font:700 12px Poppins}.c.a{background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;border:0}.c.dn{background:var(--bd);color:#fff;border:0}.ln{width:18px;height:2px;background:var(--pb)}
+.screen{display:none;padding:36px 22px 60px;justify-content:center;align-items:flex-start}.screen.on{display:flex}.in{width:100%;max-width:1040px;min-width:0}
+.card{background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:34px}.k{font:700 12px Poppins;letter-spacing:.13em;text-transform:uppercase;color:var(--or)}
+.call{background:#F5F9FD;border:1px solid var(--pb);border-radius:12px;padding:20px 22px}.def{border-left:4px solid var(--or);background:#fff}
+.narrow{max-width:660px;margin:0 auto}.card p{line-height:1.65;font-size:16px}.row{display:flex;justify-content:flex-end;margin-top:26px;gap:12px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}.tab{border:1.5px solid var(--pb);background:0;color:var(--dim);border-radius:999px;padding:8px 18px;font-weight:600;font-size:13.5px}.tab.on{border-color:var(--bd);color:var(--bd);background:rgba(74,155,209,.08)}.tab.glow{animation:gl 1.3s infinite;border-color:var(--bd);color:var(--bd)}@keyframes gl{50%{box-shadow:0 0 0 7px rgba(74,155,209,.22)}}
+.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:20px}@media(max-width:820px){.grid{grid-template-columns:1fr}}.grid>*{min-width:0}
+.ban{background:var(--ban);color:#fff;border-radius:12px;padding:14px 18px;font-size:14.5px;line-height:1.5;margin-bottom:14px}
+
+
+.rc{background:#fff;border:2px solid var(--pb);border-radius:12px;padding:12px 14px;margin-top:14px}.rc.ok{border-color:var(--sbr);background:var(--sb)}.rc.bad{border-color:var(--ebr);background:var(--eb)}.rc h4{margin:0 0 6px;font:700 12px Poppins;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}.rcg{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
+.slips{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:12px}.sl{background:#fff;border:2px dashed var(--blue);border-radius:12px;padding:12px}.sl.cl{border-style:solid;border-color:var(--pb);opacity:.65}.sl h4{margin:0 0 4px;font:700 13px Poppins;color:var(--bd)}
+.sb{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--pb);border-radius:8px;padding:8px 10px;margin-top:6px;font:500 13.5px Inter;color:var(--text)}.sb.next{border-color:var(--blue);background:#F5FAFE;animation:pu 1.2s infinite;cursor:pointer}.sb.dn{background:#EAF3FB;border-color:var(--blue)}.sb.fl{background:var(--eb);border-color:var(--ebr);color:var(--et)}.sb:disabled{cursor:default}@keyframes pu{50%{box-shadow:0 0 0 6px rgba(74,155,209,.22)}}
+.sa{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.sa .btn{padding:8px 16px;font-size:13px}.fb2{font-size:12.5px;color:var(--dim);margin-top:8px}
+.yo{background:#FFF7ED;border:1.5px solid var(--ob);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:600;line-height:1.45;margin-bottom:12px}
+.board{display:grid;grid-template-columns:1fr 54px 1fr;gap:10px;align-items:start}.mid{display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:70px;font:700 11px Poppins;letter-spacing:.06em;text-transform:uppercase;color:var(--bd)}.mid span{font-size:26px}
+.zt{font:700 13px Poppins;margin-bottom:8px}.zt small{display:block;font:400 12px Inter;color:var(--dim);margin-top:2px}
+.rw{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;background:#fff;border:1.5px solid var(--pb);margin-top:6px;font-size:14px}.rw b{font:700 15px Poppins;color:var(--bd)}
+@media(max-width:700px){.board{grid-template-columns:1fr}.mid{flex-direction:row;padding:0;gap:8px}}
+.tgl{font-size:12px;color:var(--dim);margin-top:auto}
+.msg2{margin-top:12px;padding:12px 14px;border-radius:10px;background:#F5F9FD;color:var(--dim);font-size:14px;line-height:1.5;min-height:48px}.msg2.g{background:var(--sb);color:var(--st)}.msg2.b{background:var(--eb);color:var(--et)}
+.rp.h{background:#FFF2E6;border-color:var(--ob);color:var(--text)}.btn.glow{animation:gl 1.3s infinite}.nh{font-size:13px;color:var(--dim);align-self:center}
+.rl{display:grid;gap:8px;margin-top:6px}.rr{font-size:13.5px;padding:8px 10px;border-radius:8px;background:#F5F9FD;color:var(--dim)}.rr.cu{background:#EAF3FB;color:var(--text);font-weight:600}.rr.dn{background:var(--sb);color:var(--st)}
+.accts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding-top:70px}@media(max-width:560px){.accts{grid-template-columns:1fr}}
+.ac{position:relative;height:112px;background:#fff;border:2px solid var(--pb);border-radius:12px;text-align:center;padding:10px 6px;transition:.2s}.ac .nm{font:700 12px Poppins;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}.ac .am{font:700 15px/1.3 Poppins;color:var(--text);margin:8px 0 2px}.ac small{font-size:12px;color:var(--dim);display:block;min-height:15px}
+.ac.chg{border-color:var(--blue);background:#EAF3FB}.ac.good{border-color:var(--sbr);background:var(--sb)}.ac.bad{border-color:var(--ebr);background:var(--eb)}.ac.bad .am{color:var(--et)}.ac.good .am{color:var(--st)}
+.note{position:absolute;bottom:calc(100% + 9px);left:-14px;right:-14px;background:#FFF2E6;border:1.5px solid var(--ob);color:var(--text);border-radius:10px;padding:7px 9px;font-size:12px;line-height:1.35;z-index:3;animation:pop .3s ease}.note.g{background:var(--sb);border-color:var(--sbr);color:var(--st)}.note.b{background:var(--eb);border-color:var(--ebr);color:var(--et)}
+.note:after{content:"";position:absolute;top:100%;left:50%;margin-left:-7px;border:7px solid transparent;border-top-color:inherit}@keyframes pop{from{transform:scale(.8);opacity:.3}}
+.paused .note,.paused .it,.paused .z{animation-play-state:paused}
+.steps{margin:14px 0;display:grid;gap:8px}.sp{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--pb);border-radius:10px;padding:9px 12px;font-size:13.5px;color:var(--dim)}.sp i{font:700 12px Poppins;width:24px;height:24px;border-radius:50%;background:#EAF2F9;color:var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-style:normal}.sp.cur{border-color:var(--blue);background:#EAF3FB;color:var(--text)}.sp.done{color:var(--st);background:var(--sb);border-color:var(--sbr)}.sp.done i{background:var(--sbr);color:#fff}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px}.ctl select{font:600 13px Inter;color:var(--bd);background:#fff;border:1.5px solid var(--blue);border-radius:999px;padding:7px 12px}
+.side{background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:20px}.goal{font-size:13px;padding:8px 10px;border-radius:8px;margin-top:8px;background:#F5F9FD;color:var(--dim)}.goal.ok{background:var(--sb);color:var(--st)}.goal.no{background:var(--eb);color:var(--et)}
+.log{margin-top:14px;display:flex;flex-direction:column;gap:7px;max-height:230px;overflow-y:auto}.lg{background:#F5F9FD;border-radius:8px;padding:9px 11px;font-size:13px;line-height:1.4;color:var(--dim)}.lg.g{background:var(--sb);color:var(--st)}.lg.b{background:var(--eb);color:var(--et)}
+.qg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}@media(max-width:900px){.qg{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.qg{grid-template-columns:1fr}}
+.qc{background:#fff;border-radius:16px;box-shadow:0 8px 22px rgba(23,50,77,.1);padding:24px 20px;min-height:170px;display:flex;flex-direction:column;gap:12px;transition:.18s}.qc:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(74,155,209,.22)}.qc p{margin:0;font-size:15px;line-height:1.55}
+.bd{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px Poppins}.el{font:700 11.5px Poppins;letter-spacing:.1em;text-transform:uppercase;color:var(--or)}
+.fm{background:#EAF3FB;border:1px solid var(--pb);border-radius:14px;padding:26px;text-align:center;font:700 22px Poppins;color:var(--bd)}.fm small{display:block;font:400 13.5px Inter;color:var(--dim);margin-top:8px}
+.flow{background:#fff;border-radius:14px;box-shadow:0 8px 22px rgba(23,50,77,.08);padding:22px}.fl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}.bx{border-radius:10px;padding:10px 14px;font-size:13.5px;text-align:center;background:#EAF3FB;border:1px solid var(--blue);color:var(--text)}.bx.g{background:var(--sb);border-color:var(--sbr);color:var(--st)}.bx.r{background:var(--eb);border-color:var(--ebr);color:var(--et)}.ar{color:var(--bd);font-weight:700}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:640px){.cmp{grid-template-columns:1fr}}.cc{border-radius:14px;padding:22px;text-align:center}.cn{background:var(--eb);border:1px solid var(--ebr)}.cs{background:#EAF3FB;border:1px solid var(--blue)}.cc b{display:block;font:700 26px Poppins;margin:4px 0}.cn b{color:var(--et)}.cs b{color:var(--bd)}.cc span{font-size:13.5px;color:var(--dim)}
+.sec{margin-bottom:22px}.mp{width:100%;border-collapse:collapse;font-size:13.5px}.mp td{padding:10px 12px;border-bottom:1px solid var(--pb)}.mp td:first-child{color:var(--or);font-weight:600}.mp td:last-child{color:var(--bd);font-weight:700}
+.mc{background:#fff;border-radius:14px;box-shadow:0 8px 22px rgba(23,50,77,.08);padding:20px;margin-bottom:14px}.mc p{margin:0 0 10px;font-size:15px}.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--pb);border-radius:10px;padding:10px 14px;margin-top:8px;font:500 14px Inter;color:var(--text)}.opt.ok{background:var(--sb);border-color:var(--sbr);color:var(--st)}.opt.no{background:var(--eb);border-color:var(--ebr);color:var(--et)}.fb{font-size:13.5px;margin-top:8px;color:var(--dim)}
+.mo{position:fixed;inset:0;background:rgba(31,46,55,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.mo.on{display:flex}.md{background:#fff;border-radius:16px;padding:30px;max-width:420px;text-align:center}.md p{color:var(--dim);line-height:1.55}
+.cf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:90}.cf i{position:absolute;top:-20px;width:9px;height:14px;animation:fall linear forwards}@keyframes fall{to{transform:translateY(112vh) rotate(540deg);opacity:0}}
+.rp{position:fixed;top:78px;left:50%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;background:var(--sb);border:1.5px solid var(--sbr);color:var(--st);font:700 15px Poppins;border-radius:999px;padding:10px 22px;z-index:96;transition:.35s}.rp.on{transform:translate(-50%,0);opacity:1}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,24px);opacity:0;pointer-events:none;background:#fff;border-radius:16px;box-shadow:0 16px 38px rgba(23,50,77,.2);padding:14px 20px;z-index:95;transition:.4s;max-width:calc(100vw - 32px);font-size:14px}.toast.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}.toast .btn{padding:8px 16px;font-size:13px;margin-left:8px}
+</style></head><body>
+<div class="top"><button class="back h" id="back">← Back</button><nav class="prog" id="prog"></nav><div style="width:70px"></div></div>
+
+<section class="screen on" id="s1"><div class="in"><div class="card narrow"><div class="k">A familiar problem</div><h2 style="margin-top:8px">You've seen this before</h2>
+<p>You scan a QR code at a shop and pay Rs 500 on UPI. The screen says "Processing..." and then freezes. Your bank says Rs 500 was deducted. The shopkeeper says nothing arrived.</p>
+<p>Or you book a train ticket online. The payment is taken, but the ticket never shows up.</p>
+<p>Notice the shape: a payment is not one step, but a few steps that only make sense together. Money leaving without arriving is worse than the payment never starting. Next, you will be the bank that has to fix it.</p>
+<div class="row"><button class="btn p" data-go="2">Continue</button></div></div></div></section>
+
+<section class="screen" id="s2"><div class="in"><div class="card narrow"><div class="k">How to play</div><h2 style="margin-top:8px">You are the bank</h2>
+<p><b>Your goal:</b> every payment must either fully go through or not happen at all. No money may be lost or created.</p>
+<div class="call"><ol style="margin:0;padding-left:20px;line-height:1.7">
+<li>Every payment has 3 steps: check the customer has enough, take Rs 500 from the customer, add Rs 500 to the shopkeeper.</li>
+<li>The steps are only <b>in flight</b> at first. The bank's <b>ledger</b> (the real balances) changes only when you press <b>Finalise payment</b>. <b>Reverse payment</b> cancels everything in flight.</li>
+<li>Things go wrong: the shop's bank stops responding, the system crashes, two payments arrive at once. You decide what to do.</li>
+<li>Check the ledger: the total money in the system must never change. First you watch what can go wrong, then you solve 3 challenges.</li></ol></div>
+<div class="row"><button class="btn p" data-go="3">Begin</button></div></div></div></section>
+
+<section class="screen" id="s3"><div class="in"><h2>Run the payment desk</h2>
+<div class="tabs"><button class="tab on" id="tg">Watch what the problem is</button><button class="tab" id="tf">Solve it yourself</button></div>
+<div class="grid"><div>
+<div class="ban" id="ban"></div>
+<div id="desk" aria-live="polite"></div>
+<div class="msg2" id="msg"></div>
+<div class="sa" id="act"></div>
+<div class="ctl" id="cg"><button class="btn p" id="auto">Auto-play</button><label for="sp" style="font-size:13px;font-weight:600;color:var(--dim)">Speed</label><select id="sp"><option value="12000">0.25x</option><option value="6000">0.5x</option><option value="4000">0.75x</option><option value="3000" selected>1x</option><option value="2000">1.5x</option><option value="1500">2x</option></select><button class="btn s" id="rg">Restart</button></div>
+<div class="ctl" id="cf2" style="display:none"><button class="btn s" id="rf">Restart game</button></div>
+</div><div class="side"><h3 style="margin:0 0 8px;font-size:16px">Challenges</h3><div class="rl" id="rl"></div>
+<div class="log" id="log" aria-live="polite"></div></div></div>
+<div class="row"><button class="btn p" id="p3n" data-go="4">Next →</button></div></div></section>
+
+<section class="screen" id="s4"><div class="in"><div class="k">Reflect</div><h2 style="margin-top:8px">Think back on what just happened</h2><p style="color:var(--dim)">No right answers here. Just sit with these for a moment.</p><div class="qg" id="rq"></div><div class="row"><button class="btn p" data-go="5">Next</button></div></div></section>
+
+<section class="screen" id="s5"><div class="in"><div class="k">The reveal</div><h2 style="margin-top:8px">You were protecting a transaction</h2>
+<div class="sec call def"><p style="margin:0 0 12px;line-height:1.7">Each payment was a <b>transaction</b>: a group of steps a database treats as one single piece of work. The rule that protects it is <b>atomicity</b>, which means all or nothing. Either every step happens, or none of them does.</p>
+<p style="margin:0;line-height:1.7">While the steps are in flight, they are only a draft. Pressing Finalise is a <b>commit</b>, which makes everything permanent at once. Reversing, or losing the draft in a crash, is a <b>rollback</b>, as if the payment never started. Banks, ticket sites and shopping apps all work this way.</p>
+<p style="margin:12px 0 0;line-height:1.7">Atomicity is one of four promises called <b>ACID</b>. The others showed up in your challenges too: <b>consistency</b> (total money never changes and no balance goes below zero), <b>isolation</b> (one payment at a time from the same wallet) and <b>durability</b> (a finalised payment survives a crash).</p></div>
+<div class="sec fm">Transaction = all steps happen, or none do<small>Commit finalises the whole payment. Rollback cancels all of it.</small></div>
+<div class="sec flow"><div class="fl"><div class="bx">Start payment</div><span class="ar">→</span><div class="bx">Check, take money, add money (in flight)</div><span class="ar">→</span><div><div class="bx g" style="margin-bottom:8px">All worked: COMMIT, final in the ledger</div><div class="bx r">Failure: ROLLBACK, as if it never started</div></div></div></div>
+<div class="sec call"><table class="mp"><tr><td>The whole payment</td><td>Transaction</td></tr><tr><td>Steps in flight</td><td>Uncommitted changes</td></tr><tr><td>Finalise payment</td><td>Commit</td></tr><tr><td>Reverse, or a crash before finalising</td><td>Rollback</td></tr><tr><td>Total money never changes</td><td>Consistency</td></tr><tr><td>One payment at a time from one wallet</td><td>Isolation</td></tr><tr><td>Finalised payment survives a crash</td><td>Durability</td></tr></table></div>
+<div class="sec cmp"><div class="cc cn"><div style="font-size:28px">💸</div><b>Rs 500 vanished</b><span>Saving each step on its own can leave a payment half done when something fails.</span></div><div class="cc cs"><div style="font-size:28px">✅</div><b>Never half done</b><span>Grouping the steps means a failure leaves the ledger exactly as it was, or fully updated.</span></div></div>
+<div class="row"><button class="btn p" data-go="6">Next: Checkpoint →</button></div></div></section>
+
+<section class="screen" id="s6"><div class="in"><div class="k">Checkpoint</div><h2 style="margin-top:8px">Test what you learned</h2><p style="color:var(--dim)">Think through each scenario and apply what you learned.</p><div class="qg" id="ex"></div>
+<div class="row" style="justify-content:center"><a class="btn s" href="../../" style="text-decoration:none">Home</a><button class="btn d" id="rst">Restart the whole journey</button></div></div></section>
+
+<div class="mo" id="mo"><div class="md"><h3>Go back?</h3><p>Going back will lose your progress on this page. Are you sure?</p><div style="display:flex;gap:10px;justify-content:center"><button class="btn s" id="no">Stay here</button><button class="btn d" id="yes">Go back</button></div></div></div>
+<div class="cf" id="cf" aria-hidden="true"></div><div class="rp" id="rp" role="status"></div><div class="toast" id="toast" role="status"><b>All four rounds fixed!</b> <button class="btn s" id="again">Play again</button><button class="btn p" id="nx">Next: What you learned →</button></div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},NAV=["Problem","Setup","Demo","Reflect","Concept","Checkpoint"],cur=1;
+function prog(){var h='';NAV.forEach(function(l,i){var n=i+1;h+='<span class="c '+(n==cur?'a':n<cur?'dn':'')+'">'+(n<cur?'✓':n)+'</span>'+(n<6?'<span class="ln"></span>':'')});$('prog').innerHTML=h}
+function go(n){if(n!=3)stopAuto();$('p3n').classList.remove('glow');cur=n;document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});$('s'+n).classList.add('on');$('back').classList.toggle('h',n==1);prog();window.scrollTo(0,0);if(n==5)concept()}
+document.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){go(+b.dataset.go)}});
+function setNext(){}
+function back(){var t=cur-1;if(t<=3){reset('g');setNext(false)}go(t)}
+$('back').onclick=function(){cur==3?$('mo').classList.add('on'):back()};$('no').onclick=function(){$('mo').classList.remove('on')};$('yes').onclick=function(){$('mo').classList.remove('on');back()};
+
+/* ---- game ---- */
+var SN=['Check the customer has enough money','Take Rs 500 from the customer','Add Rs 500 to the shopkeeper'],IC=['🔍','➖','➕'],CA=[2,1,3,'post'],CT=['The shop\'s bank is down','The system crashes','Two payments at once'],NX=2400,AMT=500;
+var mode='g',speed=3000,gen=0,timer=null,tleft=0,tstart=0,tfn=null,autoOn=false,paused=false,queue=[],G,F;
+function sched(fn,ms){tfn=fn;tleft=ms;tstart=Date.now();timer=setTimeout(function(){timer=null;tfn=null;fn()},ms)}
+function later(fn,ms){var g=gen;sched(function(){if(g==gen)fn()},ms)}
+function pauseT(){if(timer){clearTimeout(timer);timer=null;tleft-=Date.now()-tstart}}
+function resumeT(){if(tfn&&!timer){var f=tfn;tstart=Date.now();timer=setTimeout(function(){timer=null;tfn=null;f()},tleft)}}
+function clearT(){if(timer)clearTimeout(timer);timer=null;tfn=null}
+function lab(){$('auto').textContent=autoOn?'Pause':paused?'Resume':(queue.length?'Auto-play':'Replay')}
+function stopAuto(){autoOn=false;paused=false;resumeT();lab()}
+function log(t,k){var e=document.createElement('div');e.className='lg '+(k||'');e.textContent=t;$('log').appendChild(e);$('log').scrollTop=1e5}
+function rs(n){return 'Rs '+n.toLocaleString('en-IN')}
+function tot(l){return l.c+l.a+(l.b||0)}
+function newP(id,nm,to){return {id:id,nm:nm,to:to,d:{o:0,i:0},n:0,open:true,fail:0}}
+function ledger(c){return c==3?{c:600,a:0,b:0}:{c:10000,a:2000}}
+function okL(l,t0){return tot(l)==t0&&l.c>=0}
+function why(l,t0){var t=tot(l);return t<t0?rs(t0-t)+' has vanished from the system!':t>t0?'Money has appeared from nowhere!':l.c<0?'The customer\'s balance went below zero!':'The books do not balance.'}
+function M(){return mode=='g'?G:F}
+function yo(m){if(mode=='g')return m.res?'That is the problem: the payment is stuck half done and money has vanished.':queue.length?'Just watch. Press Auto-play and see what happens when every step is saved straight away.':'Watching...';
+if(m.res){if(m.res=='ok')return F.c==2&&F.att<4?'Well done! Press "Next attempt" below.':'Well done! Challenge complete.';return 'That left the ledger wrong. Press "Try again" and think about when to press Finalise.'}
+if(F.c==3)return 'The customer has Rs 600 and two shops each ask for Rs 500. Run the steps in any order, then Finalise or Reverse each payment. Goal: no money lost and no negative balance.';
+var c=m.cust[0];if(!c)return '';
+if(c.fail==3)return 'The shopkeeper\'s bank is not responding. Press Finalise payment (make it final anyway) or Reverse payment (cancel it). Which keeps the books balanced?';
+if(c.n==0)return (F.c==2?'The system can crash at any moment. ':'')+'Start the payment: press the glowing step "Check the customer has enough money".';
+if(c.n<3)return 'Press the next glowing step to continue. Or press Finalise payment to make it final, or Reverse payment to cancel it.';
+return 'All 3 steps are in flight but not final. Press Finalise payment to make them final, or Reverse payment to cancel.'}
+function render(){var m=M(),l=m.L,rc=m.res=='ok'?'ok':(m.res=='bad'||m.res=='meh')?'bad':'',two=l.b!==undefined;
+var h='<div class="yo">👉 '+yo(m)+'</div><div class="board"><div><div class="zt">💳 Payment in flight<small>Not final yet. It disappears if you reverse it or the system crashes.</small></div>';
+m.cust.forEach(function(c){h+='<div class="sl'+(c.open?'':' cl')+'"><h4>'+c.nm+'</h4>';
+SN.forEach(function(t,i){var n=i+1,done=c.n>=n,nxt=mode=='f'&&c.open&&!m.res&&c.n==i,cls=done?'dn':c.fail==n?'fl':nxt?'next':'';
+h+='<button class="sb '+cls+'" data-a="step" data-c="'+c.id+'" data-n="'+n+'"'+(nxt?'':' disabled')+'>'+IC[i]+' '+(done?'✓ ':'')+(c.fail==n&&n==3?'Retry: add to the shopkeeper':t)+'</button>'});
+if(mode=='g')h+='<div class="fb2">Here, each step is saved to the ledger the moment it happens.</div>';
+else if(c.open&&c.n)h+='<div class="fb2">In flight: '+rs(c.d.o)+' out of the customer, '+rs(c.d.i)+' into the shop. Not in the ledger yet.</div>';
+if(mode=='f'&&c.open&&!m.res)h+='<div class="sa"><button class="btn p" data-a="confirm" data-c="'+c.id+'">Finalise payment</button><button class="btn s" data-a="cancel" data-c="'+c.id+'">Reverse payment</button></div>';
+h+='</div>'});
+h+='</div><div class="mid">Finalise<span>➜</span></div><div class="rc '+rc+'" style="margin:0"><div class="zt">🏦 Bank ledger<small>The real balances. Permanent. It survives a crash.</small></div><div class="rw"><span>👤 Customer</span><b>'+rs(l.c)+'</b></div><div class="rw"><span>🏪 '+(two?'Sharma Store':'Shopkeeper')+'</span><b>'+rs(l.a)+'</b></div>'+(two?'<div class="rw"><span>🏪 Gupta Cafe</span><b>'+rs(l.b)+'</b></div>':'')+'<div class="rw"><span>💰 Total money in the system</span><b>'+rs(tot(l))+'</b></div><div class="fb2">Good ledger: the total stays '+rs(m.t0)+' and nobody is below zero.</div></div></div>';
+$('desk').innerHTML=h;
+var mg=$('msg');mg.className='msg2 '+(m.res=='ok'?'g':m.res?'b':'');mg.textContent=m.msg||'';
+var a='';if(mode=='f'&&m.res){if(m.res=='ok'&&F.c==2&&F.att<4)a='<button class="btn p" data-a="next">Next attempt →</button>';else if(m.res!='ok')a='<button class="btn p" data-a="again">Try again</button>'}$('act').innerHTML=a;
+var q='';if(mode=='f'){CT.forEach(function(x,i){q+='<div class="rr '+(F.done[i]?'dn':F.c==i+1?'cu':'')+'">'+(F.done[i]?'✓ ':'')+'Challenge '+(i+1)+': '+x+(F.c==2&&F.c==i+1?' (attempt '+F.att+' of 4)':'')+'</div>'})}else q='<div class="rr cu">Watching what can go wrong</div>';$('rl').innerHTML=q;lab()}
+function banner(){var x;if(F.c==1)x='<b>Challenge 1:</b> A customer pays Rs 500 to a shopkeeper, and you are the bank. Work through the payment. Not everything will go smoothly.';
+else if(F.c==2)x='<b>Challenge 2:</b> the system can crash at any moment. Run 4 payments (attempt '+F.att+' of 4) and decide when to press Finalise.';
+else x='<b>Challenge 3:</b> one customer with Rs 600, two shops each asking for Rs 500, and both payments arrive at once. Handle them however you like.';$('ban').innerHTML=x}
+function startC(){F.L=ledger(F.c);F.t0=tot(F.L);F.res=null;F.pre='';F.msg=F.c==2?'Crashes can strike at any moment. Do the steps, and press Finalise when you think it is right.':'Press the glowing step to begin.';if(F.c==2)F.crashAfter=CA[F.att-1];
+F.cust=F.c==3?[newP('A','Payment to Sharma Store','a'),newP('B','Payment to Gupta Cafe','b')]:[newP('A','Payment to the shopkeeper','a')];banner();render()}
+function settle(){if(F.cust.some(function(c){return c.open})){render();return}var l=F.L,pre=F.pre||'';F.pre='';
+if(!okL(l,F.t0)){F.res='bad';F.msg=pre+why(l,F.t0)+' The ledger is wrong.';log('Challenge '+F.c+': '+why(l,F.t0),'b')}
+else{var goal=F.c==3?(l.a+l.b==500&&l.c==100):(F.c==2&&F.att==4)?(l.c==9500&&l.a==2500):(l.c==10000&&l.a==2000);
+if(goal){F.res='ok';F.msg=pre+(F.c==1?'The customer got the Rs 500 back and nothing is half done. The ledger is clean.':F.c==3?'One payment went through, and the other was stopped. No money lost, nobody below zero.':F.att<4?'The system is back and the ledger is clean: no half-finished payment.':'The payment is still in the ledger, intact, even after the crash.');log('Challenge '+F.c+(F.c==2?', attempt '+F.att:'')+': ledger clean.','g')}
+else{F.res='meh';F.msg=pre+'Nothing is half done, but the job was not completed. Try again.'}}
+render();if(F.res=='ok'&&!(F.c==2&&F.att<4))challengeDone()}
+function getP(cid){return F.cust.filter(function(x){return x.id==cid})[0]}
+function step(cid,n){var c=getP(cid);if(!c||!c.open||F.res||n!=c.n+1)return;c.fail=0;
+if(n==1&&F.L.c<AMT){c.fail=1;F.msg='The customer does not have enough money for this payment. Reverse it.';render();return}
+if(n==3&&F.c==1){c.fail=3;F.msg='The shopkeeper\'s bank is not responding! The Rs 500 has been taken from the customer in flight, but it cannot reach the shop. What now?';render();return}
+if(n==2)c.d.o=AMT;if(n==3)c.d.i=AMT;c.n=n;F.msg='Step '+n+' done. It is in flight, not in the ledger yet.';
+if(F.c==2&&F.crashAfter==n){F.cust.forEach(function(x){x.d={o:0,i:0};x.n=0;x.open=false});F.pre='⚡ The system crashed! Everything in flight vanished. ';settle();return}render()}
+function confirmB(cid){var c=getP(cid);if(!c||!c.open||F.res)return;F.L.c-=c.d.o;F.L[c.to]+=c.d.i;c.open=false;F.pre='You pressed Finalise. ';
+if(F.c==2&&F.crashAfter=='post'){F.cust.forEach(function(x){x.open=false});F.pre+='⚡ The system crashed right after! '}settle()}
+function cancelB(cid){var c=getP(cid);if(!c||!c.open||F.res)return;c.d={o:0,i:0};c.n=0;c.open=false;F.pre='Payment reversed. ';settle()}
+function retry(nextAtt){if(nextAtt){F.att++}F.res=null;F.pre='';startC()}
+function challengeDone(){F.done[F.c-1]=true;if(F.c<3)roundPop(F.c);if(F.c==1)setNext(true);
+if(F.c<3)later(function(){F.c++;F.att=1;startC()},NX);else{render();win()}}
+$('desk').onclick=function(e){var b=e.target.closest('[data-a]');if(!b||mode!='f')return;var a=b.dataset.a;if(a=='step')step(b.dataset.c,+b.dataset.n);else if(a=='confirm')confirmB(b.dataset.c);else if(a=='cancel')cancelB(b.dataset.c)};
+$('act').onclick=function(e){var b=e.target.closest('[data-a]');if(!b||mode!='f')return;retry(b.dataset.a=='next')};
+function flash(t,c){var r=$('rp');r.textContent=t;r.className='rp on '+(c||'');clearTimeout(flash.t);flash.t=setTimeout(function(){r.classList.remove('on')},2400)}
+function burst(n){var cf=$('cf');for(var i=0;i<n;i++){var p=document.createElement('i');p.style.left=Math.random()*100+'vw';p.style.background=['#4A9BD1','#2B6FA3','#EA8C36','#4B7A4A'][i%4];p.style.animationDuration=2.2+Math.random()*1.6+'s';cf.appendChild(p);setTimeout(function(x){return function(){x.remove()}}(p),4500)}}
+function roundPop(n){burst(70);flash('Challenge '+n+' complete! 🎉','')}
+function win(){burst(110);flash('All three challenges done! Press Next 🎉','');clearTimeout(flash.t);flash.t=setTimeout(function(){$('rp').classList.remove('on')},4500);var nb=$('p3n');nb.disabled=false;nb.classList.add('glow');nb.scrollIntoView({block:'center',behavior:'smooth'})}
+/* watch mode */
+function gtick(g){if(g!=gen||!autoOn)return;var a=queue.shift(),c=G.cust[0];
+if(a==1){c.n=1;G.msg='A customer pays Rs 500 to a shopkeeper. The bank first checks the customer has enough money.';log('Balance checked.')}
+else if(a==2){c.n=2;G.L.c-=500;G.msg='Rs 500 is taken from the customer and saved to the ledger straight away.';log('Rs 500 taken from the customer and saved.')}
+else{c.fail=3;G.res='bad';G.msg='⚡ The shopkeeper\'s bank stops responding! The money already left the customer, but it never reached the shop. Rs 500 has vanished.';log('Shop\'s bank down. Rs 500 vanished.','b')}
+render();if(!queue.length){stopAuto();log('Now solve it yourself: you decide when a payment becomes final.');later(function(){$('tf').classList.add('glow');$('tf').scrollIntoView({block:'center',behavior:'smooth'})},Math.max(2500,speed));return}
+sched(function(){gtick(g)},speed)}
+$('auto').onclick=function(){if(autoOn){autoOn=false;paused=true;pauseT()}else if(paused){paused=false;autoOn=true;resumeT()}else{if(!queue.length)reset('g');autoOn=true;gtick(gen)}lab()};
+$('sp').onchange=function(e){speed=+e.target.value};
+function reset(m){gen++;clearT();stopAuto();mode=m;$('p3n').classList.remove('glow');$('log').innerHTML='';$('tf').classList.remove('glow');
+$('tg').classList.toggle('on',m=='g');$('tf').classList.toggle('on',m=='f');$('cg').style.display=m=='g'?'flex':'none';$('cf2').style.display=m=='f'?'flex':'none';
+if(m=='g'){G={L:ledger(1),t0:12000,cust:[newP('A','Payment to the shopkeeper','a')],res:null,msg:'Press Auto-play and watch what happens when the bank saves every step as it goes.'};queue=[1,2,3];$('ban').innerHTML='<b>Watch:</b> a payment where every step is saved to the ledger the moment it happens.';render()}
+else{F={c:1,att:1,L:ledger(1),t0:12000,cust:[],res:null,msg:'',pre:'',crashAfter:null,done:[false,false,false]};queue=[];startC()}}
+$('tg').onclick=function(){reset('g')};$('tf').onclick=function(){reset('f')};$('rg').onclick=function(){reset('g')};$('rf').onclick=function(){reset('f')};
+$('again').onclick=function(){reset('f')};$('nx').onclick=function(){$('toast').classList.remove('on');go(4)};
+
+/* ---- reflect, concept, checkpoint ---- */
+var RQ=["If you could redesign the payment process, how would you prevent money from leaving a customer's account when the shopkeeper cannot receive it?","Imagine the system crashes at different moments: once before a payment is finalised and once just after it is finalised. What should happen to the customer's money in each situation?","When two shops request \u20B9500 from a customer who has only \u20B9600, how should the bank handle the payments to prevent the customer from spending the same money twice?","Imagine the bank reverses a payment whenever a step fails. What could go wrong if the reversal cancels only the last step instead of undoing all the earlier changes?","If a payment appears successful on the screen but the system crashes immediately afterward, what would you want the bank to check before telling the customer whether the payment succeeded?"];
+$('rq').innerHTML=RQ.map(function(q,i){return '<div class="qc"><div class="bd">'+(i+1)+'</div><p>'+q+'</p></div>'}).join('');
+function concept(){}
+var T1='Atomicity, Consistency, Transaction Boundaries',T2='Atomicity, Durability, Optimization';
+var EX=[["Railway Booking","A railway website deducts payment but crashes before issuing the ticket. How should the system recover without charging for an incomplete booking?",T1],["Online Shopping","A shopping platform charges a customer, reduces inventory, and creates an order. If the inventory update fails, how should the system handle the earlier changes?",T1],["Flash Sale","Thousands of customers compete to buy the last 100 items. How can the database improve performance without selling more items than available?",T2],["Concurrent Withdrawals","Two transactions simultaneously withdraw \u20B9700 from an account containing \u20B91,000. How should the database prevent an invalid balance without unnecessarily slowing down all transactions?",T2],["Payment Batching","A bank groups thousands of payments into batches to improve performance. How should it handle a failure affecting only part of a batch without losing or duplicating payments?",T2],["Repeated Payment Notifications","A food-delivery platform receives the same payment confirmation multiple times because of retries. How can it prevent duplicate charges and orders while allowing legitimate retries?"],["Hospital Admission","A hospital system allocates a bed, records payment, confirms admission, and notifies medical staff. Some services may fail. Which operations must succeed first, and how should partial failures be handled?"],["Resilient Payment System","A payment involves debiting the customer, crediting the shopkeeper, and recording the transaction. The server may crash between steps, and customers may retry requests. Design a system that handles failures, prevents duplicate transfers, and supports concurrent payments efficiently."]];
+$('ex').innerHTML=EX.map(function(x,i){return '<div class="qc"><div class="bd">'+(i+1)+'</div><div class="el">'+x[0]+'</div><p>'+x[1]+'</p>'+(x[2]?'<div class="tgl">Tags: '+x[2]+'</div>':'')+'</div>'}).join('');
+$('rst').onclick=function(){reset('g');setNext(false);go(1)};
+prog();reset('g');setNext(false);
+})();
+</script></body></html>
