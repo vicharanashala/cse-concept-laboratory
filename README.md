@@ -63,6 +63,8 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 13 | The Tower of Brahma | ✅ Available |
 | 14 | The Best Stretch | ✅ Available |
 | 15 | Campus Bites | ✅ Available |
+| 16 | Atomicity | ✅ Available |
+| 17 | The Bank Rush | ✅ Available |
 
 ## Repository Structure
 

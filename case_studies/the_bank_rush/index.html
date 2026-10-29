@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bank Rush: A Counter Crowd Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   THEME: soft blue & orange, white cards, pill buttons.
+   ========================================================== */
+:root{
+  --bg-1:#FDF1E9; --bg-2:#EDF3FA; --bg-3:#E4EEFA; --bg-4:#D9E5F2;
+  --primary:#4A9BD1; --primary-dark:#2B6FA3; --primary-deep:#1B4A66; --blue-light:#8FCBEF;
+  --amber:#EA8C36; --amber-dark:#C96F1F;
+  --danger:#D9714F; --success:#4B7A4A; --green:#4f9d69; --yellow:#E0A934; --red:#C1503A;
+  --ink:#1F2E37; --muted:#54666D; --faint:#93A5AB;
+  --card-bg:#FFFFFF; --glass-border:#D9E5F2;
+  --shadow-card:rgba(23,50,77,0.12); --shadow-btn:rgba(43,111,163,0.28);
+  --success-bg:#DCEAD8; --success-text:#274B26; --success-border:#4B7A4A;
+  --error-bg:#FBE1DC; --error-text:#8A3420; --error-border:#D9714F;
+  --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:'Inter',sans-serif;font-weight:400;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 40%,var(--bg-2) 100%);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{line-height:1.65;color:var(--muted);margin:0;}
+button{font-family:'Poppins',sans-serif;cursor:pointer;}
+button:focus-visible,a:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px 70px;}
+.hidden{display:none!important;}
+
+/* ---- stepper ---- */
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
+.step-circle{width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;font-family:'Poppins',sans-serif;}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins',sans-serif;}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1;}
+.step-item:first-child .step-line{display:none;}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.step-item.done .step-line{background:var(--primary-dark);}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25);}
+.step-item.active .step-label{color:var(--primary-dark);}
+
+/* ---- section framing ---- */
+.section{display:none;}
+.section.active-view{display:block;animation:sectionFade .35s ease;}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--amber-dark);background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins',sans-serif;}
+.eyebrow.center{display:block;text-align:center;margin:0 auto 6px;width:fit-content;}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center;}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted);}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--ink);margin:0 0 12px;}
+.result-icon{font-size:56px;}
+.card{background:transparent;padding:6px 0 0;}
+
+/* ---- buttons ---- */
+.btn{border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));box-shadow:0 12px 24px -10px var(--shadow-btn);transition:transform .15s,box-shadow .15s;}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 28px -8px var(--shadow-btn);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px;}
+.btn.small{padding:9px 18px;font-size:13px;}
+.btn.orange{background:linear-gradient(135deg,#F3A65C,var(--amber-dark));box-shadow:0 12px 24px -10px rgba(201,111,31,.4);}
+a.btn{display:inline-block;text-decoration:none;}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+
+/* ---- Chapters 1 & 2: problem + story ---- */
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0;}
+.problem-card p{margin:0 0 14px;font-size:15.5px;}
+.problem-card p:last-child{margin-bottom:0;}
+.story-lines{text-align:left;max-width:680px;margin:26px auto 0;display:flex;flex-direction:column;gap:10px;}
+.story-lines p{font-size:15px;}
+.story-lines .highlight{color:var(--amber-dark);font-weight:700;}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px;}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+.rules-list li::before{content:"\2715";color:var(--danger);font-weight:700;flex-shrink:0;}
+.rules-list li.ok::before{content:"\2022";color:var(--primary);}
+
+/* ---- Chapter 3: the game ---- */
+.game-shell{width:100%;max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.scenario-badge{display:block;width:fit-content;margin:0 auto;font-size:12px;font-weight:700;color:var(--primary-deep);background:#fff;
+  border:1px solid var(--glass-border);border-radius:999px;padding:6px 14px;font-family:'Poppins',sans-serif;}
+.dialogue-box{display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);border:1px solid var(--glass-border);
+  border-radius:var(--radius-md);padding:12px 14px;max-width:680px;width:100%;margin:0 auto;}
+.dialogue-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#F3A65C,#C96F1F);
+  display:flex;align-items:center;justify-content:center;font-size:18px;}
+.dialogue-text{font-size:14px;color:var(--ink);line-height:1.5;min-height:42px;}
+.dialogue-text .speaker{font-size:11px;color:var(--amber-dark);display:block;margin-bottom:2px;letter-spacing:.05em;font-weight:700;}
+.dialogue-text .line{display:block;animation:sectionFade .3s ease;}
+.status-cluster{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;}
+.status-pill{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);}
+
+.stage{position:relative;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);
+  padding:20px 16px;min-height:320px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 10px 28px var(--shadow-card);}
+.actor-layer{position:absolute;inset:0;pointer-events:none;z-index:30;}
+.lobby{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:128px;max-width:140px;}
+.zone-label{font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--amber-dark);text-transform:uppercase;}
+.spot{width:44px;height:44px;border-radius:50%;background:rgba(74,155,209,.10);border:2px dashed var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.manager{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:10px;animation:sectionFade .4s ease;}
+.manager-avatar{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#8FCBEF,#2B6FA3);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 14px var(--shadow-card);}
+.manager-name{font-size:11px;font-weight:700;color:var(--primary-deep);font-family:'Poppins',sans-serif;}
+.manager-bubble{font-size:11.5px;font-weight:600;color:var(--primary-dark);background:#EAF4FB;border:1px solid var(--blue-light);border-radius:12px;
+  padding:6px 9px;text-align:center;line-height:1.35;min-height:30px;width:100%;opacity:0;transition:opacity .2s;}
+.manager-bubble.show{opacity:1;}
+
+.counters-row{flex:1;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-content:flex-start;}
+.counter{width:158px;background:var(--card-bg);border-radius:14px;box-shadow:0 6px 16px var(--shadow-card);overflow:hidden;border:1px solid var(--glass-border);transition:opacity .3s,filter .3s;}
+.counter .awning{height:9px;background:repeating-linear-gradient(90deg,var(--blue-light) 0 10px,#F3A65C 10px 20px);}
+.counter.closed{opacity:.5;filter:grayscale(.55);}
+.counter-face{padding:8px 9px 8px;}
+.counter-top{display:flex;align-items:center;gap:6px;}
+.counter-icon{font-size:19px;}
+.counter-label{font-size:12.5px;font-weight:700;color:var(--ink);}
+.status-chip{display:inline-block;margin-top:5px;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:999px;color:#fff;}
+.status-chip.closed{background:var(--faint);}
+.status-chip.open{background:linear-gradient(135deg,#6bc98a,var(--green));}
+.status-chip.busy{background:linear-gradient(135deg,#f0c15c,var(--yellow));color:#4a3300;}
+.status-chip.full{background:linear-gradient(135deg,#e07b60,var(--red));}
+.cap-wrap{margin-top:6px;}
+.cap-title{font-size:10.5px;font-weight:700;color:var(--amber-dark);margin-bottom:3px;}
+.cap-bar{height:7px;border-radius:4px;background:var(--glass-border);overflow:hidden;}
+.cap-fill{height:100%;width:0%;border-radius:4px;background:var(--green);transition:width .3s,background .3s;}
+.cap-text{font-size:10px;color:var(--muted);margin-top:2px;}
+.queue-row{min-height:70px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;padding:8px 0 2px;border-top:1px dashed var(--glass-border);margin-top:7px;}
+.avatar{width:24px;text-align:center;font-size:17px;line-height:1;border-radius:6px;padding:1px 0 0;}
+.avatar .progress{height:3px;background:var(--glass-border);border-radius:2px;margin-top:2px;visibility:hidden;}
+.avatar .progress-fill{height:100%;width:0%;background:var(--primary);border-radius:2px;}
+.avatar.serving{background:#FBE9DA;}
+.avatar.serving .progress{visibility:visible;}
+.avatar.flying{position:absolute;transform:translate(-50%,-50%);background:none;filter:drop-shadow(0 2px 3px rgba(23,50,77,.3));}
+.avatar.flying .progress{display:none;}
+.served-text{font-size:10.5px;color:var(--muted);margin-top:4px;}
+.exit-zone{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:60px;}
+
+.game-action{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:76px;}
+.action-hint{font-size:12px;font-weight:700;color:var(--amber-dark);font-family:'Poppins',sans-serif;animation:hintBounce 1s ease-in-out infinite;}
+@keyframes hintBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+#btn-action:not(.hidden){animation:actionPulse 1.4s ease-in-out infinite;}
+@keyframes actionPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(234,140,54,.55),0 12px 24px -10px rgba(201,111,31,.4);}
+  50%{transform:scale(1.07);box-shadow:0 0 0 14px rgba(234,140,54,0),0 12px 24px -10px rgba(201,111,31,.4);}
+}
+@media(prefers-reduced-motion:reduce){#btn-action:not(.hidden),.action-hint{animation:none;}}
+.control-bar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;border-top:1px dashed var(--glass-border);padding-top:14px;}
+.control-btn{border:1.5px solid var(--primary);background:#fff;color:var(--primary-dark);border-radius:999px;padding:9px 18px;font-weight:700;font-size:13.5px;
+  display:flex;align-items:center;gap:7px;font-family:inherit;transition:transform .12s,border-color .15s;}
+.control-btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--amber);}
+.control-btn:disabled{opacity:.35;cursor:not-allowed;}
+.control-btn.reset{color:var(--danger);border-color:var(--danger);}
+
+/* ---- overlay + question ---- */
+.overlay{position:fixed;inset:0;background:rgba(31,46,55,0.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.overlay.active{display:flex;animation:sectionFade .3s ease both;}
+.overlay-card{background:#fdfffe;border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:28px;max-width:480px;width:100%;text-align:center;
+  display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 50px -20px rgba(23,50,77,.4);max-height:88vh;overflow-y:auto;}
+.overlay-card h3{font-size:19px;color:var(--primary-deep);}
+.q-kicker{font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--amber-dark);text-transform:uppercase;}
+.q-options{display:flex;flex-direction:column;gap:9px;}
+.qopt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--glass-border);border-radius:14px;padding:12px 14px;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--ink);transition:border-color .15s;}
+.qopt:hover:not(:disabled){border-color:var(--primary);}
+.qopt.correct{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text);}
+.qopt.wrong{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text);}
+.qletter{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--blue-light);color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.qopt.correct .qletter{background:var(--success-border);}
+.qopt.wrong .qletter{background:var(--error-border);}
+.feedback{font-size:13.5px;font-weight:600;color:var(--primary-deep);min-height:20px;}
+
+/* ---- completion ---- */
+.result-card{max-width:600px;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-chip{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 16px;min-width:130px;}
+.stat-chip .num{font-size:22px;color:var(--amber-dark);font-weight:800;}
+.stat-chip .lbl{font-size:11px;color:var(--muted);letter-spacing:.03em;line-height:1.3;}
+.complete-explain{max-width:520px;font-size:14.5px;text-align:left;background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;color:var(--muted);line-height:1.6;}
+
+/* ---- reflection + exercise cards ---- */
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+.qcard{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;padding:22px 20px 20px;
+  box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:190px;display:flex;flex-direction:column;gap:10px;transition:transform .18s,box-shadow .18s;}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38);}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary);letter-spacing:.03em;}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600;}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.qgrid{grid-template-columns:1fr;}.qcard{min-height:auto;padding:18px 18px 16px;}}
+
+/* ---- Chapter 5: the method ---- */
+.learning-flow{max-width:700px;margin:0 auto;text-align:left;}
+.learning-flow > * + *{margin-top:26px;padding-top:26px;border-top:1px dashed var(--glass-border);}
+.method-part > * + *{margin-top:16px;}
+.part-head{text-align:center;}
+.part-head .eyebrow{margin-bottom:8px;}
+.part-head h3{font-size:19px;color:var(--primary-deep);}
+.map-table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--glass-border);}
+.map-table th{background:var(--primary-dark);color:#fff;padding:9px 12px;font-family:'Poppins',sans-serif;font-size:12.5px;text-align:left;}
+.map-table td{padding:8px 12px;border-bottom:1px solid var(--glass-border);color:var(--ink);}
+.map-table tr:nth-child(even) td{background:#F7FAFD;}
+.map-table tr:last-child td{border-bottom:none;}
+.map-table td:last-child{font-weight:700;color:var(--primary-deep);}
+.dist-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.dist-pair{grid-template-columns:1fr;}}
+.dist-panel{background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;}
+.dist-panel h4{font-size:13.5px;color:var(--primary-deep);margin-bottom:10px;text-align:center;}
+.dist-row{display:grid;grid-template-columns:62px 1fr;gap:4px 8px;align-items:center;margin-bottom:8px;}
+.dist-name{font-size:11.5px;font-weight:700;color:var(--primary-deep);}
+.dist-track{height:11px;border-radius:999px;background:var(--bg-3);overflow:hidden;}
+.dist-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--amber));transition:width .5s ease,background .3s;}
+.dist-fill.over{background:linear-gradient(90deg,#e07b60,var(--red));}
+.dist-meta{grid-column:2;font-size:10.5px;color:var(--muted);margin-top:-2px;}
+.dist-note{font-size:12px;font-weight:700;color:var(--primary-deep);text-align:center;min-height:32px;margin-top:6px;}
+.dist-actions{display:flex;justify-content:center;}
+.concept-summary-lead{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:8px;}
+.concept-summary ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.concept-summary li{font-size:13.5px;color:var(--muted);line-height:1.55;}
+.concept-summary strong{color:var(--amber-dark);}
+.compare-wrap h3{font-size:16px;color:var(--primary-deep);text-align:center;margin-bottom:12px;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.compare-col{background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;}
+.compare-col h4{font-size:14px;margin:0 0 8px;color:var(--amber-dark);}
+.compare-col ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;}
+.compare-col li{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.compare-note{text-align:center;font-size:13px;margin-top:12px;}
+@media(max-width:560px){.compare-grid{grid-template-columns:1fr;}}
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center;}
+.kl-grid{display:flex;flex-direction:column;gap:14px;}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left;}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border);}
+.kl-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px;}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+@media(max-width:760px){
+  .wrap{padding:32px 14px 50px;}
+  .stage{flex-direction:column;align-items:stretch;}
+  .lobby{flex-direction:row;flex-wrap:wrap;justify-content:center;max-width:none;}
+  .manager{margin-top:0;flex-direction:row;}
+  .manager-bubble{width:auto;}
+  .exit-zone{flex-direction:row;justify-content:center;}
+  .counter{width:calc(50% - 6px);}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="stepper" id="stepper">
+    <div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Crowd</span></div>
+    <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Morning</span></div>
+    <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Rush</span></div>
+    <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Floor Notes</span></div>
+    <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Method</span></div>
+    <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">New Cases</span></div>
+  </div>
+
+  <!-- ================= CHAPTER 1: THE CROWD (the problem) ================= -->
+  <section class="section active-view" id="sec-crowd">
+    <div class="hero">
+      <span class="eyebrow">Chapter 1 &middot; The Crowd</span>
+      <h1>🏦 Who Goes Where?</h1>
+    </div>
+    <div class="problem-card">
+      <p>Imagine a place where lots of people show up at once, and there are several spots ready to help them: a bank with a row of service counters, an airport with check-in desks, a supermarket with checkout lanes.</p>
+      <p>If everyone walks to the same spot, that line grows and grows while the other spots sit empty. Everyone waits longer than they need to, even though there is plenty of help available.</p>
+      <p>So who decides where each person should go? And what should that decision be based on?</p>
+      <p>Let's find out by running the floor at a busy bank 👇</p>
+    </div>
+    <div class="section-nav">
+      <button class="btn" id="btn-crowd-continue">Continue to the Morning ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 2: THE MORNING (story + rules) ================= -->
+  <section class="section" id="sec-morning">
+    <div class="hero">
+      <span class="eyebrow">Chapter 2 &middot; The Bank Morning</span>
+      <h1>Monday, 9:00 AM</h1>
+    </div>
+    <div class="story-lines">
+      <p>The doors of the bank just opened, and customers are streaming in.</p>
+      <p>There are <span class="highlight">four service counters</span> in the hall, but right now only <span class="highlight">Counter 1</span> is open.</p>
+      <p>Every customer takes about <span class="highlight">4 to 5 seconds</span> to be served.</p>
+      <p>You'll watch the morning unfold in three short stages.</p>
+    </div>
+    <ul class="rules-list">
+      <li>A customer can only be served at an open counter.</li>
+      <li>A counter can only serve a limited number of customers at the same time.</li>
+      <li class="ok">Customers who reach a counter wait for their turn, in order.</li>
+      <li class="ok">The goal: keep the lines short and every counter useful.</li>
+    </ul>
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-morning-back">⬅ Back to the Crowd</button>
+      <button class="btn" id="btn-morning-start">Start the Morning ▶</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3: THE RUSH (game) ================= -->
+  <section class="section" id="sec-game">
+    <span class="eyebrow center">Chapter 3 &middot; The Rush</span>
+    <h2 class="section-title">Run the Bank Floor</h2>
+    <div class="section-nav" style="margin-top:0;margin-bottom:14px;">
+      <button class="btn ghost small" id="btn-game-back">⬅ Back to the Morning</button>
+      <button class="btn ghost small" id="btn-game-skip">Skip ➜</button>
+    </div>
+
+    <div class="game-shell">
+      <span class="scenario-badge" id="stage-badge">Stage 1 of 3 &middot; Only Counter 1 is open</span>
+
+      <div class="dialogue-box">
+        <div class="dialogue-avatar" id="dialogue-avatar">🏦</div>
+        <div class="dialogue-text">
+          <span class="speaker" id="dialogue-speaker">THE STORY</span>
+          <span id="dialogue-text"></span>
+        </div>
+      </div>
+
+      <div class="status-cluster">
+        <div class="status-pill">⏳ Waiting: <b id="pill-waiting">0</b></div>
+        <div class="status-pill">✅ Served: <b id="pill-served">0</b></div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="actor-layer" id="actor-layer"></div>
+        <div class="lobby">
+          <div class="zone-label">Entrance</div>
+          <div class="spot" id="entrance-spot">🚪</div>
+          <div class="manager hidden" id="manager">
+            <div class="manager-avatar">🧑‍💼</div>
+            <div class="manager-name">Floor Manager</div>
+            <div class="manager-bubble" id="manager-bubble"></div>
+          </div>
+        </div>
+        <div class="counters-row" id="counters-row"></div>
+        <div class="exit-zone">
+          <div class="zone-label">Exit</div>
+          <div class="spot" id="exit-spot">🚶</div>
+        </div>
+      </div>
+
+      <div class="game-action"><span class="action-hint hidden" id="action-hint">👇 Your turn, click here!</span><button class="btn orange hidden" id="btn-action">Go</button></div>
+
+      <div class="control-bar">
+        <button class="control-btn" id="btn-pause">⏸ Pause</button>
+        <button class="control-btn" id="btn-speed">Speed: 1×</button>
+        <button class="control-btn reset" id="btn-restart">⟲ Restart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3b: SHIFT COMPLETE ================= -->
+  <section class="section" id="sec-complete">
+    <div class="result-card">
+      <div class="result-icon">🎉</div>
+      <h2>The bank is calm again!</h2>
+      <p class="complete-explain">The floor manager kept the lines short by looking at where customers were waiting, and by remembering that a bigger counter can take on more people. Nobody was stuck in a long line while another counter sat idle.</p>
+      <div class="stat-row">
+        <div class="stat-chip"><div class="num" id="stat-w1">0s</div><div class="lbl">Longest wait<br>Stage 1 &middot; one counter</div></div>
+        <div class="stat-chip"><div class="num" id="stat-w2">0s</div><div class="lbl">Longest wait<br>Stage 2 &middot; with the manager</div></div>
+        <div class="stat-chip"><div class="num" id="stat-w3">0s</div><div class="lbl">Longest wait<br>Stage 3 &middot; different capacities</div></div>
+        <div class="stat-chip"><div class="num" id="stat-served">0</div><div class="lbl">Customers<br>served</div></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-complete-replay">⟲ Run the Morning Again</button>
+        <button class="btn" id="btn-complete-continue">Continue to Floor Notes ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 4: FLOOR NOTES (reflection) ================= -->
+  <section class="section" id="sec-notes">
+    <span class="eyebrow center">Chapter 4 &middot; Floor Notes</span>
+    <h2 class="section-title">What did you notice?</h2>
+    <p class="section-sub">Sit with these for a moment, there's no single correct wording, just think them through in your own words.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; One Busy Counter</span><span class="q-text">At first, every customer had to use Counter 1. What made the line grow? Was the counter itself the problem, or was the work not being shared?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; A Better Way to Share the Work</span><span class="q-text">When more counters became available, the manager could send customers to different places. How did this help the bank, and what do you think would happen if customers still crowded around just one counter?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Choosing Where to Go</span><span class="q-text">What clues did the manager use to choose a counter? How might the decision change if the manager sent customers to counters in a fixed order without checking the queues?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Not Every Counter Is the Same</span><span class="q-text">Some counters could serve more customers at once than others. How should the manager account for this difference when sharing the work?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; If Nobody Is Coordinating</span><span class="q-text">Imagine the manager steps away and customers choose counters on their own. What problems might appear? What information would help someone keep the queues moving fairly?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-notes-back">⬅ Back to the Rush</button>
+        <button class="btn" id="btn-notes-continue">Continue to the Method ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 5: THE METHOD (key learning) ================= -->
+  <section class="section" id="sec-method">
+    <span class="eyebrow center">Chapter 5 &middot; The Method</span>
+    <h2 class="section-title">What the manager was really doing</h2>
+    <p class="section-sub">Here's the strategy you watched all morning, with a name and a shape.</p>
+
+    <div class="hero" style="margin-bottom:6px;">
+      <div class="result-icon">🏦</div>
+      <h2>You Discovered: Load Balancing!</h2>
+    </div>
+
+    <div class="learning-flow">
+
+      <!-- Part 1: translate the story, equal counters -->
+      <div class="method-part">
+        <div class="part-head">
+          <span class="eyebrow">Stages 1 &amp; 2 &middot; One counter, then many</span>
+          <h3>Spreading the work</h3>
+        </div>
+        <table class="map-table">
+          <tr><th>Bank story</th><th>Computer system</th></tr>
+          <tr><td>Customers</td><td>Requests (from users)</td></tr>
+          <tr><td>Service counters</td><td>Servers</td></tr>
+          <tr><td>The waiting line</td><td>Pending requests</td></tr>
+          <tr><td>How many a counter serves at once</td><td>Server capacity</td></tr>
+          <tr><td>The floor manager</td><td>Load balancer</td></tr>
+        </table>
+        <div class="dist-pair" id="pair-a"></div>
+        <div class="dist-actions"><button class="btn ghost small" id="btn-replay-a">↻ Replay Animation</button></div>
+        <div class="concept-summary">
+          <p class="concept-summary-lead">That's exactly what you saw in the first two stages:</p>
+          <ul>
+            <li>With one open counter, every request piles onto a single server while the others sit idle.</li>
+            <li>With a manager at the door, each new request goes to the server that is the least busy right now.</li>
+            <li>When all servers are equally capable, the least busy one is the quickest way to get an answer.</li>
+          </ul>
+          <p class="concept-summary-lead">That job has a name: <strong>Load Balancing</strong>. It means spreading incoming work across the available resources so that none is overloaded while others sit idle.</p>
+        </div>
+      </div>
+
+      <!-- Part 2: different capacities -->
+      <div class="method-part">
+        <div class="part-head">
+          <span class="eyebrow">Stage 3 &middot; Different capacities</span>
+          <h3>Weighted sharing</h3>
+        </div>
+        <div class="dist-pair" id="pair-b"></div>
+        <div class="dist-actions"><button class="btn ghost small" id="btn-replay-b">↻ Replay Animation</button></div>
+        <div class="concept-summary">
+          <p class="concept-summary-lead">In the third stage, the counters were no longer the same:</p>
+          <ul>
+            <li>Splitting the work equally overloads the small server while the big one has plenty of room.</li>
+            <li>A smarter balancer compares each server's current work against its capacity, then sends the request where there's the most room.</li>
+            <li>The result: bigger servers take on more, and every server stays equally comfortable.</li>
+          </ul>
+          <p class="concept-summary-lead">This is called <strong>weighted</strong> load balancing: each server gets a share that matches what it can handle.</p>
+        </div>
+      </div>
+
+      <!-- Part 3: side-by-side -->
+      <div class="compare-wrap">
+        <h3>⚖️ Two situations, two decisions</h3>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <h4>🟰 Equal servers (Stage 2)</h4>
+            <ul>
+              <li>Every server can handle the same amount.</li>
+              <li>Send each request to the server with the fewest requests, or simply take turns (round robin).</li>
+              <li>Fair shares are equal shares.</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <h4>⚖️ Different capacities (Stage 3)</h4>
+            <ul>
+              <li>Servers can handle different amounts.</li>
+              <li>Compare each server's current work against its capacity before choosing.</li>
+              <li>Fair shares match capacity.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="compare-note">Real load balancers also notice when a server stops responding and quietly stop sending it new work.</p>
+      </div>
+
+      <div class="key-learnings">
+        <h3>🔑 Key Learnings</h3>
+        <div class="kl-grid">
+          <div class="kl-item"><span class="kl-icon">⚖️</span><div><b>Load Balancing</b><p>Incoming work is spread across available servers so that no single server is overloaded while others sit idle.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">🧑‍💼</span><div><b>The Load Balancer</b><p>A single entry point that decides, for every request, which server should handle it.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">📏</span><div><b>Capacity Matters</b><p>Equal doesn't always mean balanced. Weigh each server's current work against what it can handle.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">🌍</span><div><b>Where You'll See It</b><p>Busy websites, cloud services, streaming platforms, and online stores all rely on load balancers to stay fast and reliable.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-method-back">⬅ Back to Floor Notes</button>
+      <button class="btn" id="btn-method-continue">Continue to New Cases ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 6: NEW CASES (exercise) ================= -->
+  <section class="section" id="sec-cases">
+    <span class="eyebrow center">Chapter 6 &middot; New Cases</span>
+    <h2 class="section-title">Put the idea to the test</h2>
+    <p class="section-sub">New situations to think through using what you just discovered.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Hospital Rush</span><span class="q-text">Several registration desks are open at a hospital, but most patients are joining the same queue while other desks are quiet. What could the hospital change to reduce the waiting time? What information should guide each patient's choice?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Pick the Shorter Queue</span><span class="q-text">At an airport, Desk A has 8 people waiting and Desk B has 3. Both desks process passengers at about the same speed. A new passenger arrives. Which desk would you recommend, and what might change your decision?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Share Work by Capacity</span><span class="q-text">A delivery hub has two teams. Team A can deliver 10 orders per hour and Team B can deliver 30. If 20 orders arrive in an hour, suggest a reasonable split between the teams. Explain how their different capacities affect your decision.</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Is an Equal Split Always Fair?</span><span class="q-text">A school assigns 30 students to each teacher, even though one teacher is handling a simple revision activity and another is supporting students who need extra help. Is an equal split necessarily the best arrangement? What else should the school consider?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; One Service Point Closes</span><span class="q-text">During a busy railway ticket rush, one booking counter suddenly closes. How should staff direct new passengers? What should they do about the people already waiting at the closed counter?</span></div>
+        <div class="qcard"><span class="q-num">6 &middot; Design a Better System</span><span class="q-text">Choose a setting such as a food delivery service, a clinic, a supermarket, or a college help desk. Propose a simple rule for assigning incoming work to available helpers. Explain what the rule should do when one helper is busy, has greater capacity, or becomes unavailable.</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-cases-back">⬅ Back to the Method</button>
+        <a class="btn ghost" id="btn-cases-home" href="../../index.html">🏠 Back to CSE Concept Laboratory</a>
+        <button class="btn" id="btn-cases-finish">⟲ Restart from the beginning</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= OVERLAY: the one question ================= -->
+<div class="overlay" id="overlay"><div class="overlay-card" id="overlay-card"></div></div>
+
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+
+/* ============================================================
+   NAVIGATION: 6-chapter stepper wrapping the game screens
+   ============================================================ */
+const STEP_FOR_SECTION = {
+  'sec-crowd':1, 'sec-morning':2, 'sec-game':3, 'sec-complete':3, 'sec-notes':4, 'sec-method':5, 'sec-cases':6
+};
+function setStep(n){
+  for (let i = 1; i <= 6; i++){
+    const el = $('step-' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view'));
+  $(id).classList.add('active-view');
+  setStep(STEP_FOR_SECTION[id] || 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================================================
+   ENGINE: one shared clock so Pause and Speed affect everything
+   ============================================================ */
+let runToken = 0, userPaused = false, modalPaused = false, paused = false, speed = 1, simNow = 0;
+class Aborted extends Error {}
+class Cancelled extends Error {}
+function swallow(e){ if (!(e instanceof Aborted) && !(e instanceof Cancelled)) console.error(e); }
+function checkAlive(t){ if (t !== runToken) throw new Aborted(); }
+function syncPaused(){
+  paused = userPaused || modalPaused;
+  $('btn-pause').textContent = userPaused ? '▶ Resume' : '⏸ Pause';
+}
+let lastTs = performance.now();
+function clock(now){ const dt = now - lastTs; lastTs = now; if (!paused) simNow += dt * speed; requestAnimationFrame(clock); }
+requestAnimationFrame(clock);
+
+function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+function animateValue(ms, token, onFrame){
+  return new Promise((resolve, reject) => {
+    let elapsed = 0, last = performance.now();
+    function step(now){
+      if (token !== runToken){ reject(new Aborted()); return; }
+      const dt = now - last; last = now;
+      if (!paused) elapsed += dt * speed;
+      const t = Math.min(1, elapsed / ms);
+      try { onFrame(t); } catch(e){ reject(e); return; }
+      if (t < 1) requestAnimationFrame(step); else resolve();
+    }
+    requestAnimationFrame(step);
+  });
+}
+function wait(ms, token){ return animateValue(ms, token, () => {}); }
+
+/* service time for ONE customer: 4 to 5 seconds */
+const serviceTime = () => 4000 + Math.random() * 1000;
+
+/* ============================================================
+   COUNTERS
+   ============================================================ */
+const COUNTER_COUNT = 4;
+let counters = [], stage = 1, totalServed = 0;
+let gameActive = false, gameCompleted = false;
+let stageStats = {1:{maxWait:0}, 2:{maxWait:0}, 3:{maxWait:0}};
+
+function initCounters(){
+  counters = [];
+  for (let i = 0; i < COUNTER_COUNT; i++){
+    counters.push({ id:i+1, active:i === 0, capacity:1, showCap:false, queue:[], incoming:0, served:0 });
+  }
+}
+function buildCounterDOM(){
+  const row = $('counters-row');
+  row.innerHTML = '';
+  counters.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'counter';
+    card.innerHTML = `
+      <div class="awning"></div>
+      <div class="counter-face">
+        <div class="counter-top"><span class="counter-icon">🏧</span><span class="counter-label">Counter ${t.id}</span></div>
+        <span class="status-chip closed">Closed</span>
+        <div class="cap-wrap hidden">
+          <div class="cap-title"></div>
+          <div class="cap-bar"><div class="cap-fill"></div></div>
+          <div class="cap-text"></div>
+        </div>
+        <div class="queue-row"></div>
+        <div class="served-text">Served: 0</div>
+      </div>`;
+    row.appendChild(card);
+    t.el = card;
+    t.chipEl = card.querySelector('.status-chip');
+    t.capWrapEl = card.querySelector('.cap-wrap');
+    t.capTitleEl = card.querySelector('.cap-title');
+    t.capFillEl = card.querySelector('.cap-fill');
+    t.capTextEl = card.querySelector('.cap-text');
+    t.rowEl = card.querySelector('.queue-row');
+    t.servedEl = card.querySelector('.served-text');
+  });
+  refreshAll();
+}
+function statusFor(t){
+  if (!t.active) return {cls:'closed', txt:'Closed'};
+  const waiting = Math.max(0, t.queue.length - t.capacity);
+  if (t.queue.length === 0) return {cls:'open', txt:'Free'};
+  if (waiting === 0) return {cls:'open', txt:'Serving'};
+  if (waiting < 4) return {cls:'busy', txt:'Busy'};
+  return {cls:'full', txt:'Crowded'};
+}
+function refreshCounter(t){
+  t.el.classList.toggle('closed', !t.active);
+  const st = statusFor(t);
+  t.chipEl.className = 'status-chip ' + st.cls;
+  t.chipEl.textContent = st.txt;
+  t.servedEl.textContent = 'Served: ' + t.served;
+  t.capWrapEl.classList.toggle('hidden', !t.showCap);
+  if (t.showCap){
+    const r = t.queue.length / t.capacity;
+    t.capTitleEl.textContent = 'Capacity: ' + t.capacity + (t.capacity === 1 ? ' at a time' : ' at once');
+    t.capFillEl.style.width = Math.min(100, r * 100) + '%';
+    t.capFillEl.style.background = r > 1 ? 'var(--red)' : (r >= 0.75 ? 'var(--yellow)' : 'var(--green)');
+    t.capTextEl.textContent = t.queue.length + ' here now';
+  }
+}
+function refreshAll(){
+  counters.forEach(refreshCounter);
+  $('pill-waiting').textContent = counters.reduce((s,t) => s + (t.active ? Math.max(0, t.queue.length - t.capacity) : 0), 0);
+  $('pill-served').textContent = totalServed;
+}
+
+/* ============================================================
+   CUSTOMERS: arrive, wait, get served (4-5 s), leave
+   ============================================================ */
+const actorLayer = () => $('actor-layer');
+function rectRel(el){
+  const s = $('stage').getBoundingClientRect(), r = el.getBoundingClientRect();
+  return { left:r.left - s.left, top:r.top - s.top, width:r.width, height:r.height, cx:r.left - s.left + r.width/2, cy:r.top - s.top + r.height/2 };
+}
+function makeCustomer(stg){
+  const el = document.createElement('div');
+  el.className = 'avatar';
+  el.innerHTML = '👤<div class="progress"><div class="progress-fill"></div></div>';
+  return { el, fill:el.querySelector('.progress-fill'), started:false, dead:false, stage:stg, joinedAt:0 };
+}
+async function sendCustomer(t, token, stg){
+  checkAlive(token);
+  t.incoming++;
+  const c = makeCustomer(stg);
+  c.el.classList.add('flying');
+  const from = rectRel($('entrance-spot'));
+  c.el.style.left = from.cx + 'px';
+  c.el.style.top = from.cy + 'px';
+  actorLayer().appendChild(c.el);
+  const rr = rectRel(t.rowEl);
+  const slot = t.queue.length + t.incoming - 1;
+  const to = { x: rr.left + 16 + (slot % 5) * 28, y: rr.top + 18 + Math.floor(slot / 5) * 24 };
+  try {
+    await animateValue(1000, token, p => {
+      if (c.dead) throw new Cancelled();
+      const e = easeInOut(p);
+      c.el.style.left = (from.cx + (to.x - from.cx) * e) + 'px';
+      c.el.style.top = (from.cy + (to.y - from.cy) * e) + 'px';
+    });
+  } catch(err){ c.el.remove(); throw err; }
+  c.el.classList.remove('flying');
+  c.el.style.left = ''; c.el.style.top = '';
+  t.rowEl.appendChild(c.el);
+  t.incoming--;
+  c.joinedAt = simNow;
+  t.queue.push(c);
+  refreshAll();
+  pump(t, token);
+}
+function pump(t, token){
+  t.queue.slice(0, t.capacity).forEach(c => {
+    if (!c.started){ c.started = true; serve(t, c, token); }
+  });
+}
+async function serve(t, c, token){
+  try {
+    const waited = (simNow - c.joinedAt) / 1000;
+    if (waited > stageStats[c.stage].maxWait) stageStats[c.stage].maxWait = waited;
+    c.el.classList.add('serving');
+    await animateValue(serviceTime(), token, p => {
+      if (c.dead) throw new Cancelled();
+      c.fill.style.width = (p * 100) + '%';
+    });
+    const i = t.queue.indexOf(c);
+    if (i >= 0) t.queue.splice(i, 1);
+    t.served++; totalServed++;
+    refreshAll();
+    pump(t, token);
+    await flyOut(c, token);
+  } catch(e){ swallow(e); }
+}
+async function flyOut(c, token){
+  const el = c.el, from = rectRel(el), to = rectRel($('exit-spot'));
+  el.classList.remove('serving');
+  el.classList.add('flying');
+  el.style.left = (from.left + from.width/2) + 'px';
+  el.style.top = (from.top + from.height/2) + 'px';
+  actorLayer().appendChild(el);
+  try {
+    await animateValue(700, token, p => {
+      const e = easeInOut(p);
+      el.style.left = (from.left + from.width/2 + (to.cx - from.left - from.width/2) * e) + 'px';
+      el.style.top = (from.top + from.height/2 + (to.cy - from.top - from.height/2) * e) + 'px';
+    });
+  } finally { el.remove(); }
+}
+function clearCustomers(){
+  counters.forEach(t => { t.queue.forEach(c => { c.dead = true; c.el.remove(); }); t.queue = []; t.incoming = 0; });
+  actorLayer().innerHTML = '';
+}
+
+/* ============================================================
+   THE FLOOR MANAGER: picks the counter for each new customer
+   ============================================================ */
+function pickCounter(strategy){
+  if (strategy === 'first') return counters[0];
+  const open = counters.filter(t => t.active);
+  const score = t => (t.queue.length + t.incoming) / t.capacity;
+  open.sort((a, b) => score(a) - score(b) || a.id - b.id);
+  return open[0];
+}
+function bubble(text){
+  const b = $('manager-bubble');
+  if (text){ b.textContent = text; b.classList.add('show'); } else { b.classList.remove('show'); }
+}
+async function dispatch(n, gap, strategy, token, stg){
+  for (let i = 0; i < n; i++){
+    checkAlive(token);
+    const t = pickCounter(strategy);
+    if (strategy !== 'first'){
+      const here = t.queue.length + t.incoming;
+      bubble(stg === 3 ? `→ Counter ${t.id} · ${here} of ${t.capacity} busy` : `→ Counter ${t.id} · ${here} in line`);
+      await wait(450, token);
+    }
+    sendCustomer(t, token, stg).catch(swallow);
+    await wait(gap, token);
+  }
+  bubble('');
+}
+
+/* ============================================================
+   DIALOGUE + ACTION BUTTON + THE ONE QUESTION
+   ============================================================ */
+function say(text, who){
+  const manager = who === 'manager';
+  $('dialogue-avatar').textContent = manager ? '🧑‍💼' : '🏦';
+  $('dialogue-speaker').textContent = manager ? 'FLOOR MANAGER' : 'THE STORY';
+  $('dialogue-text').innerHTML = '<span class="line">' + text + '</span>';
+}
+const STAGE_BADGES = {
+  1:'Stage 1 of 3 · Only Counter 1 is open',
+  2:'Stage 2 of 3 · A manager guides the customers',
+  3:'Stage 3 of 3 · Counters with different capacities'
+};
+function setStage(n){ stage = n; $('stage-badge').textContent = STAGE_BADGES[n]; }
+function waitForAction(label, token){
+  return new Promise(resolve => {
+    checkAlive(token);
+    const b = $('btn-action');
+    b.textContent = label;
+    b.classList.remove('hidden');
+    $('action-hint').classList.remove('hidden');
+    b.onclick = () => { b.classList.add('hidden'); $('action-hint').classList.add('hidden'); b.onclick = null; resolve(); };
+  });
+}
+function askQuestion(opts){
+  return new Promise(resolve => {
+    modalPaused = true; syncPaused();
+    const letters = ['A','B','C'];
+    let html = `<div class="q-kicker">Quick check</div><h3>${opts.question}</h3><div class="q-options">`;
+    opts.options.forEach((o, i) => { html += `<button class="qopt" data-i="${i}"><span class="qletter">${letters[i]}</span><span>${o}</span></button>`; });
+    html += `</div><div class="feedback" id="q-feedback"></div><div class="section-nav hidden" id="q-nav" style="margin-top:4px;"><button class="btn small" id="q-continue">Continue ➜</button></div>`;
+    $('overlay-card').innerHTML = html;
+    $('overlay').classList.add('active');
+    let done = false;
+    document.querySelectorAll('.qopt').forEach(b => {
+      b.onclick = () => {
+        if (done) return; done = true;
+        const i = parseInt(b.dataset.i, 10);
+        const all = [...document.querySelectorAll('.qopt')];
+        all.forEach(x => x.disabled = true);
+        if (i === opts.correct){ b.classList.add('correct'); $('q-feedback').textContent = '✓ ' + opts.right; }
+        else { b.classList.add('wrong'); all[opts.correct].classList.add('correct'); $('q-feedback').textContent = opts.wrong + ' ' + opts.right; }
+        $('q-nav').classList.remove('hidden');
+        $('q-continue').onclick = () => { closeOverlay(); resolve(i); };
+      };
+    });
+  });
+}
+function closeOverlay(){
+  $('overlay').classList.remove('active');
+  modalPaused = false; syncPaused();
+}
+
+/* ============================================================
+   THE GAME: three short stages
+   ============================================================ */
+async function runGame(token){
+  /* ---------- Stage 1: everyone goes to Counter 1 ---------- */
+  setStage(1);
+  say('Only <b>Counter 1</b> is open. Let\'s see where the customers go.');
+  await waitForAction('Let the customers in ▶', token);
+  say('Everyone heads for the only open counter.');
+  await dispatch(9, 1000, 'first', token, 1);
+  say('Look at that line! Counter 1 is working as fast as it can, but everyone else has to wait, while three counters sit closed.');
+  await wait(3500, token);
+  await waitForAction('Open the other counters ➜', token);
+
+  /* ---------- Stage 2: the manager guides customers ---------- */
+  setStage(2);
+  for (let i = 1; i < COUNTER_COUNT; i++){
+    counters[i].active = true; refreshAll();
+    await wait(350, token);
+  }
+  say('Three more counters just opened, and they are all empty. But new customers still don\'t know where to go.');
+  await wait(2800, token);
+  $('manager').classList.remove('hidden');
+  say('Meet the floor manager. Standing at the entrance, the manager tells each new customer which counter to go to.', 'manager');
+  await wait(1500, token);
+  await waitForAction('Let the manager guide customers ▶', token);
+  say('Watch the manager look at the lines and send each new customer to the shortest one.', 'manager');
+  await dispatch(11, 1100, 'ratio', token, 2);
+  say('The old line at Counter 1 shrinks, while the new customers are shared across all four counters.');
+  await wait(3200, token);
+  checkAlive(token);
+  await askQuestion({
+    question: 'Every counter here serves customers equally well and at the same speed. So how should the manager share out the new customers?',
+    options: [
+      'Send everyone to Counter 1, it\'s the closest to the door.',
+      'Send each new customer to the counter with the shortest line.',
+      'Keep one counter empty, just in case.'
+    ],
+    correct: 1,
+    right: 'When every counter is equally good, the shortest line is the quickest way out.',
+    wrong: 'Look at the lines again.'
+  });
+  checkAlive(token);
+  say('Because all the counters are the same, the manager only had to watch the lines.', 'manager');
+  await waitForAction('Give the counters different capacities ➜', token);
+
+  /* ---------- Stage 3: counters with different capacities ---------- */
+  setStage(3);
+  clearCustomers();
+  say('Later that day... the bank has upgraded its counters. Each one can now serve a <b>different number of customers at once</b>.');
+  const caps = [2, 4, 1, 3];
+  counters.forEach((t, i) => { t.capacity = caps[i]; t.showCap = true; });
+  refreshAll();
+  await wait(2800, token);
+  say('The manager now looks at each counter\'s capacity, and how much of it is already in use, before sending anyone.', 'manager');
+  await wait(1200, token);
+  await waitForAction('Let the manager guide customers ▶', token);
+  await dispatch(20, 500, 'ratio', token, 3);
+  say('See how the crowd splits? Bigger counters took on more customers, and no counter was left overloaded.');
+  await wait(5500, token);
+  await waitForAction('Finish the morning ✓', token);
+  finishGame();
+}
+
+function finishGame(){
+  const secs = n => Math.round(n) + 's';
+  $('stat-w1').textContent = secs(stageStats[1].maxWait);
+  $('stat-w2').textContent = secs(stageStats[2].maxWait);
+  $('stat-w3').textContent = secs(stageStats[3].maxWait);
+  $('stat-served').textContent = totalServed;
+  runToken++;
+  gameActive = false; gameCompleted = true;
+  showSection('sec-complete');
+}
+
+function startGame(){
+  runToken++;
+  const token = runToken;
+  userPaused = false; modalPaused = false; syncPaused();
+  totalServed = 0; stage = 1;
+  gameActive = true; gameCompleted = false;
+  stageStats = {1:{maxWait:0}, 2:{maxWait:0}, 3:{maxWait:0}};
+  $('overlay').classList.remove('active');
+  $('btn-action').classList.add('hidden'); $('btn-action').onclick = null; $('action-hint').classList.add('hidden');
+  $('manager').classList.add('hidden'); bubble('');
+  actorLayer().innerHTML = '';
+  initCounters();
+  buildCounterDOM();
+  showSection('sec-game');
+  try { history.pushState({bankGame:true}, ''); } catch(e){}
+  runGame(token).catch(swallow);
+}
+function leaveGame(){
+  runToken++;
+  gameActive = false;
+  $('overlay').classList.remove('active');
+  modalPaused = false; userPaused = false; syncPaused();
+}
+
+/* ---- leaving a running game: warn that it will be reset ---- */
+function confirmLeave(onConfirm){
+  if (!gameActive){ onConfirm(); return; }
+  modalPaused = true; syncPaused();
+  $('overlay-card').innerHTML = `
+    <div class="q-kicker">Heads up</div>
+    <h3>⚠️ The game will be reset</h3>
+    <p>If you leave now, this run of the game is reset and you'll start again from Stage 1 the next time you play.</p>
+    <div class="section-nav" style="margin-top:4px;">
+      <button class="btn ghost small" id="leave-stay">Stay in the game</button>
+      <button class="btn small" id="leave-go">Leave &amp; reset</button>
+    </div>`;
+  $('overlay').classList.add('active');
+  $('leave-stay').onclick = closeOverlay;
+  $('leave-go').onclick = () => { closeOverlay(); leaveGame(); onConfirm(); };
+}
+window.addEventListener('popstate', () => {
+  if (!gameActive) return;
+  try { history.pushState({bankGame:true}, ''); } catch(e){}   /* stay on the page, then ask */
+  if ($('overlay').classList.contains('active')) return;
+  confirmLeave(() => showSection('sec-morning'));
+});
+function enterMethod(){
+  aPlayed = false; bPlayed = false;
+  showSection('sec-method');
+  ['a1','a2','b1','b2'].forEach(k => { demoState[k] = (demoState[k] || 0) + 1; renderDemo(k, DEMOS[k].caps.map(() => 0)); $(`${k}-note`).textContent = 'Press Replay to watch.'; });
+  $('btn-replay-a').disabled = false; $('btn-replay-b').disabled = false;
+}
+
+/* ============================================================
+   CHAPTER 5: replayable distribution demos
+   ============================================================ */
+const DEMOS = {
+  a1:{ title:'🚫 Without a load balancer', caps:[4,4,4,4], n:8, pick:'first',  note:'Server 1 is overloaded while three servers sit idle.' },
+  a2:{ title:'⚖️ With a load balancer',    caps:[4,4,4,4], n:8, pick:'ratio',  note:'Every server shares the work.' },
+  b1:{ title:'🟰 Equal split',              caps:[2,4,6],   n:6, pick:'rr',     note:'The small server is full while the big one has room to spare.' },
+  b2:{ title:'⚖️ Weighted by capacity',    caps:[2,4,6],   n:6, pick:'ratio',  note:'Each server is equally comfortable.' }
+};
+const demoState = {};
+function buildDemoPanel(key){
+  const d = DEMOS[key];
+  const el = document.createElement('div');
+  el.className = 'dist-panel';
+  el.innerHTML = `<h4>${d.title}</h4>` + d.caps.map((c, i) => `
+    <div class="dist-row">
+      <span class="dist-name">Server ${i+1}</span>
+      <div class="dist-track"><div class="dist-fill" id="${key}-f${i}"></div></div>
+      <span class="dist-meta" id="${key}-m${i}">Capacity ${c} &middot; 0 requests</span>
+    </div>`).join('') + `<div class="dist-note" id="${key}-note">Press Replay to watch.</div>`;
+  return el;
+}
+function renderDemo(key, counts){
+  const d = DEMOS[key];
+  d.caps.forEach((c, i) => {
+    const r = counts[i] / c;
+    const f = $(`${key}-f${i}`);
+    f.style.width = Math.min(100, r * 100) + '%';
+    f.classList.toggle('over', r > 1);
+    $(`${key}-m${i}`).innerHTML = `Capacity ${c} &middot; ${counts[i]} request${counts[i] === 1 ? '' : 's'}${r > 1 ? ' &middot; overloaded!' : ''}`;
+  });
+}
+function playDemo(key){
+  const d = DEMOS[key];
+  const id = (demoState[key] = (demoState[key] || 0) + 1);
+  const counts = d.caps.map(() => 0);
+  renderDemo(key, counts);
+  $(`${key}-note`).textContent = 'Requests arriving…';
+  return new Promise(resolve => {
+    let sent = 0;
+    const timer = setInterval(() => {
+      if (demoState[key] !== id){ clearInterval(timer); resolve(); return; }
+      let idx;
+      if (d.pick === 'first') idx = 0;
+      else if (d.pick === 'rr') idx = sent % d.caps.length;
+      else { idx = 0; counts.forEach((c, i) => { if (c / d.caps[i] < counts[idx] / d.caps[idx]) idx = i; }); }
+      counts[idx]++; sent++;
+      renderDemo(key, counts);
+      if (sent >= d.n){ clearInterval(timer); $(`${key}-note`).textContent = d.note; resolve(); }
+    }, 650);
+  });
+}
+function playPair(pair, btnId){
+  const btn = $(btnId);
+  btn.disabled = true;
+  Promise.all(pair.map(playDemo)).then(() => { btn.disabled = false; });
+}
+let aPlayed = false, bPlayed = false;
+function setupDemos(){
+  ['a1','a2'].forEach(k => $('pair-a').appendChild(buildDemoPanel(k)));
+  ['b1','b2'].forEach(k => $('pair-b').appendChild(buildDemoPanel(k)));
+  $('btn-replay-a').onclick = () => playPair(['a1','a2'], 'btn-replay-a');
+  $('btn-replay-b').onclick = () => playPair(['b1','b2'], 'btn-replay-b');
+  if ('IntersectionObserver' in window){
+    const mk = (el, pair, btn, flagGet, flagSet) => new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !flagGet() && $('sec-method').classList.contains('active-view')){ flagSet(); playPair(pair, btn); }
+      });
+    }, { threshold:0.6 }).observe(el);
+    mk($('pair-a'), ['a1','a2'], 'btn-replay-a', () => aPlayed, () => { aPlayed = true; });
+    mk($('pair-b'), ['b1','b2'], 'btn-replay-b', () => bPlayed, () => { bPlayed = true; });
+  }
+}
+
+/* ============================================================
+   EVENT WIRING
+   ============================================================ */
+$('btn-crowd-continue').addEventListener('click', () => showSection('sec-morning'));
+$('btn-morning-back').addEventListener('click', () => showSection('sec-crowd'));
+$('btn-morning-start').addEventListener('click', startGame);
+$('btn-game-back').addEventListener('click', () => confirmLeave(() => showSection('sec-morning')));
+$('btn-game-skip').addEventListener('click', () => confirmLeave(() => showSection('sec-notes')));
+
+$('btn-pause').addEventListener('click', () => { userPaused = !userPaused; syncPaused(); });
+const SPEEDS = [ {v:0.7, label:'Speed: 0.7×'}, {v:1, label:'Speed: 1×'}, {v:1.5, label:'Speed: 1.5×'} ];
+let speedIdx = 1;
+$('btn-speed').addEventListener('click', () => {
+  speedIdx = (speedIdx + 1) % SPEEDS.length;
+  speed = SPEEDS[speedIdx].v;
+  $('btn-speed').textContent = SPEEDS[speedIdx].label;
+});
+$('btn-restart').addEventListener('click', startGame);
+
+$('btn-complete-replay').addEventListener('click', startGame);
+$('btn-complete-continue').addEventListener('click', () => showSection('sec-notes'));
+
+$('btn-notes-back').addEventListener('click', () => { if (gameCompleted) showSection('sec-complete'); else startGame(); });
+$('btn-notes-continue').addEventListener('click', enterMethod);
+$('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
+$('btn-method-continue').addEventListener('click', () => showSection('sec-cases'));
+
+$('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
+$('btn-cases-finish').addEventListener('click', () => { leaveGame(); showSection('sec-crowd'); });
+
+/* ---------------- initial paint ---------------- */
+setupDemos();
+})();
+</script>
+</body>
+</html>
