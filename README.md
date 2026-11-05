@@ -65,6 +65,8 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 15 | Campus Bites | ✅ Available |
 | 16 | Atomicity | ✅ Available |
 | 17 | The Bank Rush | ✅ Available |
+| 18 | Hungry Mouse | ✅ Available |
+| 19 | The Ant Colony | ✅ Available |
 
 ## Repository Structure
 

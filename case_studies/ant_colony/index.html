@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ant Colony | CSE Concept Laboratory</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #EDF3FA;
+    --bg-top: #FDF1E9;
+    --panel: #FFFFFF;
+    --line: #D9E5F2;
+    --track: #B7CBDF;
+    --wash: #F3F8FD;
+    --teal: #4A9BD1;
+    --teal-dim: #8FCBEF;
+    --blue-dark: #2B6FA3;
+    --amber: #EA8C36;
+    --amber-dim: #F3A65C;
+    --orange-dark: #C96F1F;
+    --ink: #1F2E37;
+    --muted: #54666D;
+    --faint: #93A5AB;
+    --danger: #D9714F;
+    --success-bg: #DCEAD8;
+    --success-text: #274B26;
+    --success-border: #4B7A4A;
+    --error-bg: #FBE1DC;
+    --error-text: #8A3420;
+    --error-border: #D9714F;
+    --banner: #22496B;
+    --shadow-card: 0 8px 24px rgba(23,50,77,0.10);
+    --shadow-lift: 0 10px 30px rgba(23,50,77,0.12);
+    --shadow-btn: 0 6px 18px rgba(43,111,163,0.28);
+    --font-display: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 420px, var(--bg) 100%);
+    color: var(--ink); font-family: var(--font-body); min-height:100vh;
+  }
+  .app{ position:relative; min-height:100vh; width:100%; }
+
+  h1,h2,h3,h4{ font-family: var(--font-display); margin:0; letter-spacing:-0.01em; color: var(--ink); }
+  p{ line-height:1.6; color: var(--muted); margin:0; }
+  .eyebrow{ font-family:var(--font-body); font-weight:700; font-size:11.5px; letter-spacing:0.13em; text-transform:uppercase; color: var(--amber); display:block; margin-bottom:12px; }
+
+  button{ font-family: var(--font-display); cursor:pointer; border:none; outline:none; }
+  button:focus-visible{ outline:2px solid var(--teal); outline-offset:3px; }
+
+  .btn-primary{
+    background: linear-gradient(135deg, var(--teal-dim), var(--blue-dark)); color:#fff;
+    font-weight:600; font-size:14px; padding:13px 26px; border-radius:999px;
+    box-shadow: var(--shadow-btn); transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(43,111,163,.36); }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+  .btn-danger{
+    background: linear-gradient(135deg,#E39A7D,var(--danger)); color:#fff; font-weight:600; font-size:14px;
+    padding:13px 26px; border-radius:999px; box-shadow:0 6px 18px rgba(217,113,79,.3);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-danger:hover{ transform:translateY(-1px); }
+  .btn-ghost{
+    background:transparent; color: var(--teal); font-size:13px; font-weight:600;
+    padding:9px 18px; border:1.5px solid var(--teal); border-radius:999px;
+    transition: all .15s ease;
+  }
+  .btn-ghost:hover{ background: rgba(74,155,209,.08); }
+  .btn-ghost.on{ background: rgba(74,155,209,.1); }
+  .btn-row{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40; background:rgba(255,255,255,.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;
+    padding:12px 20px; gap:14px; flex-wrap:wrap;
+  }
+  .back-btn{
+    background:transparent; border:1.5px solid var(--line); color: var(--muted);
+    font-family:var(--font-body); font-weight:600; font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+    padding:7px 14px; border-radius:999px; cursor:pointer; flex-shrink:0;
+  }
+  .back-btn:hover{ border-color: var(--error-border); color: var(--error-text); }
+  .back-btn[disabled]{ visibility:hidden; }
+
+  .progress{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; flex:1; }
+  .progress-step{ display:flex; align-items:center; gap:5px; font-family:var(--font-body); font-weight:600; font-size:9px; letter-spacing:.02em; text-transform:uppercase; color: var(--line); }
+  .progress-step .num{ width:18px; height:18px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:9px; color: var(--muted); flex-shrink:0; }
+  .progress-step.done .num{ background: var(--teal); border-color: var(--teal); color:#fff; }
+  .progress-step.current .num{ background: linear-gradient(135deg,var(--teal-dim),var(--blue-dark)); border-color: var(--blue-dark); color:#fff; box-shadow:0 2px 8px rgba(43,111,163,.3); }
+  .progress-step.current .label{ color: var(--blue-dark); }
+  .progress-step .label{ color: var(--muted); }
+  .progress-line{ width:14px; height:1px; background: var(--line); flex-shrink:0; }
+
+  .screen{ display:none; min-height:calc(100vh - 56px); width:100%; align-items:center; justify-content:center; padding:40px 20px; }
+  .screen.active{ display:flex; }
+  .container{ width:100%; max-width:920px; margin:0 auto; min-width:0; }
+
+  /* ---------- Guide notes ---------- */
+  .guide-note{ background: var(--wash); border-left:3px solid var(--teal); border-radius:0 12px 12px 0; padding:14px 18px; margin:0 0 16px; text-align:left; }
+  .guide-note p{ margin:0 0 6px; color: var(--ink); font-size:13.5px; }
+  .guide-note p:last-child{ margin-bottom:0; }
+  .guide-note ul{ margin:6px 0 0; padding-left:18px; text-align:left; }
+  .guide-note li{ color: var(--ink); font-size:13.5px; line-height:1.6; margin-bottom:4px; }
+  .guide-kicker{ display:inline-block; font-family:var(--font-body); font-weight:700; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color: var(--teal); margin-bottom:6px; }
+  .edit-tag{
+    display:inline-block; background: var(--teal); color:#fff; font-family:var(--font-body); font-weight:700;
+    font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:999px; margin-bottom:10px;
+  }
+
+  /* ---------- PAGE 1: PROBLEM ---------- */
+  #screen-problem .container{ text-align:center; max-width:900px; }
+  .problem-card{ background: var(--panel); border:1px solid var(--line); border-radius:16px; padding:44px 40px; box-shadow: var(--shadow-lift); }
+  .problem-card .guide-note{ text-align:left; margin-bottom:0; }
+
+  /* ---------- PAGE 2: SETUP ---------- */
+  #screen-setup .container{ text-align:left; max-width:920px; }
+  .setup-card{ background: var(--panel); border:1px solid var(--line); border-radius:16px; padding:40px 40px 34px; box-shadow: var(--shadow-lift); }
+  .setup-title{ font-size:clamp(22px,3.4vw,32px); line-height:1.18; margin-bottom:16px; }
+  .setup-title .accent{ color: var(--amber); }
+  .rules-box{ background: var(--wash); border:1px solid var(--line); border-radius:14px; padding:20px 24px; margin-bottom:24px; }
+  .rules-box li{ font-size:14px; color: var(--muted); line-height:1.7; margin-bottom:4px; }
+  .rules-box strong{ color: var(--ink); }
+
+  /* ---------- PAGE 3: GAME ---------- */
+  #screen-game .container{ max-width:700px; }
+
+  /* ---------- QUESTION GRID (reflect + exercise) ---------- */
+  #screen-reflect .container, #screen-exercise .container{ text-align:left; max-width:1040px; }
+  .screen-title{ font-size:clamp(22px,3.2vw,30px); text-align:center; margin-bottom:22px; }
+  #screen-reflect .eyebrow, #screen-exercise .eyebrow{ text-align:center; }
+
+  .questions-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:22px; }
+  @media (max-width:640px){ .questions-grid{ grid-template-columns:1fr; } }
+
+  .q-card{
+    display:flex; flex-direction:column; gap:10px; background: var(--panel); border:1.5px dashed var(--track);
+    border-radius:16px; padding:20px 20px 18px; box-shadow: var(--shadow-card);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .q-card:hover{ border-color: var(--teal); transform: translateY(-2px); }
+  .q-card-head{ display:flex; align-items:center; gap:10px; }
+  .q-num{
+    flex-shrink:0; width:30px; height:30px; border-radius:50%; background: rgba(74,155,209,.12);
+    border:1.5px solid var(--teal-dim); display:flex; align-items:center; justify-content:center;
+    font-size:12.5px; font-weight:700; color: var(--blue-dark);
+  }
+  .q-note{ font-size:13px; color: var(--muted); flex:1; }
+
+  /* ---------- CONCEPT PAGE ---------- */
+  #screen-concept .container{ text-align:left; max-width:880px; }
+  #screen-concept .eyebrow{ text-align:center; }
+
+  .concept-blank{ background: var(--panel); border:1.5px dashed var(--track); border-radius:16px; padding:24px 26px; margin-bottom:20px; box-shadow: var(--shadow-card); }
+  .concept-blank h4{ font-family:var(--font-display); font-weight:600; font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; color: var(--teal); margin:16px 0 8px; }
+  .concept-blank h4:first-child{ margin-top:0; }
+  .concept-blank p{ font-size:13.5px; line-height:1.6; }
+
+  .compare-cards{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:8px; }
+  @media (max-width:560px){ .compare-cards{ grid-template-columns:1fr; } }
+  .compare-card{
+    background: var(--panel); border:1.5px dashed var(--track); border-radius:14px; padding:20px 18px;
+    text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .compare-title{ font-family:var(--font-body); font-weight:600; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color: var(--muted); }
+  .compare-sub{ font-size:12.5px; color: var(--faint); margin-top:2px; }
+
+  .center-actions{ text-align:center; margin-top:8px; }
+
+  /* ---------- MODAL ---------- */
+  .modal-backdrop{ position:fixed; inset:0; background: rgba(31,46,55,.5); display:none; align-items:center; justify-content:center; z-index:80; padding:20px; }
+  .modal-backdrop.show{ display:flex; }
+  .modal-card{ background: var(--panel); border:1px solid var(--line); border-radius:18px; padding:32px 30px; max-width:440px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(23,50,77,.22); }
+  .modal-eyebrow{ font-family:var(--font-body); font-weight:700; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color: var(--amber); margin-bottom:12px; }
+  .modal-card p{ font-size:14.5px; line-height:1.6; color: var(--muted); margin:0 0 10px; }
+  .modal-card .punch{ color: var(--ink); font-weight:600; }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+    background: var(--banner); color:#fff; font-family:var(--font-display); font-weight:600; font-size:13px;
+    padding:12px 20px; border-radius:999px; box-shadow:0 8px 24px rgba(23,50,77,.35);
+    opacity:0; pointer-events:none; transition: all .3s ease; z-index:90;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  @media (max-width:480px){
+    .progress-step .label{ display:none; }
+    .progress-line{ width:8px; }
+  }
+#screen-game .container{max-width:1400px}#screen-game{padding:22px 12px;align-items:flex-start}
+.story p+p{margin-top:14px}
+.results-card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:22px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+.frame{display:block;width:100%;height:1100px;border:0}.topbar a{color:var(--blue-dark);font-size:12px}.problem-card p{font-size:17px}.screen:focus{outline:none}
+@media(max-width:600px){.problem-card,.setup-card{padding:26px 22px}.screen{padding:26px 14px}.topbar{padding:10px}.progress{order:3;flex-basis:100%}th,td{padding:8px 5px;font-size:12px}}
+
+/* Question text uses the template body font and original 13px sizing. */
+  .q-note{font-family:var(--font-body);font-weight:400;font-style:normal;}
+.concept-blank li{font-size:13.5px;color:var(--muted);line-height:1.65;margin-bottom:8px}
+.screen:focus{outline:none}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <button class="back-btn" id="back-btn">← Back</button>
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <!-- ============ PAGE 1: PROBLEM ============ -->
+  <section class="screen active" id="screen-problem" tabindex="-1"><div class="container"><div class="problem-card story"><span class="eyebrow">Step 1 : Problem</span><h1 style="font-size:clamp(26px,4vw,36px);margin-bottom:20px">Would you follow the busiest path?</h1>
+<p>You are looking for somewhere to eat and notice a busy lane. You follow it, only to find that the nearest stall has sold out. Other stalls still have food, but they are farther away or harder to reach.</p><p>A busy path tells you where people have been. How would you decide whether it is still worth following?</p>
+</div><div class="btn-row" style="margin-top:26px"><button class="btn-primary" id="problem-next">Continue to the story →</button></div></div></section>
+
+  <!-- ============ PAGE 2: SETUP ============ -->
+  <section class="screen" id="screen-setup" tabindex="-1"><div class="container"><div class="setup-card story"><span class="eyebrow">Step 2 : The Story</span><h2 class="setup-title">🐜 An afternoon in <span class="accent">the ant colony</span></h2>
+<p>Twenty hungry ants live at the edge of a garden. Four paths lead to food. One smells especially promising, but every patch holds a limited supply, and some journeys take much longer than others.</p><p style="margin-bottom:20px">You cannot steer each ant. You can choose the instruction the whole colony follows. Bring home as much food as possible before sunset.</p>
+<div class="rules-box"><ul><li><strong>Level 1:</strong> choose whether ants strongly follow smells, explore unfamiliar paths, or combine the two.</li><li><strong>Level 2:</strong> replay the same garden and choose how much smell, distance, food, and path difficulty matter.</li><li>Each ant carries <strong>one piece</strong> at a time. Stones and puddles slow ants in both directions. Food counts only when it reaches the nest.</li><li>Successful returns strengthen a path's smell; smells fade over time. A patch can run out while its trail still smells strong.</li><li>Each day lasts <strong>90 simulated seconds</strong>. Pause, change playback speed, or skip to sunset to see the result immediately.</li><li>Compare food collected, completed returns, and time spent on empty paths. Replay either level to try another instruction.</li></ul></div><button class="btn-primary" id="start-demo">Enter the garden →</button></div></div></section>
+
+  <!-- ============ PAGE 3: GAME ============ -->
+  <section class="screen" id="screen-game" tabindex="-1"><div class="container"><span class="eyebrow" style="text-align:center">Step 3: Game</span><h2 class="screen-title">The Ant Colony</h2><iframe class="frame" id="game-frame" src="game.html" title="The Ant Colony: two-level interactive garden simulation"></iframe><div class="center-actions"><button class="btn-primary" id="demo-next" disabled>Play both levels to reflect →</button></div></div></section>
+
+  <!-- ============ PAGE 4: REFLECT ============ -->
+  <section class="screen" id="screen-reflect" tabindex="-1"><div class="container">
+<span class="eyebrow">Step 4: Reflect</span><h2 class="screen-title">What did you notice in the garden?</h2>
+<p style="text-align:center;margin-bottom:22px">Think about the clues the colony uses. Explain your reasoning in your own words.</p>
+<div class="results-card" id="run-results" aria-live="polite"></div><div class="questions-grid">
+<div class="q-card"><div class="q-card-head"><div class="q-num">01</div><div class="q-note">What clues about a path could help the ants decide whether it is worth following? What does each clue tell them?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">02</div><div class="q-note">Why might one clue, such as a strong smell, give an incomplete picture of a path? What other clues would help?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">03</div><div class="q-note">Distance and food amount use different measurements. How could you turn them into signals the ants could compare or combine?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">04</div><div class="q-note">Could you create a new clue by combining existing ones, for example, how much food a path offers for the effort of travelling it? What would that reveal?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">05</div><div class="q-note">In Level 2, the path marked “Looks promising” could change during the day. What could cause this change, even though the paths themselves stayed in the same place?</div></div></div>
+</div>
+<div class="center-actions"><button class="btn-primary" id="to-concept">Next: Explain the Concept →</button></div></div></section>
+
+  <!-- ============ PAGE 5: CONCEPT ============ -->
+  <section class="screen" id="screen-concept" tabindex="-1"><div class="container">
+<span class="eyebrow">Step 5: Concept</span><h2 class="screen-title">From Clues to Features</h2>
+<div class="concept-blank">
+<h4>Definition</h4><p><strong>Feature engineering</strong> means choosing, transforming, or combining information into useful inputs for a computer system. These inputs are called <strong>features</strong>.</p>
+<h4>Mechanism</h4><p>In the garden, smell, distance, remaining food, and obstacles describe each path. These are the colony's features.</p>
+<ul><li><strong>Choose useful clues:</strong> One clue may give an incomplete picture. A strong smell does not tell the ants how much food remains.</li>
+<li><strong>Make clues comparable:</strong> The game turns distance into nearness and obstacles into ease, then combines these scores using the importance you assign.</li>
+<li><strong>Describe the current situation:</strong> Food and smell change during the day. As their values change, a different path can look promising.</li></ul>
+<p>You could also create a new feature by combining clues, for example, <strong>food available per unit of travel time</strong>. This is a feature you could design, rather than one currently used by the game.</p>
+<h4>Vocabulary</h4><p><strong>Feature:</strong> a useful input. <strong>Derived feature:</strong> a clue created from other clues. <strong>Weight:</strong> how much a clue matters when combining scores.</p>
+</div>
+<div class="center-actions"><button class="btn-primary" id="to-exercise">Next: Try the Exercises →</button></div></div></section>
+
+  <!-- ============ PAGE 6: EXERCISE ============ -->
+  <section class="screen" id="screen-exercise" tabindex="-1"><div class="container">
+<span class="eyebrow">Step 6: Exercise</span><h2 class="screen-title">Put the idea to work</h2>
+<p style="text-align:center;margin-bottom:22px">Apply feature engineering to new situations. Explain your choices and the tradeoffs involved.</p><div class="questions-grid">
+<div class="q-card"><div class="q-card-head"><div class="q-num">01</div><div class="q-note">A bus app predicts that every 5 km journey takes 15 minutes, but actual times range from 12 to 35 minutes. What features could explain this variation? Propose one feature that combines two measurements and explain how you would test its usefulness.</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">02</div><div class="q-note">You are designing a system to predict which crops need watering, but you have little farming knowledge. How would you identify useful features? How would you distinguish a feature that works across seasons from one that reflects a temporary pattern?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">03</div><div class="q-note">A fitness app collects 50 motion readings per second. What features could summarise a 10-second interval to distinguish walking from running? How would you make them useful whether the phone is in a hand, pocket, or bag?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">04</div><div class="q-note">A machine-failure predictor improves from 78% to 96% accuracy after adding replacement-part orders as a feature. However, parts are often ordered after a fault is discovered. What would you investigate to decide whether this feature supports a valid prediction?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">05</div><div class="q-note">A delivery system uses distance and historical traffic to rank routes. During a festival, its preferred routes become slow. How would you redesign its features to respond to changing conditions without reacting too strongly to a few unusual journeys?</div></div></div>
+<div class="q-card"><div class="q-card-head"><div class="q-num">06</div><div class="q-note">A drone has 2 seconds to assess 8 landing sites. Checking flatness takes 0.05 seconds per site, while checking surface strength takes 0.4 seconds. If checks run one at a time, how would you prioritise them? Explain how you would evaluate the balance between speed and landing safety.</div></div></div>
+</div>
+<div class="btn-row" style="margin-top:8px"><button class="btn-ghost" id="go-home-btn">🏠 Go to Home Page</button><button class="btn-primary" id="restart-journey">Restart the Whole Journey</button></div></div></section>
+
+  <!-- ============ MODAL: BACK WARNING ============ -->
+  <div class="modal-backdrop" id="modal-back-warn">
+    <div class="modal-card">
+      <div class="modal-eyebrow">Wait</div>
+      <p>Going back will lose your progress on this page, and you'll need to reach it again through Next.</p>
+      <p class="punch">Are you sure you want to go back?</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn-ghost" id="back-cancel">Stay Here</button>
+        <button class="btn-danger" id="back-confirm">Go Back</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var PAGES = ['screen-problem','screen-setup','screen-game','screen-reflect','screen-concept','screen-exercise'];
+  var PAGE_LABELS = ['Problem','Setup','Game','Reflect','Concept','Exercise'];
+  var currentPage = 0;
+  var unlockedPage = 0;
+
+  var runs = {}, history = [];
+  var frame = document.getElementById('game-frame');
+  var progressEl = document.getElementById('progress');
+  function renderProgress(){
+    progressEl.innerHTML = '';
+    PAGES.forEach(function(_, i){
+      var step = document.createElement('div');
+      step.className = 'progress-step' + (i === currentPage ? ' current' : (i < currentPage ? ' done' : ''));
+      step.innerHTML = '<span class="num">' + (i+1) + '</span><span class="label">' + PAGE_LABELS[i] + '</span>';
+      progressEl.appendChild(step);
+      if(i < PAGES.length - 1){
+        var line = document.createElement('div');
+        line.className = 'progress-line';
+        progressEl.appendChild(line);
+      }
+    });
+  }
+
+  function showPage(idx){
+    if(idx === 3 && !(runs[1] && runs[2])) return;
+    currentPage = idx;
+    if(idx > unlockedPage) unlockedPage = idx;
+    document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById(PAGES[idx]).classList.add('active');
+    document.getElementById('back-btn').disabled = (idx === 0);
+    renderProgress();
+    frame.contentWindow.postMessage({type:'ant-visibility',visible:idx===2},'*');
+    document.getElementById(PAGES[idx]).focus({preventScroll:true});
+    window.scrollTo({ top:0, behavior:'auto' });
+  }
+  function goNext(idx){ showPage(idx); }
+
+  document.getElementById('problem-next').addEventListener('click', function(){ goNext(1); });
+  document.getElementById('start-demo').addEventListener('click', function(){ goNext(2); });
+  document.getElementById('demo-next').addEventListener('click', function(){ goNext(3); });
+  document.getElementById('to-concept').addEventListener('click', function(){ goNext(4); });
+  document.getElementById('to-exercise').addEventListener('click', function(){ goNext(5); });
+  document.getElementById('restart-journey').addEventListener('click', function(){
+    resetEverything();
+    unlockedPage = 0;
+    showPage(0);
+  });
+  document.getElementById('go-home-btn').addEventListener('click', function(){
+    window.location.href = '../../';
+  });
+
+  document.getElementById('back-btn').addEventListener('click', function(){
+    if(currentPage === 0) return;
+    if(PAGES[currentPage] === 'screen-game'){
+      document.getElementById('modal-back-warn').classList.add('show');
+      return;
+    }
+    unlockedPage = currentPage - 1;
+    showPage(currentPage - 1);
+  });
+  document.getElementById('back-cancel').addEventListener('click', function(){
+    document.getElementById('modal-back-warn').classList.remove('show');
+  });
+  document.getElementById('back-confirm').addEventListener('click', function(){
+    document.getElementById('modal-back-warn').classList.remove('show');
+    resetEverything();
+    var target = currentPage - 1;
+    unlockedPage = target;
+    showPage(target);
+  });
+
+  // ================= FULL RESET =================
+  function resetEverything(){
+    runs = {}; history = [];
+    document.getElementById('run-results').innerHTML = '';
+    document.getElementById('demo-next').disabled = true;
+    document.getElementById('demo-next').textContent = 'Play both levels to reflect →';
+    frame.src = 'game.html';
+  }
+
+const escapeText=value=>String(value).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function renderResults(){const names=['Pink','Blue','Purple','Yellow'];const rows=[['Instruction',r=>escapeText(r.label)],['Food home',r=>r.food],['Completed trips with food',r=>`${r.tripsWithFood} of ${r.completed}`],['Still travelling at sunset',r=>r.trips-r.completed],['Time on empty paths',r=>`${Math.round(r.wasted)} ant-seconds`],['Food by path',r=>r.by.map((n,i)=>`${names[i]}: ${n}`).join(' · ')]];
+document.getElementById('run-results').innerHTML='<h3 style="margin-bottom:12px">Your latest days</h3><table><thead><tr><th>Observation</th><th>Level 1</th><th>Level 2</th></tr></thead><tbody>'+rows.map(([label,fn])=>`<tr><th scope="row">${label}</th><td>${runs[1]?fn(runs[1]):'Not played yet'}</td><td>${runs[2]?fn(runs[2]):'Not played yet'}</td></tr>`).join('')+'</tbody></table><p style="font-size:12px;margin-top:12px">Empty-path time adds together time spent by all ants on empty-handed trips, including unfinished trips toward exhausted patches. Trips still underway are excluded from completed returns. Replays start from the same garden and random seed.</p><details style="margin-top:14px"><summary>All your tries</summary><table><thead><tr><th>Try</th><th>Level</th><th>Instruction</th><th>Food home</th></tr></thead><tbody>'+history.map((r,i)=>`<tr><td>${i+1}</td><td>${r.level}</td><td>${escapeText(r.label)}</td><td>${r.food}</td></tr>`).join('')+'</tbody></table></details>';}
+
+window.addEventListener('message',function(e){
+ if(e.source !== frame.contentWindow || !e.data) return;
+ if(e.data.type === 'ant-height' && Number.isFinite(e.data.height)) frame.style.height=Math.max(700,Math.min(4000,e.data.height+24))+'px';
+ if(e.data.type === 'ant-results'){
+  runs=e.data.runs; history=e.data.history; renderResults();
+  var ready=!!(runs[1]&&runs[2]);
+  document.getElementById('demo-next').disabled=!ready;
+  document.getElementById('demo-next').textContent=ready?'Continue to reflection →':'Play both levels to reflect →';
+ }
+ if(e.data.type === 'ant-reflect') showPage(3);
+});
+frame.addEventListener('load',function(){frame.contentWindow.postMessage({type:'ant-visibility',visible:currentPage===2},'*');});
+
+  // ---------- INIT ----------
+  renderProgress();
+  document.getElementById('back-btn').disabled = true;
+
+})();
+</script>
+</body>
+</html>

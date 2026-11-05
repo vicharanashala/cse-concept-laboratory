@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ant Colony</title>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:linear-gradient(#fff9ee,#f1faee);color:#4a4036;
+ font-family:ui-rounded,"Nunito","Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.45;min-height:100vh}
+.app{max-width:1280px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.brand{font-weight:800;font-size:22px;display:flex;align-items:center;gap:8px}
+.steps{display:flex;gap:8px;flex-wrap:wrap}
+.step{border:1px solid #f0e2c8;background:#fff;border-radius:999px;padding:8px 14px;font:inherit;font-weight:700;color:#7a6a58;cursor:pointer;font-size:14px}
+.step.on{background:#ffe3bd;color:#5a3a18;border-color:#f6c98c}
+.step:disabled{opacity:.55;cursor:not-allowed}
+.card{background:#fff;border:1px solid #f1e6d3;border-radius:22px;box-shadow:0 6px 24px rgba(160,130,90,.10)}
+.hidden{display:none!important}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:16px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+
+/* intro */
+.intro{max-width:760px;margin:24px auto;padding:34px 30px;text-align:center}
+.intro h1{margin:0 0 6px;font-size:38px}
+.intro .lead{font-size:18px;color:#6b5d4e;margin:8px 0 22px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 28px;text-align:left}
+@media(max-width:640px){.how{grid-template-columns:1fr}}
+.how div{background:#fff8ec;border:1px solid #f4e4c6;border-radius:16px;padding:14px}
+.how b{display:block;margin-bottom:2px}
+.how span{font-size:26px}
+
+/* buttons */
+.btn{font:inherit;font-weight:800;border-radius:14px;padding:11px 18px;cursor:pointer;border:1px solid #ead9bc;background:#fff;color:#6a5640}
+.btn:hover{background:#fff6e8}
+.btn.primary{background:linear-gradient(#ffdcae,#ffc487);border-color:#f4b070;color:#5a3414}
+.btn.primary:hover{filter:brightness(1.04)}
+.btn.big{width:100%;padding:14px 18px;font-size:17px}
+.btn:disabled{background:#f4efe6;border-color:#eee6d8;color:#b9ad9c;cursor:not-allowed;filter:none}
+.btn.small{padding:6px 10px;font-size:13px;border-radius:10px}
+.btn.small.on{background:#ffe3bd;border-color:#f4b070;color:#5a3414}
+
+/* stage */
+.stage{padding:12px}
+.hud{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:10px}
+.pill{background:#fff6e6;border:1px solid #f4e3c3;border-radius:999px;padding:6px 12px;font-weight:800;font-size:15px;white-space:nowrap}
+.sunwrap{flex:1;min-width:180px}
+.suntrack{position:relative;height:16px;border-radius:999px;background:linear-gradient(90deg,#fff6c9,#ffe7bf 55%,#ffc9bb);border:1px solid #f4e0bd}
+.sun{position:absolute;top:-8px;font-size:24px;transform:translateX(-50%);transition:left .1s linear;filter:drop-shadow(0 1px 2px rgba(255,170,60,.5))}
+.sunlbl{display:flex;justify-content:space-between;font-size:12px;color:#9a8b78;margin-top:4px}
+.ctl{display:flex;gap:6px;flex-wrap:wrap}
+.canvas-wrap{position:relative;border-radius:18px;overflow:hidden;border:1px solid #e6f0d6}
+canvas{width:100%;height:auto;display:block}
+.hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:rgba(255,255,255,.92);border:1px solid #f4e3c3;border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px;color:#7a5a36;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:#8a7c6a;margin:10px 4px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+
+/* clue cards */
+.clue-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+@media(max-width:1100px){.clue-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.clue-row{grid-template-columns:1fr}}
+.cc{border:2px solid #f3e8d4;border-radius:16px;padding:10px 12px;background:#fffdf8;position:relative;transition:border-color .2s,background .2s}
+.cc.best{border-color:#f7cf6a;background:#fffbea}
+.cc-h{display:flex;align-items:center;gap:7px;font-weight:800;margin-bottom:6px}
+.dot{display:inline-block;width:13px;height:13px;border-radius:50%;flex:none}
+.spark{margin-left:auto;font-size:11px;background:#fff0b8;border-radius:999px;padding:2px 8px;color:#8a6410;display:none;white-space:nowrap}
+.cc.best .spark{display:inline-block}
+.cc-r{display:grid;grid-template-columns:78px 1fr 78px;align-items:center;gap:6px;font-size:12.5px;margin:3px 0}
+.cc-r em{font-style:normal;font-weight:800;text-align:right;color:#6a5a48}
+.bar{height:8px;background:#f4eee2;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .25s}
+
+/* side */
+.side{padding:18px}
+.side h2{margin:0 0 4px;font-size:22px}
+.side p{margin:6px 0 14px;color:#6b5d4e}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid #f0e4d0;border-radius:16px;padding:12px;margin-bottom:10px;cursor:pointer;background:#fffdf9}
+.opt:hover{background:#fff8ec}
+.opt.sel{border-color:#f4b070;background:#fff3e0}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .oi{font-size:22px;line-height:1.1;min-width:34px}
+.opt small{display:block;color:#8a7c6a;margin-top:2px;font-size:13px}
+.opt:focus-within{outline:3px solid #ffe0b0}
+.locked{opacity:.6;pointer-events:none}
+.cl{border:1px solid #f3e8d4;border-radius:14px;padding:10px;margin-bottom:9px;background:#fffdf9}
+.cl-q{font-size:13px;color:#8a7c6a;margin-bottom:6px}
+.cl-q b{color:#4a4036;font-size:15px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.seg button{font:inherit;font-size:12.5px;font-weight:800;border:1px solid #eadfca;background:#fff;border-radius:10px;padding:7px 4px;cursor:pointer;color:#7a6a58}
+.seg button.on{background:#ffe3bd;border-color:#f4b070;color:#5a3414}
+.sentence{background:#f2f9ff;border:1px solid #d8ecfb;border-radius:14px;padding:11px 13px;margin:12px 0;font-size:14.5px;color:#3f5a70}
+.sentence .tag{display:block;margin-top:6px;color:#8a6410;font-weight:800}
+.watch{display:flex;flex-direction:column;gap:6px;margin-top:10px;font-size:14px;color:#6b5d4e}
+
+/* results */
+.res h3{margin:0 0 4px;font-size:21px}
+.bign{font-size:16px;margin:2px 0 12px}
+.bign b{font-size:34px;color:#d9822b;margin-right:4px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 12px}
+th,td{padding:8px 8px;border-bottom:1px solid #f3eadb;text-align:left;vertical-align:top}
+th{font-size:12px;color:#9a8b78;text-transform:uppercase;letter-spacing:.04em}
+td.v{font-weight:800}
+td.na{color:#bdb2a2;font-weight:600}
+.src{display:flex;flex-direction:column;gap:5px;margin:6px 0 14px;font-size:13px}
+.src div{display:grid;grid-template-columns:64px 1fr 28px;gap:8px;align-items:center}
+.src .bar{height:10px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btnrow .btn{flex:1;min-width:140px}
+
+/* reflect */
+.reflect{max-width:900px;margin:0 auto;padding:26px}
+.reflect h2{margin:0 0 4px;font-size:28px}
+.sum{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.sum li{display:flex;gap:12px;align-items:flex-start;background:#fffaf0;border:1px solid #f4e6cb;border-radius:16px;padding:12px 14px}
+.sum .n{flex:none;width:26px;height:26px;border-radius:50%;background:#ffe3bd;color:#5a3414;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+.final{margin-top:24px;background:linear-gradient(135deg,#fff4dc,#ffeaf0);border:1px solid #f6dcc0;border-radius:20px;padding:22px;font-size:20px;font-weight:800;text-align:center;color:#6a4520}
+
+body{min-height:0;background:transparent;color:#1F2E37;font-family:Inter,"Segoe UI",sans-serif}
+.app{padding:8px;max-width:1400px}.brand{display:none}header{justify-content:center}
+.card{border-color:#D9E5F2;border-radius:16px;box-shadow:0 8px 24px rgba(23,50,77,.10)}
+.step.on,.seg button.on,.opt.sel{background:#EDF6FD;border-color:#4A9BD1;color:#2B6FA3}
+.btn.primary{background:linear-gradient(135deg,#4A9BD1,#2B6FA3);color:white;border-color:#2B6FA3}
+button:focus-visible{outline:3px solid #2B6FA3;outline-offset:3px}.side{min-width:0}
+.cc-r{grid-template-columns:72px minmax(12px,1fr) 88px;font-size:12px}.seg button{min-height:42px}.btn.small{min-height:36px}
+@media(max-width:520px){.app{padding:3px}.side{padding:14px}.hint{white-space:normal;border-radius:12px;font-size:12px;text-align:center}th,td{padding:7px 4px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">🐜 <span>The Ant Colony</span></div>
+    <nav class="steps" id="steps"></nav>
+  </header>
+
+  <!-- INTRO -->
+  <section id="intro" class="card intro">
+    <h1>🐜 The Ant Colony</h1>
+    <p class="lead">A garden, a hungry colony of 20 ants, and one long afternoon before sunset.<br>
+      Help the ants bring home as much food as they can.</p>
+    <div class="how">
+      <div><span>👀</span><b>Watch</b>The ants walk on their own. You can't move them one by one.</div>
+      <div><span>🧭</span><b>Choose</b>Tell the whole colony how to decide which path is worth following.</div>
+      <div><span>🔁</span><b>Compare</b>Play again with a different choice and see what changes.</div>
+    </div>
+    <button class="btn primary big" id="enter" style="max-width:340px">Enter the garden 🌼</button>
+  </section>
+
+  <!-- PLAY -->
+  <section id="play" class="hidden">
+    <div class="layout">
+      <div class="stage card">
+        <div class="hud">
+          <div class="pill">🍓 Food home: <span id="hFood">0</span></div>
+          <div class="sunwrap">
+            <div class="suntrack"><div class="sun" id="sun" style="left:3%">☀️</div></div>
+            <div class="sunlbl"><span>Morning</span><span id="hTime">Sunset in 1:30</span><span>🌇 Sunset</span></div>
+          </div>
+          <div class="ctl">
+            <button class="btn small" id="bPause" title="Pause or resume" aria-label="Pause or resume the day">⏸</button>
+            <button class="btn small" data-speed="1">1×</button>
+            <button class="btn small on" data-speed="2">2×</button>
+            <button class="btn small" data-speed="4">4×</button>
+            <button class="btn small" id="bSkip">⏩ Skip to sunset</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="c" role="img" aria-label="Ants travelling between a nest and four food patches. Level two provides text clues for every path."></canvas>
+          <div class="hint" id="hint">Choose an instruction, then press “Start the day”</div>
+        </div>
+        <div class="legend" id="legend"></div>
+        <div class="clue-row hidden" id="clueRow"></div>
+      </div>
+
+      <aside class="side card">
+        <h2 id="lvTitle"></h2>
+        <p id="lvText"></p>
+        <div id="controls"></div>
+        <div id="results" class="res hidden"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- REFLECT -->
+  <section id="reflect" class="card reflect hidden"></section>
+</div>
+
+<script>
+// ==SIM_START==
+const W = 960, H = 620;
+const NEST = { x: 110, y: 500 };
+const DAY_LEN = 90, ANT_COUNT = 20, ANT_SPEED = 55, PICK_TIME = 0.6;
+const SLOW = 0.3, ZONE = 34, MAX_FOOD = 45;
+const DECAY = 0.03, DEPOSIT = 0.2, MAX_SCENT = 1.5, STEP = 0.05, SEED = 20240611;
+
+const PATH_DEFS = [
+  { name: 'Pink',   color: '#f59ab1', food: 8,  scent: 0.9,
+    pts: [[110,500],[190,440],[270,380],[350,340]], obs: [] },
+  { name: 'Blue',   color: '#7dc4ee', food: 45, scent: 0.3,
+    pts: [[110,500],[230,500],[360,470],[470,400],[560,300],[680,260]], obs: [{t:.55,k:'stone'}] },
+  { name: 'Purple', color: '#b79af0', food: 45, scent: 0.2,
+    pts: [[110,500],[200,540],[400,560],[600,530],[760,440],[840,330]],
+    obs: [{t:.18,k:'puddle'},{t:.34,k:'stone'},{t:.5,k:'puddle'},{t:.66,k:'stone'},{t:.82,k:'puddle'}] },
+  { name: 'Yellow', color: '#f5c05a', food: 16, scent: 0.45,
+    pts: [[110,500],[100,400],[140,300],[130,200],[180,110]],
+    obs: [{t:.3,k:'stone'},{t:.55,k:'puddle'},{t:.8,k:'stone'}] }
+];
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+function posAt(p, d){
+  d = Math.max(0, Math.min(p.len, d));
+  let k = 1;
+  while (k < p.cum.length - 1 && p.cum[k] < d) k++;
+  const a = p.pts[k-1], b = p.pts[k], seg = p.cum[k] - p.cum[k-1];
+  const u = seg ? (d - p.cum[k-1]) / seg : 0;
+  return { x: a.x + (b.x-a.x)*u, y: a.y + (b.y-a.y)*u, ang: Math.atan2(b.y-a.y, b.x-a.x) };
+}
+
+const PATHS = PATH_DEFS.map((def, i) => {
+  const pts = def.pts.map(p => ({x:p[0], y:p[1]}));
+  const cum = [0];
+  for (let k = 1; k < pts.length; k++) cum.push(cum[k-1] + Math.hypot(pts[k].x-pts[k-1].x, pts[k].y-pts[k-1].y));
+  const p = { i, name: def.name, color: def.color, pts, cum, len: cum[cum.length-1], food: def.food, scent: def.scent, obs: [] };
+  p.obs = def.obs.map((o, j) => {
+    const d = o.t * p.len, pos = posAt(p, d), off = (j % 2 ? 6 : -6);
+    return { d, kind: o.k, x: pos.x - Math.sin(pos.ang)*off, y: pos.y + Math.cos(pos.ang)*off, r: o.k === 'stone' ? 11 : 15 };
+  });
+  return p;
+});
+const MIN_LEN = Math.min(...PATHS.map(p => p.len));
+const MAX_LEN = Math.max(...PATHS.map(p => p.len));
+const MAX_OBS = Math.max(...PATHS.map(p => p.obs.length));
+
+function slowAt(p, d){
+  for (const o of p.obs) if (Math.abs(d - o.d) < ZONE) return SLOW;
+  return 1;
+}
+
+function createSim(seed){
+  return {
+    t: 0, done: false, rng: mulberry32(seed), wantFx: false, fx: [],
+    collected: 0, trips: 0, completed: 0, tripsWithFood: 0, wasted: 0,
+    paths: PATHS.map(p => ({ i: p.i, food: p.food, scent: p.scent, visits: 0, delivered: 0 })),
+    ants: Array.from({length: ANT_COUNT}, (_, k) => ({
+      id: k, state: 'wait', timer: k * 0.45, path: -1, d: 0, carry: false, tripTime: 0, emptyTrip: false
+    }))
+  };
+}
+
+function pickWeighted(w, rng){
+  let s = 0; for (const x of w) s += x;
+  let r = rng() * s;
+  for (let i = 0; i < w.length; i++){ r -= w[i]; if (r <= 0) return i; }
+  return w.length - 1;
+}
+
+function makeL1Chooser(kind){
+  return function(sim){
+    const P = sim.paths, rng = sim.rng;
+    if (kind === 'strong')  return pickWeighted(P.map(p => Math.pow(p.scent, 4) + 0.0005), rng);
+    if (kind === 'explore') return pickWeighted(P.map(p => 1 / Math.pow(1 + p.visits, 0.5)), rng);
+    // mixed
+    if (rng() < 0.2) return Math.floor(rng() * P.length);
+    return pickWeighted(P.map(p => Math.pow(p.scent, 2) + 0.0005), rng);
+  };
+}
+
+function clueValues(sim, i){
+  const p = PATHS[i], s = sim.paths[i];
+  return {
+    smell: Math.min(1, s.scent),
+    near:  1 - 0.85 * (p.len - MIN_LEN) / (MAX_LEN - MIN_LEN),
+    food:  Math.min(1, s.food / MAX_FOOD),
+    easy:  1 - p.obs.length / (MAX_OBS + 1)
+  };
+}
+function scoreOf(sim, i, w){
+  const v = clueValues(sim, i);
+  const tot = w.smell + w.near + w.food + w.easy;
+  if (!tot) return 0;
+  return (w.smell*v.smell + w.near*v.near + w.food*v.food + w.easy*v.easy) / tot;
+}
+function makeL2Chooser(w){
+  return function(sim){
+    const n = sim.paths.length;
+    if (!(w.smell + w.near + w.food + w.easy) || sim.rng() < 0.03) return Math.floor(sim.rng() * n);
+    return pickWeighted(sim.paths.map((_, i) => Math.pow(scoreOf(sim, i, w), 5) + 0.01), sim.rng);
+  };
+}
+
+function stepSim(sim, dt, choose){
+  if (sim.done) return;
+  dt = Math.min(dt, DAY_LEN - sim.t);
+  sim.t = Math.min(DAY_LEN, sim.t + dt);
+  const dec = Math.exp(-DECAY * dt);
+  for (const p of sim.paths) p.scent *= dec;
+  for (const a of sim.ants){
+    if (a.state === 'wait' || a.state === 'rest'){
+      a.timer -= dt;
+      if (a.timer <= 0){
+        const idx = choose(sim);
+        a.path = idx; a.d = 0; a.state = 'out'; a.carry = false;
+        a.tripTime = 0; a.emptyTrip = false;
+        sim.paths[idx].visits++; sim.trips++;
+      }
+    } else if (a.state === 'out'){
+      const P = PATHS[a.path];
+      a.tripTime += dt;
+      a.d += ANT_SPEED * slowAt(P, a.d) * dt;
+      if (a.d >= P.len){ a.d = P.len; a.state = 'pick'; a.timer = PICK_TIME; }
+    } else if (a.state === 'pick'){
+      a.tripTime += dt;
+      a.timer -= dt;
+      if (a.timer <= 0){
+        const s = sim.paths[a.path];
+        if (s.food > 0){ s.food--; a.carry = true; }
+        else { a.carry = false; a.emptyTrip = true; if (sim.wantFx) sim.fx.push({kind:'empty', path:a.path}); }
+        a.state = 'back';
+      }
+    } else if (a.state === 'back'){
+      const P = PATHS[a.path];
+      a.tripTime += dt;
+      a.d -= ANT_SPEED * slowAt(P, a.d) * dt;
+      if (a.d <= 0){
+        a.d = 0; sim.completed++;
+        if (a.carry){
+          sim.collected++; sim.tripsWithFood++; sim.paths[a.path].delivered++;
+          sim.paths[a.path].scent = Math.min(MAX_SCENT, sim.paths[a.path].scent + DEPOSIT);
+          if (sim.wantFx) sim.fx.push({kind:'plus'});
+        } else {
+          sim.wasted += a.tripTime;
+        }
+        a.carry = false; a.state = 'rest'; a.timer = 0.3;
+      }
+    }
+  }
+  if (sim.t >= DAY_LEN){ sim.done = true; finishSim(sim); }
+}
+
+function finishSim(sim){
+  // ants still walking to a path that has run out of food were wasting their day too
+  for (const a of sim.ants){
+    if ((a.state === 'out' || a.state === 'pick' || a.state === 'back') && !a.carry && sim.paths[a.path].food <= 0)
+      sim.wasted += a.tripTime;
+  }
+}
+// ==SIM_END==
+
+/* ================= UI ================= */
+const $ = s => document.querySelector(s);
+const clueDefs = [
+  { key:'smell', icon:'👃', name:'Smell',      q:'Is the scent strong or weak?' },
+  { key:'near',  icon:'📏', name:'Distance',   q:'Is the food near or far?' },
+  { key:'food',  icon:'🍓', name:'Food',       q:'Is there plenty of food or very little?' },
+  { key:'easy',  icon:'🪨', name:'Difficulty', q:'Is the path clear or blocked?' }
+];
+const L1opts = [
+  { id:'strong',  icon:'👃',  title:'Follow the strongest smell',             desc:'Ants strongly prefer paths with stronger smells, but may try others.' },
+  { id:'explore', icon:'🧭',  title:'Explore unfamiliar paths',               desc:'Ants prefer paths that few ants have tried yet.' },
+  { id:'mixed',   icon:'👃🧭', title:'Follow a smell, but occasionally explore', desc:'Most ants follow a smell. A few wander off to look around.' }
+];
+
+const S = {
+  screen:'intro', level:1, running:false, paused:false, speed:2,
+  sim:null, chooser:null, l1:null, l2:{smell:1, near:0, food:0, easy:0},
+  runs:{1:null, 2:null}, history:[]
+};
+let T = 0, acc = 0;
+
+/* ---------- decor ---------- */
+const dpr = Math.min(2, window.devicePixelRatio || 1);
+const cv = $('#c'); cv.width = W*dpr; cv.height = H*dpr;
+const ctx = cv.getContext('2d');
+const BG = document.createElement('canvas'); BG.width = W*dpr; BG.height = H*dpr;
+
+function distToPath(x, y, p){
+  let best = 1e9;
+  for (let k = 1; k < p.pts.length; k++){
+    const a = p.pts[k-1], b = p.pts[k], dx = b.x-a.x, dy = b.y-a.y;
+    const u = Math.max(0, Math.min(1, ((x-a.x)*dx + (y-a.y)*dy) / (dx*dx+dy*dy)));
+    best = Math.min(best, Math.hypot(x-(a.x+dx*u), y-(a.y+dy*u)));
+  }
+  return best;
+}
+const drng = mulberry32(7);
+const flowers = [];
+const petalCols = ['#ffc2d4','#fff0a8','#d9c8ff','#ffffff','#ffd2a6','#bfe3ff'];
+while (flowers.length < 34){
+  const x = 20 + drng()*(W-40), y = 20 + drng()*(H-40);
+  if (PATHS.every(p => distToPath(x, y, p) > 34) && Math.hypot(x-NEST.x, y-NEST.y) > 70)
+    flowers.push({x, y, c: petalCols[Math.floor(drng()*petalCols.length)], ph: drng()*6.28, s: 0.8 + drng()*0.5});
+}
+const tufts = [];
+for (let i = 0; i < 160; i++) tufts.push({x: drng()*W, y: drng()*H, s: 4 + drng()*5});
+
+function buildBG(){
+  const g = BG.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
+  const gr = g.createLinearGradient(0,0,0,H);
+  gr.addColorStop(0,'#eaf7dc'); gr.addColorStop(1,'#e0f2cf');
+  g.fillStyle = gr; g.fillRect(0,0,W,H);
+  g.strokeStyle = '#cde7b6'; g.lineWidth = 1.6; g.lineCap = 'round';
+  for (const t of tufts){
+    g.beginPath();
+    g.moveTo(t.x, t.y); g.lineTo(t.x-2, t.y-t.s);
+    g.moveTo(t.x, t.y); g.lineTo(t.x+2, t.y-t.s*1.1);
+    g.moveTo(t.x, t.y); g.lineTo(t.x, t.y-t.s*1.3);
+    g.stroke();
+  }
+  // dirt paths
+  g.lineJoin = 'round'; g.lineCap = 'round';
+  for (const [w, col] of [[34,'#ecddbf'],[25,'#f8edd6']]){
+    g.strokeStyle = col; g.lineWidth = w;
+    for (const p of PATHS){
+      g.beginPath(); g.moveTo(p.pts[0].x, p.pts[0].y);
+      for (const q of p.pts.slice(1)) g.lineTo(q.x, q.y);
+      g.stroke();
+    }
+  }
+  // obstacles
+  for (const p of PATHS) for (const o of p.obs){
+    if (o.kind === 'stone'){
+      g.fillStyle = 'rgba(120,110,100,.12)'; g.beginPath(); g.ellipse(o.x+2, o.y+4, o.r+2, o.r*0.75, 0, 0, 7); g.fill();
+      const sg = g.createRadialGradient(o.x-3, o.y-4, 2, o.x, o.y, o.r+2);
+      sg.addColorStop(0,'#eef0f3'); sg.addColorStop(1,'#cfd4da');
+      g.fillStyle = sg; g.strokeStyle = '#bcc3cb'; g.lineWidth = 1.2;
+      g.beginPath(); g.ellipse(o.x, o.y, o.r, o.r*0.8, 0.4, 0, 7); g.fill(); g.stroke();
+    } else {
+      g.fillStyle = '#c6e6f8'; g.strokeStyle = '#a9d4ee'; g.lineWidth = 1.5;
+      g.beginPath(); g.ellipse(o.x, o.y, o.r+4, o.r*0.7, 0.2, 0, 7); g.fill(); g.stroke();
+      g.strokeStyle = '#eaf7ff'; g.lineWidth = 2;
+      g.beginPath(); g.ellipse(o.x-3, o.y-2, o.r*0.5, o.r*0.25, 0.2, 3.4, 5.4); g.stroke();
+    }
+  }
+  // nest
+  g.fillStyle = 'rgba(120,90,50,.12)'; g.beginPath(); g.ellipse(NEST.x+3, NEST.y+8, 50, 30, 0, 0, 7); g.fill();
+  const ng = g.createRadialGradient(NEST.x-8, NEST.y-10, 4, NEST.x, NEST.y, 48);
+  ng.addColorStop(0,'#f6e3c0'); ng.addColorStop(1,'#deba86');
+  g.fillStyle = ng; g.strokeStyle = '#cfa874'; g.lineWidth = 1.5;
+  g.beginPath(); g.ellipse(NEST.x, NEST.y, 44, 30, 0, 0, 7); g.fill(); g.stroke();
+  g.fillStyle = '#9b7550'; g.beginPath(); g.ellipse(NEST.x, NEST.y+2, 13, 8, 0, 0, 7); g.fill();
+  g.fillStyle = '#6d4f33'; g.font = '800 13px ui-rounded,system-ui,sans-serif'; g.textAlign = 'center';
+  g.fillText('Nest', NEST.x, NEST.y + 52);
+}
+buildBG();
+
+/* ---------- drawing ---------- */
+const foodCols = ['#ff8fa3','#ffb36b','#ff9bd0','#ffcf6b'];
+const parts = [];
+
+function drawAnt(x, y, a, carry, seed){
+  ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.scale(1.25, 1.25);
+  const w = Math.sin(T*16 + seed*2) * 1.3;
+  ctx.strokeStyle = '#8c6a52'; ctx.lineWidth = 0.9; ctx.lineCap = 'round';
+  ctx.beginPath();
+  [-2.2, 0, 2.2].forEach((dx, i) => {
+    const s = (i % 2 ? 1 : -1) * w;
+    ctx.moveTo(dx, 0); ctx.lineTo(dx + s, 5);
+    ctx.moveTo(dx, 0); ctx.lineTo(dx - s, -5);
+  });
+  ctx.stroke();
+  ctx.fillStyle = '#7d5539';
+  ctx.beginPath(); ctx.ellipse(-5.2, 0, 3.8, 2.8, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-0.2, 0, 2.5, 2.1, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.arc(4.2, 0, 2.3, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(5.5, -1); ctx.lineTo(8, -3); ctx.moveTo(5.5, 1); ctx.lineTo(8, 3); ctx.stroke();
+  if (carry){ ctx.fillStyle = '#ff7f96'; ctx.beginPath(); ctx.arc(8.4, 0, 3, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.beginPath(); ctx.arc(7.6, -1, 0.9, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+
+function polyline(p){
+  ctx.beginPath(); ctx.moveTo(p.pts[0].x, p.pts[0].y);
+  for (const q of p.pts.slice(1)) ctx.lineTo(q.x, q.y);
+}
+
+function promisingIndex(){
+  if (S.level !== 2) return -1;
+  const w = S.l2;
+  if (!(w.smell + w.near + w.food + w.easy)) return -1;
+  let best = -1, bs = -1;
+  S.sim.paths.forEach((s, i) => {
+    if (s.food <= 0) return;
+    const sc = scoreOf(S.sim, i, w);
+    if (sc > bs){ bs = sc; best = i; }
+  });
+  return best;
+}
+
+function draw(){
+  const sim = S.sim;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.drawImage(BG, 0, 0, W, H);
+
+  // scent trails
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  for (const p of PATHS){
+    const s = Math.min(1, sim.paths[p.i].scent);
+    if (s < 0.03) continue;
+    ctx.setLineDash([]); ctx.strokeStyle = `rgba(200,165,245,${0.10 + 0.38*s})`; ctx.lineWidth = 6 + 16*s;
+    polyline(p); ctx.stroke();
+    ctx.setLineDash([1, 11]); ctx.lineDashOffset = T * 14;
+    ctx.strokeStyle = `rgba(150,100,225,${0.25 + 0.6*s})`; ctx.lineWidth = 3 + 4*s;
+    polyline(p); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // food + flags
+  const prom = promisingIndex();
+  for (const p of PATHS){
+    const end = p.pts[p.pts.length-1], rem = sim.paths[p.i].food;
+    if (p.i === prom){
+      const pr = 30 + Math.sin(T*3)*3;
+      ctx.strokeStyle = 'rgba(247,200,80,.85)'; ctx.lineWidth = 3; ctx.setLineDash([6,6]);
+      ctx.beginPath(); ctx.arc(end.x, end.y, pr, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      ctx.font = '16px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('✨', end.x - 28, end.y - 24);
+    }
+    const n = Math.min(16, Math.ceil(rem / 3));
+    for (let k = 0; k < n; k++){
+      const a = k*2.399963, r = 3 + Math.sqrt(k)*4.4;
+      ctx.fillStyle = foodCols[k % 4];
+      ctx.beginPath(); ctx.arc(end.x + Math.cos(a)*r, end.y + Math.sin(a)*r*0.8, 3.6 + (k%3)*0.45, 0, 7); ctx.fill();
+    }
+    if (rem <= 0){
+      ctx.strokeStyle = 'rgba(160,140,120,.55)'; ctx.lineWidth = 2; ctx.setLineDash([3,5]);
+      ctx.beginPath(); ctx.arc(end.x, end.y, 13, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    }
+    // flag
+    const fx = end.x + 22, fy = end.y - 4;
+    ctx.strokeStyle = '#a58a6c'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 30); ctx.stroke();
+    ctx.fillStyle = p.color;
+    ctx.beginPath(); ctx.moveTo(fx, fy-30); ctx.lineTo(fx + 20 + Math.sin(T*4+p.i)*1.5, fy-24); ctx.lineTo(fx, fy-17); ctx.closePath(); ctx.fill();
+    ctx.font = '800 12px ui-rounded,system-ui,sans-serif'; ctx.textAlign = 'left';
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.strokeText(p.name, fx + 6, fy + 12);
+    ctx.fillStyle = '#6a5640'; ctx.fillText(p.name, fx + 6, fy + 12);
+  }
+
+  // ants
+  for (const a of sim.ants){
+    if (a.state === 'wait' || a.state === 'rest') continue;
+    const P = PATHS[a.path], pos = posAt(P, a.d);
+    const lane = (((a.id * 7) % 5) - 2) * 2.4;
+    const x = pos.x - Math.sin(pos.ang)*lane, y = pos.y + Math.cos(pos.ang)*lane;
+    const ang = a.state === 'back' ? pos.ang + Math.PI : pos.ang;
+    drawAnt(x, y, ang, a.carry, a.id);
+  }
+
+  // flowers & butterflies (decor)
+  for (const f of flowers){
+    const sw = Math.sin(T*1.6 + f.ph) * 0.8;
+    ctx.fillStyle = f.c;
+    for (let k = 0; k < 5; k++){
+      const a = k*1.2566 + sw*0.2;
+      ctx.beginPath(); ctx.arc(f.x + Math.cos(a)*4*f.s, f.y + Math.sin(a)*4*f.s, 3*f.s, 0, 7); ctx.fill();
+    }
+    ctx.fillStyle = '#ffd966'; ctx.beginPath(); ctx.arc(f.x, f.y, 2.3*f.s, 0, 7); ctx.fill();
+  }
+  const bc = ['#ffc8dd','#cde4ff','#fff3b0'];
+  for (let b = 0; b < 3; b++){
+    const bx = W/2 + Math.cos(T*0.22 + b*2.1)*(300 + b*50) , by = 170 + b*120 + Math.sin(T*0.35 + b)*70;
+    const fl = Math.abs(Math.sin(T*9 + b)) ;
+    ctx.fillStyle = bc[b];
+    ctx.beginPath(); ctx.ellipse(bx-5, by, 6*fl+1, 7, -0.4, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(bx+5, by, 6*fl+1, 7, 0.4, 0, 7); ctx.fill();
+    ctx.fillStyle = '#8c7a68'; ctx.fillRect(bx-0.8, by-5, 1.6, 10);
+  }
+
+  // particles
+  for (const e of sim.fx.splice(0)){
+    if (e.kind === 'plus') parts.push({txt:'+1', x:NEST.x, y:NEST.y-26, c:'#4fa564', life:1});
+    else { const end = PATHS[e.path].pts[PATHS[e.path].pts.length-1]; parts.push({txt:'nothing left!', x:end.x, y:end.y-34, c:'#c0707f', life:1.4}); }
+  }
+  for (let i = parts.length-1; i >= 0; i--){
+    const q = parts[i]; q.life -= 0.016; q.y -= 0.5;
+    if (q.life <= 0){ parts.splice(i,1); continue; }
+    ctx.globalAlpha = Math.min(1, q.life); ctx.fillStyle = q.c; ctx.textAlign = 'center';
+    ctx.font = '800 14px ui-rounded,system-ui,sans-serif'; ctx.fillText(q.txt, q.x, q.y); ctx.globalAlpha = 1;
+  }
+  if (parts.length > 40) parts.splice(0, parts.length - 40);
+
+  // sunset tint
+  const prog = Math.min(1, sim.t / DAY_LEN);
+  ctx.fillStyle = `rgba(255,190,150,${0.30 * Math.pow(prog, 1.7)})`; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = `rgba(255,170,190,${0.12 * Math.pow(prog, 2.5)})`; ctx.fillRect(0, 0, W, H*0.5);
+}
+
+/* ---------- HUD ---------- */
+function fmt(sec){ sec = Math.max(0, Math.ceil(sec)); return Math.floor(sec/60) + ':' + String(sec%60).padStart(2,'0'); }
+function updateHud(){
+  const sim = S.sim;
+  $('#hFood').textContent = sim.collected;
+  $('#sun').style.left = (3 + 94 * Math.min(1, sim.t/DAY_LEN)) + '%';
+  $('#hTime').textContent = 'Sunset in ' + fmt(DAY_LEN - sim.t);
+}
+
+/* ---------- clue cards ---------- */
+function buildCards(){
+  $('#clueRow').innerHTML = PATHS.map(p => `
+    <div class="cc" data-i="${p.i}">
+      <div class="cc-h"><span class="dot" style="background:${p.color}"></span>${p.name} path<span class="spark">✨ Looks promising</span></div>
+      ${['smell','dist','food','easy'].map(k => `
+        <div class="cc-r"><span>${{smell:'👃 Smell',dist:'📏 Distance',food:'🍓 Food',easy:'🪨 Path'}[k]}</span>
+        <div class="bar"><i data-b="${k}" style="background:${p.color}"></i></div><em data-t="${k}"></em></div>`).join('')}
+    </div>`).join('');
+}
+let lastCard = 0;
+function updateCards(force){
+  const now = performance.now();
+  if (!force && now - lastCard < 180) return; lastCard = now;
+  const prom = promisingIndex();
+  document.querySelectorAll('.cc').forEach(el => {
+    const i = +el.dataset.i, p = PATHS[i], s = S.sim.paths[i];
+    const sm = Math.min(1, s.scent);
+    const set = (k, w, t) => { el.querySelector(`[data-b="${k}"]`).style.width = Math.round(w*100) + '%'; el.querySelector(`[data-t="${k}"]`).textContent = t; };
+    set('smell', sm, sm < 0.3 ? 'Weak' : sm < 0.6 ? 'Medium' : 'Strong');
+    set('dist', p.len/MAX_LEN, p.len < 350 ? 'Near' : p.len < 700 ? 'Medium' : 'Far');
+    set('food', s.food/MAX_FOOD, s.food <= 0 ? 'None left' : s.food <= 10 ? 'Very little' : s.food <= 25 ? 'Some' : 'Plenty');
+    set('easy', p.obs.length/MAX_OBS, p.obs.length <= 1 ? 'Clear' : p.obs.length <= 3 ? 'Some obstacles' : 'Blocked');
+    el.classList.toggle('best', i === prom);
+  });
+}
+
+/* ---------- screens / nav ---------- */
+function renderSteps(){
+  const items = [
+    {id:'1', label:'1 · Follow the Smell', ok:true},
+    {id:'2', label:'2 · Think Before You Follow', ok: !!S.runs[1]},
+    {id:'3', label:'3 · Look Back', ok: !!(S.runs[1] && S.runs[2])}
+  ];
+  $('#steps').innerHTML = S.screen === 'intro' ? '' : items.map(it => {
+    const on = (it.id === '3' && S.screen === 'reflect') || (S.screen === 'play' && S.level === +it.id);
+    return `<button class="step ${on?'on':''}" data-go="${it.id}" ${it.ok?'':'disabled'}>${it.ok?'':'🔒 '}${it.label}</button>`;
+  }).join('');
+  document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
+}
+function show(id){
+  S.screen = id;
+  for (const s of ['intro','play','reflect']) $('#'+s).classList.toggle('hidden', s !== id);
+  renderSteps();
+}
+function go(n){
+  S.running = false; S.paused = false; $('#bPause').textContent = '⏸';
+  if (n === 3 && !(S.runs[1] && S.runs[2])) return;
+  if (n === 3 && window.parent !== window){ window.parent.postMessage({type:'ant-reflect'}, '*'); return; }
+  if (n === 3){ renderReflect(); show('reflect'); window.scrollTo(0,0); return; }
+  S.level = n; resetSim(); setupLevel(); show('play'); window.scrollTo(0,0);
+}
+function resetSim(){
+  S.sim = createSim(SEED); S.sim.wantFx = true; parts.length = 0;
+  S.running = false; acc = 0;
+}
+
+function setupLevel(){
+  $('#results').classList.add('hidden'); $('#controls').classList.remove('hidden');
+  $('#hint').classList.remove('hidden');
+  const l1 = S.level === 1;
+  $('#lvTitle').textContent = l1 ? 'Level 1 · Follow the Smell' : 'Level 2 · Think Before You Follow';
+  $('#lvText').textContent = l1
+    ? 'Ants that find food strengthen a smell trail when they bring food home. Other ants are drawn to stronger trails. Choose how the colony should decide where to go.'
+    : 'The same garden, the same ants, the same starting moment. This time you can see more about every path. Choose which clues the ants should pay attention to.';
+  $('#clueRow').classList.toggle('hidden', l1);
+  $('#hint').textContent = l1 ? 'Choose an instruction, then press “Start the day”' : 'Choose your clues, then press “Start the day”';
+  $('#legend').innerHTML = (l1
+    ? '<span>🟣 A glowing trail = a smell. Thicker glow = stronger smell.</span>'
+    : '<span>🟣 Glow = smell on the trail.</span>') +
+    PATHS.map(p => `<span><i style="background:${p.color}"></i>${p.name} path</span>`).join('');
+  if (!l1) buildCards();
+  renderControls();
+  updateCards(true);
+}
+
+/* ---------- controls ---------- */
+function buildSentence(w){
+  const on = clueDefs.filter(c => w[c.key] > 0), off = clueDefs.filter(c => w[c.key] === 0);
+  if (!on.length) return {text:'Choose at least one clue for the ants to pay attention to.', tag:''};
+  const good = {smell:'a strong smell', near:'a short trip', food:'plenty of food', easy:'an easy, clear route'};
+  const meh = {smell:'the smell is weaker', near:'the trip is longer', food:'there is less food', easy:'the route is bumpy'};
+  const list = (a, word) => a.length < 2 ? a[0] : a.slice(0,-1).join(', ') + ' ' + word + ' ' + a[a.length-1];
+  let t = 'Prefer paths with ' + list(on.map(c => good[c.key]), 'and');
+  if (off.length) t += ', even when ' + list(off.map(c => meh[c.key]), 'or');
+  t += '.';
+  const heavy = on.filter(c => w[c.key] >= 3);
+  if (heavy.length && heavy.length < on.length) t += ' Above all, look for ' + list(heavy.map(c => good[c.key]), 'and') + '.';
+  let tag = '';
+  if (w.food > 0 && (w.near > 0 || w.easy > 0)) tag = '🌟 Your ants are now looking for paths that are worth the journey.';
+  else if (on.length >= 3) tag = '🌟 Your ants are weighing several clues together.';
+  return {text:t, tag};
+}
+function clueSummary(w){
+  const names = {smell:'Smell', near:'Distance', food:'Food', easy:'Clear path'};
+  const a = Object.keys(names).filter(k => w[k] > 0).map(k => names[k] + (w[k] >= 3 ? ' (a lot)' : ''));
+  return a.length ? 'Clues: ' + a.join(', ') : 'No clues';
+}
+
+function renderControls(){
+  const c = $('#controls');
+  c.classList.remove('locked');
+  if (S.level === 1){
+    c.innerHTML = L1opts.map(o => `
+      <label class="opt ${S.l1===o.id?'sel':''}">
+        <input type="radio" name="l1" value="${o.id}" ${S.l1===o.id?'checked':''}>
+        <span class="oi">${o.icon}</span><span><b>${o.title}</b><small>${o.desc}</small></span>
+      </label>`).join('') +
+      `<button class="btn primary big" id="startBtn" ${S.l1?'':'disabled'}>Start the day ☀️</button>`;
+    c.querySelectorAll('input').forEach(i => i.onchange = () => { S.l1 = i.value; renderControls(); });
+  } else {
+    c.innerHTML = clueDefs.map(cl => `
+      <div class="cl" data-k="${cl.key}">
+        <div class="cl-q"><b>${cl.icon} ${cl.name}</b> : ${cl.q}</div>
+        <div class="seg">
+          ${[[0,'Ignore'],[1,'Matters'],[3,'Matters a lot']].map(([v,l]) =>
+            `<button data-v="${v}" class="${S.l2[cl.key]===v?'on':''}">${l}</button>`).join('')}
+        </div>
+      </div>`).join('') +
+      `<div class="sentence" id="sentence"></div>
+       <button class="btn primary big" id="startBtn">Start the day ☀️</button>`;
+    c.querySelectorAll('.cl').forEach(row => row.querySelectorAll('button').forEach(b => b.onclick = () => {
+      S.l2[row.dataset.k] = +b.dataset.v;
+      row.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      updateSentence(); updateCards(true);
+    }));
+    updateSentence();
+  }
+  $('#startBtn').onclick = startRun;
+}
+function updateSentence(){
+  const s = buildSentence(S.l2);
+  $('#sentence').innerHTML = s.text + (s.tag ? `<span class="tag">${s.tag}</span>` : '');
+  $('#startBtn').disabled = !(S.l2.smell + S.l2.near + S.l2.food + S.l2.easy);
+}
+
+/* ---------- run ---------- */
+function startRun(){
+  resetSim();
+  S.chooser = S.level === 1 ? makeL1Chooser(S.l1) : makeL2Chooser(Object.assign({}, S.l2));
+  S.runMeta = S.level === 1 ? L1opts.find(o => o.id === S.l1).title : clueSummary(S.l2);
+  S.running = true; S.paused = false; $('#bPause').textContent = '⏸';
+  $('#hint').classList.add('hidden');
+  const c = $('#controls'); c.classList.add('locked');
+  c.querySelectorAll('button,input').forEach(el => el.disabled = true);
+  $('#startBtn').disabled = true; $('#startBtn').textContent = 'The day has begun… 🐜';
+  if (S.level === 2) $('#sentence').innerHTML = $('#sentence').innerHTML;
+}
+function endRun(){
+  S.running = false; S.paused = false; $('#bPause').textContent = '⏸';
+  const sim = S.sim;
+  let bestI = 0; sim.paths.forEach((p, i) => { if (p.delivered > sim.paths[bestI].delivered) bestI = i; });
+  const run = {
+    level: S.level, food: sim.collected, trips: sim.trips, completed: sim.completed, tripsWithFood: sim.tripsWithFood, wasted: sim.wasted,
+    best: sim.collected ? bestI : -1, by: sim.paths.map(p => p.delivered), visits: sim.paths.map(p => p.visits), label: S.runMeta
+  };
+  S.runs[S.level] = run; S.history.push(run);
+  if (window.parent !== window) window.parent.postMessage({type:'ant-results', runs:S.runs, history:S.history}, '*');
+  renderSteps(); showResults(run);
+}
+function skipToSunset(){
+  if (!S.running) return;
+  S.sim.wantFx = false;
+  while (!S.sim.done) stepSim(S.sim, STEP, S.chooser);
+  endRun();
+}
+
+/* ---------- results ---------- */
+const dotName = i => i < 0 ? ':' : `<span class="dot" style="background:${PATHS[i].color}"></span> ${PATHS[i].name}`;
+function fmtWaste(s){ s = Math.round(s); return s < 60 ? s + ' s' : Math.floor(s/60) + ' min ' + (s%60) + ' s'; }
+function compareTable(){
+  const r1 = S.runs[1], r2 = S.runs[2];
+  const rows = [
+    ['Food collected', r => `${r.food}`],
+    ['Completed trips with food', r => `${r.tripsWithFood} of ${r.completed} returns`],
+    ['Still travelling at sunset', r => `${r.trips - r.completed}`],
+    ['Time wasted on empty paths', r => fmtWaste(r.wasted)],
+    ['Most successful path', r => dotName(r.best)]
+  ];
+  return `<table><tr><th>Observation</th><th>Level 1</th><th>Level 2</th></tr>` +
+    rows.map(([n, f]) => `<tr><td>${n}</td>
+      <td class="${r1?'v':'na'}">${r1 ? f(r1) : 'Not played yet'}</td>
+      <td class="${r2?'v':'na'}">${r2 ? f(r2) : 'Not played yet'}</td></tr>`).join('') + `</table>
+    <div style="font-size:12px;color:#9a8b78;margin-top:-6px">Latest run of each level. Unfinished trips are excluded from completed returns. “Time wasted” adds up empty-path time across all ants.</div>`;
+}
+function showResults(run){
+  const max = Math.max(1, ...run.by);
+  const l1 = run.level === 1;
+  $('#controls').classList.add('hidden');
+  const r = $('#results'); r.classList.remove('hidden');
+  r.innerHTML = `
+    <h3>🌇 Sunset!</h3>
+    <div class="bign"><b>${run.food}</b> pieces of food made it home.</div>
+    ${compareTable()}
+    <div style="font-weight:800;font-size:13px">Where the food came from</div>
+    <div class="src">${PATHS.map(p => `
+      <div><span><span class="dot" style="background:${p.color}"></span> ${p.name}</span>
+      <div class="bar"><i style="width:${run.by[p.i]/max*100}%;background:${p.color}"></i></div><b>${run.by[p.i]}</b></div>`).join('')}</div>
+    <div class="btnrow">
+      <button class="btn" id="again">🔁 Replay this level</button>
+      <button class="btn primary" id="next">${l1 ? 'Go to Level 2 →' : 'Look back & reflect →'}</button>
+    </div>`;
+  $('#again').onclick = () => { resetSim(); setupLevel(); };
+  $('#next').onclick = () => go(l1 ? 2 : 3);
+  $('#hint').classList.add('hidden');
+}
+
+/* ---------- reflect ---------- */
+function buildSummary(){
+  const r1 = S.runs[1], r2 = S.runs[2], pts = [];
+  const nm = i => i < 0 ? 'no path' : `<b>${PATHS[i].name}</b>`;
+  const pc = (n, d) => d ? Math.round(100 * n / d) : 0;
+
+  // 1. overall result
+  const diff = r2.food - r1.food;
+  pts.push(['The result', diff > 0
+    ? `Your colony brought home <b>${r2.food}</b> pieces in Level 2, compared with <b>${r1.food}</b> in Level 1. That is <b>${diff} more</b>.`
+    : diff < 0
+    ? `Your colony brought home <b>${r2.food}</b> pieces in Level 2, compared with <b>${r1.food}</b> in Level 1. Looking at more clues did not help this time, which is worth asking why.`
+    : `Both levels ended with <b>${r1.food}</b> pieces of food, even though the ants chose in different ways.`]);
+
+  // 2. efficiency / wasted time
+  const e1 = pc(r1.tripsWithFood, r1.completed), e2 = pc(r2.tripsWithFood, r2.completed);
+  pts.push(['Walking for nothing', `In Level 1, <b>${e1}%</b> of completed trips returned with food, and <b>${fmtWaste(r1.wasted)}</b> of ant time went on empty paths. In Level 2, it was <b>${e2}%</b> of completed trips and <b>${fmtWaste(r2.wasted)}</b> of ant time. ` +
+    (r2.wasted < r1.wasted ? 'Fewer ants walked to places with nothing left.' : r2.wasted > r1.wasted ? 'More ants walked to places with nothing left this time.' : 'The wasted time was about the same.')]);
+
+  // 3. the pink trap
+  const v1 = pc(r1.visits[0], r1.trips), v2 = pc(r2.visits[0], r2.trips);
+  pts.push(['The tempting trail', `The ${nm(0)} path smelled strongest at the start, yet it only held <b>${PATHS[0].food}</b> pieces of food. In Level 1, <b>${v1}%</b> of trips went there. In Level 2, <b>${v2}%</b> did. ` +
+    (v1 > v2 ? 'A strong smell told the ants where others had been, not how much was left.' : 'A strong smell alone never told the ants how much was left.')]);
+
+  // 4. best path
+  pts.push(['Where the food came from', r1.best === r2.best
+    ? `The ${nm(r1.best)} path gave the most food in both levels.`
+    : `The ${nm(r1.best)} path gave the most food in Level 1, but the ${nm(r2.best)} path led in Level 2. The ants shifted toward a different path.`]);
+
+  // 5. what changed
+  pts.push(['What changed', `The garden, the 20 ants, the food and the time were exactly the same in both levels. Only what the ants paid attention to changed. Your latest Level 2 instruction was: <b>${r2.label.replace('Clues: ', '')}</b>.`]);
+  return pts;
+}
+
+function renderReflect(){
+  const hist = S.history.map((h, i) => `<tr><td>${i+1}</td><td>Level ${h.level}</td><td>${h.label}</td><td class="v">${h.food}</td></tr>`).join('');
+  const sum = buildSummary().map(([t, x], i) =>
+    `<li><span class="n">${i+1}</span><div><b>${t}</b><br>${x}</div></li>`).join('');
+  $('#reflect').innerHTML = `
+    <h2>Look back at your days</h2>
+    <p style="color:#6b5d4e;margin-top:0">Same garden. Same 20 ants. Here is what happened.</p>
+    ${compareTable()}
+    <h3 style="margin:18px 0 8px">What happened</h3>
+    <ol class="sum">${sum}</ol>
+    <div style="font-weight:800;margin-top:14px">All your tries</div>
+    <table><tr><th>#</th><th>Level</th><th>Your instruction</th><th>Food home</th></tr>${hist}</table>
+    <div class="final">Did you give the ants more food, more time, or more information?
+      Or did you simply help them make better sense of what was already there?</div>
+    <div class="btnrow" style="margin-top:18px">
+      <button class="btn" id="back1">🔁 Play Level 1 again</button>
+      <button class="btn" id="back2">🔁 Play Level 2 again</button>
+    </div>`;
+  $('#back1').onclick = () => go(1); $('#back2').onclick = () => go(2);
+}
+
+/* ---------- wiring & loop ---------- */
+$('#enter').onclick = () => { go(1); };
+$('#bPause').onclick = () => { if (!S.running) return; S.paused = !S.paused; $('#bPause').textContent = S.paused ? '▶' : '⏸'; };
+document.querySelectorAll('[data-speed]').forEach(b => b.onclick = () => {
+  S.speed = +b.dataset.speed;
+  document.querySelectorAll('[data-speed]').forEach(x => x.classList.toggle('on', x === b));
+});
+$('#bSkip').onclick = skipToSunset;
+
+resetSim(); show('intro');
+if (window.parent !== window) go(1);
+window.addEventListener('message', e => {
+ if (e.source === window.parent && e.data?.type === 'ant-visibility') S.hostHidden = !e.data.visible;
+});
+new ResizeObserver(() => {
+ if (window.parent !== window) window.parent.postMessage({type:'ant-height', height:document.body.scrollHeight}, '*');
+}).observe(document.body);
+
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt;
+  if (S.screen === 'play'){
+    if (S.running && !S.paused && !S.hostHidden){
+      acc += dt * S.speed;
+      while (acc >= STEP && !S.sim.done){ stepSim(S.sim, STEP, S.chooser); acc -= STEP; }
+      if (S.sim.done) endRun();
+    }
+    draw(); updateHud();
+    if (S.level === 2) updateCards();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
