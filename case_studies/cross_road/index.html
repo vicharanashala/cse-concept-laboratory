@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Crossroads: Interactive Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDF3FA;--panel:#fff;--pb:#D9E5F2;--text:#1F2E37;--dim:#54666D;--faint:#93A5AB;--blue:#4A9BD1;--bd:#2B6FA3;--bl:#8FCBEF;--or:#A85D1A;--ob:#EA8C36;--ban:#22496B;--sb:#DCEAD8;--st:#274B26;--sbr:#4B7A4A;--eb:#FBE1DC;--et:#8A3420;--ebr:#D9714F}
+*{box-sizing:border-box}html,body{margin:0;background:linear-gradient(180deg,#FDF1E9,var(--bg) 400px);color:var(--text);font-family:Inter,sans-serif;min-height:100%}
+h1,h2,h3,button{font-family:Poppins,sans-serif}h2{margin:0 0 6px;font-size:26px}button{cursor:pointer}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+.btn{border:0;border-radius:999px;padding:12px 26px;font-size:15px;font-weight:600;transition:.15s}.btn:focus-visible,select:focus-visible,input:focus-visible,.opt:focus-visible{outline:3px solid var(--bd);outline-offset:2px}
+.p{background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;box-shadow:0 8px 20px rgba(43,111,163,.28)}.p:hover{transform:translateY(-2px)}
+.s{background:transparent;color:var(--bd);border:1.5px solid var(--blue)}.d{background:linear-gradient(135deg,#E0703F,#C1462A);color:#fff}
+.top{position:sticky;top:0;z-index:40;background:rgba(237,243,250,.92);border-bottom:1px solid var(--pb);padding:12px 20px;display:flex;align-items:center;gap:16px}
+.back{background:0;border:0;color:var(--dim);font:600 14px Inter;padding:8px 14px;border-radius:999px}.back.h{visibility:hidden}
+.prog{flex:1;display:flex;justify-content:center;align-items:center;gap:6px}.c{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--pb);background:#fff;color:var(--faint);display:flex;align-items:center;justify-content:center;font:700 12px Poppins}.c.a{background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;border:0}.c.dn{background:var(--bd);color:#fff;border:0}.ln{width:18px;height:2px;background:var(--pb)}
+.screen{display:none;padding:36px 22px 60px;justify-content:center;align-items:flex-start}.screen.on{display:flex}.in{width:100%;max-width:1040px;min-width:0}
+.card{background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:34px}.k{font:700 12px Poppins;letter-spacing:.13em;text-transform:uppercase;color:var(--or)}
+.call{background:#F5F9FD;border:1px solid var(--pb);border-radius:12px;padding:20px 22px}.def{border-left:4px solid var(--or);background:#fff}
+.narrow{max-width:660px;margin:0 auto}.card p{line-height:1.65;font-size:16px}.row{display:flex;justify-content:flex-end;margin-top:26px;gap:12px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}.tab{border:1.5px solid var(--pb);background:0;color:var(--dim);border-radius:999px;padding:8px 18px;font-weight:600;font-size:13.5px}.tab.on{border-color:var(--bd);color:var(--bd);background:rgba(74,155,209,.08)}
+.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:start}@media(max-width:820px){.grid{grid-template-columns:1fr}}.grid>*{min-width:0}
+.ban{background:var(--ban);color:#fff;border-radius:12px;padding:14px 18px;font-size:14.5px;line-height:1.5;margin-bottom:14px}
+.scene{display:grid;grid-template-columns:1fr 120px 112px;grid-template-areas:"he he he" "wy wy wy" ". rT lT" "rE xb rX" "lb rC lx";background:#fff;border:1px solid var(--pb);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.he{grid-area:he;display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap;margin-bottom:8px;font:700 12px Poppins;letter-spacing:.06em;text-transform:uppercase}.hg{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--bd)}.hg:last-child{color:var(--or)}
+.way{font:700 12px Inter;text-transform:none;letter-spacing:0;background:#EAF3FB;border:1px solid var(--blue);color:var(--bd);border-radius:999px;padding:3px 10px}.way.c{background:#FFF2E6;border-color:var(--ob);color:var(--or)}.way:empty{display:none}
+.why{grid-area:wy;min-height:64px;margin-bottom:10px;border:1.5px dashed var(--pb);background:#F5F9FD;border-radius:10px;padding:8px 12px;font-size:13px;line-height:1.4;color:var(--dim);display:flex;align-items:center}.why.on{border:1.5px solid var(--sbr);background:var(--sb);color:var(--st)}
+.rT{grid-area:rT;min-height:44px;background:linear-gradient(to bottom,#fff 50%,transparent 50%) 50% 0/3px 22px repeat-y,#5E6E7A;border-left:3px solid #fff;border-right:3px solid #fff}
+.lT,.lx,.lb{font:600 10.5px Inter;color:var(--dim);line-height:1.3}.lT{grid-area:lT;align-self:center;padding-left:8px}.lx{grid-area:lx;align-self:start;padding:8px 0 0 8px}.lb{grid-area:lb;align-self:start;padding:8px 10px 0 0;text-align:right;color:var(--or)}
+.rE,.rX{background:linear-gradient(to right,#fff 50%,transparent 50%) 0 50%/26px 3px repeat-x,#5E6E7A;border-top:3px solid #fff;border-bottom:3px solid #fff;min-height:112px;display:flex;align-items:center}.rE{grid-area:rE;min-width:0}.rX{grid-area:rX}
+.xb{grid-area:xb;background:#5E6E7A;min-height:112px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.rC{grid-area:rC;background:linear-gradient(to bottom,#fff 50%,transparent 50%) 50% 0/3px 26px repeat-y,#5E6E7A;border-left:3px solid #fff;border-right:3px solid #fff;min-height:170px}
+.q{display:flex;gap:6px;padding:6px 8px;width:100%}.rE .q{flex-direction:row-reverse;align-items:center;justify-content:flex-start}.rC .q{flex-direction:column;align-items:center}
+.v{position:relative;flex:1 1 0;max-width:64px;min-width:40px;text-align:center}.rC .v{flex:0 0 auto;width:64px;max-width:none}.v .i{display:inline-block;font-size:32px;line-height:1.1}.v.ve .i{transform:scaleX(-1);font-size:32px}.v.ve{max-width:76px;min-width:58px}.v.vc .i{transform:rotate(90deg)}
+.cap{display:block;background:#fff;border:1.5px solid var(--pb);border-radius:6px;padding:1px 3px;line-height:1.2;color:var(--text);margin-top:2px;font-size:10.5px}.cap b{display:block;font-size:10.5px}.cap i{display:block;font-style:normal;color:var(--dim);font-size:10px}
+.v.w1 .cap{border-color:var(--ob)}.v.w1 .cap i{color:var(--or);font-weight:700}.v.w2 .cap{background:var(--eb);border-color:var(--ebr);color:var(--et)}.v.w2 .cap i{color:var(--et);font-weight:700}
+.v.go .i{filter:drop-shadow(0 0 8px #2E8B57);animation:gw 1s ease}@keyframes gw{50%{filter:drop-shadow(0 0 16px #2E8B57)}}
+.v.pk{cursor:pointer}.v.pk .i{filter:drop-shadow(0 0 4px #2B6FA3)}.v.pk:hover .cap{border-color:var(--bd)}.v.pk:hover .i{filter:drop-shadow(0 0 10px #2B6FA3)}.v.pk:focus-visible{outline:3px solid var(--bd);outline-offset:2px;border-radius:8px}
+.v.pk{border:2px dashed var(--bd);border-radius:12px;background:rgba(74,155,209,.12);padding:3px 2px;animation:pk 1.4s ease-in-out infinite}.v.pk:after{content:"👆 Tap";display:block;font:700 10.5px Inter;color:var(--bd);margin-top:3px}.v.pk:hover{background:rgba(74,155,209,.28);transform:scale(1.06)}@keyframes pk{50%{box-shadow:0 0 0 5px rgba(74,155,209,.28)}}
+.alert{background:#F5F9FD;border:1px solid var(--pb);border-radius:10px;padding:8px 12px;font-size:13.5px;margin:0 0 6px;color:var(--dim)}.alert.w1{background:#FFF6EC;border-color:var(--ob);color:var(--or)}.alert.w2{background:var(--eb);border-color:var(--ebr);color:var(--et);font-weight:700}
+@media(max-width:600px){.scene{grid-template-columns:1fr 92px 68px}.v .i{font-size:26px}.v.ve{min-width:48px}.v.ve .i{font-size:26px}.cap,.cap b{font-size:9px}.lT,.lx,.lb{font-size:9.5px}}
+.paused .v,.paused .note{animation-play-state:paused}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px}.ctl select{font:600 13px Inter;color:var(--bd);background:#fff;border:1.5px solid var(--blue);border-radius:999px;padding:7px 12px}
+.dial{background:#fff;border:1px solid var(--pb);border-radius:12px;padding:12px 14px;margin-bottom:12px}.dial label{font-weight:600;font-size:14px}.dial input{width:100%;margin:8px 0 2px}.dial small{color:var(--dim);font-size:12.5px;line-height:1.4;display:block}
+.side{position:sticky;top:76px;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(23,50,77,.1);padding:20px}.sr{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--pb);font-size:14px}.sr span:first-child{color:var(--dim)}.sr span:last-child{font:700 14px Poppins;color:var(--bd)}
+.goal{font-size:13px;padding:7px 10px;border-radius:8px;margin-top:8px;background:#F5F9FD;color:var(--dim)}.goal.ok{background:var(--sb);color:var(--st)}.goal.no{background:var(--eb);color:var(--et)}
+.log{margin-top:14px;display:flex;flex-direction:column;gap:7px;max-height:210px;overflow-y:auto}.lg{background:#F5F9FD;border-radius:8px;padding:9px 11px;font-size:13px;line-height:1.4;color:var(--dim)}.lg.g{background:var(--sb);color:var(--st)}.lg.b{background:var(--eb);color:var(--et)}
+.qg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}@media(max-width:900px){.qg{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.qg{grid-template-columns:1fr}}
+.qc{background:#fff;border-radius:16px;box-shadow:0 8px 22px rgba(23,50,77,.1);padding:24px 20px;min-height:170px;display:flex;flex-direction:column;gap:12px;transition:.18s}.qc:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(74,155,209,.22)}.qc p{margin:0;font-size:15px;line-height:1.55}
+.bd{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px Poppins}.el{font:700 11.5px Poppins;letter-spacing:.1em;text-transform:uppercase;color:var(--or)}
+.fm{background:#EAF3FB;border:1px solid var(--pb);border-radius:14px;padding:26px;text-align:center;font:700 22px Poppins;color:var(--bd)}.fm small{display:block;font:400 13.5px Inter;color:var(--dim);margin-top:8px}
+.bars{background:#fff;border-radius:14px;box-shadow:0 8px 22px rgba(23,50,77,.08);padding:22px}.br{display:grid;grid-template-columns:140px 1fr;gap:12px;align-items:center;margin:10px 0;font-size:13px;color:var(--dim)}.bt{height:16px;background:#EAF2F9;border-radius:999px;overflow:hidden;margin-bottom:4px;min-width:0}.bt i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--bd))}.bt i.r{background:linear-gradient(90deg,#E4A98A,var(--ebr))}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:640px){.cmp{grid-template-columns:1fr}}.cc{border-radius:14px;padding:22px;text-align:center}.cn{background:var(--eb);border:1px solid var(--ebr)}.cs{background:#EAF3FB;border:1px solid var(--blue)}.cc b{display:block;font:700 26px Poppins;margin:4px 0}.cn b{color:var(--et)}.cs b{color:var(--bd)}.cc span{font-size:13.5px;color:var(--dim)}
+.sec{margin-bottom:22px}.mc{background:#fff;border-radius:14px;box-shadow:0 8px 22px rgba(23,50,77,.08);padding:20px;margin-bottom:14px}.mc p{margin:0 0 10px;font-size:15px}.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--pb);border-radius:10px;padding:10px 14px;margin-top:8px;font:500 14px Inter;color:var(--text)}.opt.ok{background:var(--sb);border-color:var(--sbr);color:var(--st)}.opt.no{background:var(--eb);border-color:var(--ebr);color:var(--et)}.fb{font-size:13.5px;margin-top:8px;color:var(--dim)}
+.mo{position:fixed;inset:0;background:rgba(31,46,55,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}.mo.on{display:flex}.md{background:#fff;border-radius:16px;padding:30px;max-width:420px;text-align:center}.md p{color:var(--dim);line-height:1.55}
+.cf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:90}.cf i{position:absolute;top:-20px;width:9px;height:14px;animation:fall linear forwards}@keyframes fall{to{transform:translateY(112vh) rotate(540deg);opacity:0}}
+.yo{background:#FFF7ED;border:1.5px solid var(--ob);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:600;line-height:1.45;margin-bottom:12px}
+.rp{position:fixed;top:78px;left:50%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;background:var(--sb);border:1.5px solid var(--sbr);color:var(--st);font:700 15px Poppins;border-radius:999px;padding:10px 22px;z-index:96;transition:.35s}.rp.on{transform:translate(-50%,0);opacity:1}
+.btn.glow,.tab.glow{animation:gl 1.3s infinite}@keyframes gl{50%{box-shadow:0 0 0 7px rgba(74,155,209,.22)}}
+.ban{position:relative}.ban.glow-box{animation:gl 1.3s infinite;outline:3px solid var(--ob)}
+.bpop{position:absolute;bottom:calc(100% + 12px);left:12px;right:12px;background:#FFF2E6;border:1.5px solid var(--ob);color:var(--text);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.45;z-index:5;cursor:pointer;animation:bp .3s ease}.bpop:after{content:"";position:absolute;top:100%;left:28px;border:8px solid transparent;border-top-color:var(--ob)}@keyframes bp{from{transform:scale(.92);opacity:.3}}
+.dopts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.do{border:1.5px solid var(--pb);background:#fff;border-radius:999px;padding:8px 14px;font:600 13px Inter;color:var(--dim)}.do.on{border-color:var(--bd);background:rgba(74,155,209,.12);color:var(--bd)}.do:focus-visible{outline:3px solid var(--bd);outline-offset:2px}
+.fc{background:#F5F9FD;border:1px solid var(--pb);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.5;margin:8px 0;color:var(--dim)}.fc b{color:var(--bd)}.fc .ok{color:var(--st);font-weight:700}.fc .no{color:var(--et);font-weight:700}
+.hist{background:#fff;border:1px solid var(--pb);border-radius:12px;padding:12px 14px;margin-top:12px;display:none}.hist h4{margin:0 0 8px;font:700 12px Poppins;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}.hs{display:flex;gap:6px;flex-wrap:wrap}.hc{width:44px;text-align:center;border-radius:8px;padding:4px 2px;font-size:20px;border:2px solid var(--pb)}.hc small{display:block;font-size:10px;color:var(--dim)}.hc.e{border-color:var(--blue)}.hc.c{border-color:var(--ob);background:#FFF6EC}.hist p{font-size:13.5px;color:var(--dim);margin:8px 0 0;line-height:1.5}
+.xe{font-size:34px}.xe.go{animation:xc 1.2s ease forwards}.xe.gov{animation:xcv 1.2s ease forwards}
+@keyframes xc{0%{transform:translateX(-130px) scaleX(-1);opacity:0}30%{opacity:1}50%{transform:translateX(0) scaleX(-1);opacity:1}100%{transform:translateX(130px) scaleX(-1);opacity:0}}
+@keyframes xcv{0%{transform:translateY(130px) rotate(90deg);opacity:0}30%{opacity:1}50%{transform:translateY(0) rotate(90deg);opacity:1}100%{transform:translateY(-130px) rotate(90deg);opacity:0}}
+.xt{font-size:12.5px;color:var(--dim);text-align:center;margin:6px 0 12px}.paused .xe{animation-play-state:paused}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,24px);opacity:0;pointer-events:none;background:#fff;border-radius:16px;box-shadow:0 16px 38px rgba(23,50,77,.2);padding:14px 20px;z-index:95;transition:.4s;max-width:calc(100vw - 32px);font-size:14px}.toast.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}.toast .btn{padding:8px 16px;font-size:13px;margin-left:8px}
+</style></head><body>
+<div class="top"><button class="back h" id="back">← Back</button><nav class="prog" id="prog"></nav><div style="width:70px"></div></div>
+
+<section class="screen on" id="s1"><div class="in"><div class="card narrow"><div class="k">A familiar problem</div><h2 style="margin-top:8px">You've seen this before</h2>
+<p>On a normal road, an ambulance's siren makes everyone pull over. That is fair, because seconds matter. At a busy counter, a VIP or a staff member gets served first, and the queue waits a little longer.</p>
+<p>Now imagine the VIPs never stop coming. Each time you are about to be served, someone more important arrives. Nobody refuses you. You are just never next.</p>
+<p>Picture that at a city crossroads in wartime: ambulances, fire trucks, bomb-disposal squads and army trucks go first, and ordinary drivers wait at the side. What happens to the driver at the front of that line?</p>
+<div class="row"><button class="btn p" data-go="2">Continue</button></div></div></div></section>
+
+<section class="screen" id="s2"><div class="in"><div class="card narrow"><div class="k">How to play</div><h2 style="margin-top:8px">You are the traffic controller</h2>
+<p><b>Goal:</b> keep emergency vehicles quick without leaving any ordinary driver waiting too long. One vehicle crosses per turn.</p>
+<div class="call"><ol style="margin:0;padding-left:20px;line-height:1.7">
+<li><b>Watch:</b> emergency vehicles always go first.</li>
+<li><b>Challenge 1:</b> tap who crosses each turn. Ordinary drivers can wait <b>9 turns</b> at most, emergency vehicles <b>4</b>.</li>
+<li><b>Challenge 2:</b> pick a <b>waiting bonus</b> rule and let it run.</li></ol></div>
+<div class="row"><button class="btn p" data-go="3">Begin</button></div></div></div></section>
+
+<section class="screen" id="s3"><div class="in" id="demo"><h2>Run the crossroads</h2>
+<div class="tabs"><button class="tab on" id="tg">Watch what happens</button><button class="tab" id="tf">Solve it yourself</button></div>
+<div class="grid"><div>
+<div class="ban" id="ban"></div>
+<div class="yo" id="yo"></div>
+<div class="dial" id="dialbox"><label>Waiting bonus: <b id="dv">0</b> points per turn waited</label><input type="hidden" id="dl" value="0"><div class="dopts" id="dopts"></div><div class="fc" id="fcst"></div><small>Every vehicle has a go-first score: emergency vehicles start at 5 and ordinary cars at 1, and the highest score crosses next. A waiting bonus adds points for every turn a vehicle has waited. Example: with a bonus of 1, a taxi that has waited 4 turns scores 1 + 4 = 5, the same as a brand-new ambulance.</small></div>
+<div class="scene" id="scene"><div class="he"><span class="hg">🚨 Emergency vehicles <span class="way" id="wayE"></span></span><span class="hg">🚗 Ordinary drivers <span class="way c" id="wayC"></span></span></div>
+<div class="why" id="why"></div>
+<div class="rT" aria-hidden="true"></div><div class="lT">⬆ Ordinary drivers leave this way</div>
+<div class="rE"><div class="q" id="qe"></div></div><div class="xb"><div class="xe" id="xe" aria-hidden="true">🚦</div></div><div class="rX" aria-hidden="true"></div>
+<div class="lb">Ordinary drivers wait on the side road ➜</div><div class="rC"><div class="q" id="qc"></div></div><div class="lx">⬆ Emergency vehicles leave this way</div></div>
+<div class="alert" id="alert"></div><div class="xt" id="xt">No vehicle has crossed yet</div>
+<div class="hist" id="hist"></div>
+<div class="ctl" id="ctl"><button class="btn p" id="auto">Auto-play</button><label for="sp" id="lsp" style="font-size:13px;font-weight:600;color:var(--dim)">Speed</label><select id="sp"><option value="6000">0.5x</option><option value="4000">0.75x</option><option value="3000" selected>1x</option><option value="2400">1.25x</option><option value="2000">1.5x</option><option value="1500">2x</option></select><button class="btn s" id="rs">Restart shift</button></div>
+</div><div class="side"><h3 style="margin:0 0 8px;font-size:16px">Live status</h3>
+<div class="sr"><span>Turn</span><span id="st">0 / 15</span></div><div class="sr"><span>Emergency vehicles crossed</span><span id="se">0</span></div><div class="sr"><span>Ordinary crossed</span><span id="sc">0</span></div><div class="sr"><span>Longest ordinary wait</span><span id="wc">0</span></div><div class="sr"><span>Longest emergency wait</span><span id="we">0</span></div>
+<div class="goal" id="g1"></div><div class="goal" id="g2"></div>
+<div class="log" id="log" aria-live="polite"></div></div></div>
+<div class="row"><button class="btn p" id="p3n" data-go="4">Next →</button></div></div></section>
+
+<section class="screen" id="s4"><div class="in"><div class="k">Reflect</div><h2 style="margin-top:8px">Think back on what just happened</h2><p style="color:var(--dim)">No right answers here. Just sit with these for a moment.</p><div class="qg" id="rq"></div><div class="row"><button class="btn p" data-go="5">Next</button></div></div></section>
+
+<section class="screen" id="s5"><div class="in"><div class="k">The reveal</div><h2 style="margin-top:8px">You were fixing starvation</h2>
+<div class="sec call def"><p style="margin:0 0 12px;line-height:1.7">Your crossroads was a computer. Vehicles were <b>tasks</b> waiting for one shared resource, such as the processor, and the green light was a turn to use it. Emergency vehicles were high-priority tasks, and ordinary cars were low-priority ones.</p>
+<p style="margin:0;line-height:1.7">When high-priority tasks keep arriving, a low-priority task can wait forever. That is <b>starvation</b>. In your shift, a few ordinary drivers slipped through between rounds, but one was left behind every time. In a real computer the high-priority work may never stop, and then the waiting task never runs. The fix is <b>aging</b>: the longer a task waits, the higher its priority grows, until its turn finally comes. In Challenge 1 you did this by hand, and in Challenge 2 the waiting bonus did it for you. Urgent work still goes first, but nothing waits forever.</p></div>
+<div class="sec fm">Score = base priority + (bonus × turns waited)<small>Base priority is the starting score, and the bonus is your aging dial.</small></div>
+<div class="sec bars"><h3 style="margin:0 0 10px;font-size:16px">Longest waits in the same 15-turn shift</h3><div id="bars"></div></div>
+<div class="sec cmp"><div class="cc cn"><div style="font-size:28px">🚫</div><b id="n1">-</b><span>Always serving the highest priority lets low-priority tasks wait with no limit.</span></div><div class="cc cs"><div style="font-size:28px">⏳</div><b id="n2">-</b><span>Aging gives every task a turn in the end, while urgent tasks still stay quick.</span></div></div>
+<div class="row"><button class="btn p" data-go="6">Next: Checkpoint →</button></div></div></section>
+
+<section class="screen" id="s6"><div class="in"><div class="k">Checkpoint</div><h2 style="margin-top:8px">Test what you learned</h2><p style="color:var(--dim)">Think through each exercise and apply what you learned.</p><div class="qg" id="ex"></div>
+<div class="row" style="justify-content:center"><a class="btn s" href="../../" style="text-decoration:none">Home</a><button class="btn d" id="rst">Restart the whole journey</button></div></div></section>
+
+<div class="mo" id="mo"><div class="md"><h3>Go back?</h3><p>Going back will lose your progress on this page. Are you sure?</p><div style="display:flex;gap:10px;justify-content:center"><button class="btn s" id="no">Stay here</button><button class="btn d" id="yes">Go back</button></div></div></div>
+<div class="cf" id="cf" aria-hidden="true"></div><div class="rp" id="rp" role="status"></div><div class="toast" id="toast" role="status"><b id="tt"></b> <button class="btn s" id="again">Play again</button><button class="btn p" id="nx">Next: What you learned →</button></div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},NAV=["Problem","Setup","Demo","Reflect","Concept","Checkpoint"],cur=1;
+function prog(){var h='';NAV.forEach(function(l,i){var n=i+1;h+='<span class="c '+(n==cur?'a':n<cur?'dn':'')+'">'+(n<cur?'✓':n)+'</span>'+(n<6?'<span class="ln"></span>':'')});$('prog').innerHTML=h}
+function go(n){if(n!=3)stopAuto();cur=n;document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});$('s'+n).classList.add('on');$('back').classList.toggle('h',n==1);prog();window.scrollTo(0,0);if(n==5)concept()}
+document.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){go(+b.dataset.go)}});
+function back(){var t=cur-1;if(t<=3)reset('g');go(t)}
+$('back').onclick=function(){cur==3?$('mo').classList.add('on'):back()};$('no').onclick=function(){$('mo').classList.remove('on')};$('yes').onclick=function(){$('mo').classList.remove('on');back()};
+
+/* ---- simulation engine ---- */
+var T=15,BE=5,BC=1,EI=[['🚑','Ambulance'],['🚒','Fire truck'],['🚓','Police car'],['🚛','Army truck'],['🚐','Bomb squad'],['🚔','Patrol car'],['🚙','SUV unit'],['🚓','Highway patrol'],['🚑','Medic van'],['🚒','Rescue truck']],CI=[['🚕','Taxi'],['🚌','Bus'],['🚙','Van'],['🚗','Car'],['🛵','Scooter'],['🛻','Pickup']];
+function arrivals(t,nc){var a=[],i;if(t==1){for(i=0;i<nc;i++)a.push({c:1,i:i})}if((t-1)%3==0&&t<=13){a.push({c:0,i:(t-1)/3*2});a.push({c:0,i:(t-1)/3*2+1})}return a}
+function score(v,t,b){return (v.c?BC:BE)+b*(t-v.at)}
+function pick(q,t,b){var best=null;q.forEach(function(v){if(!best)best=v;else{var s=score(v,t,b),r=score(best,t,b);if(s>r+1e-9||(Math.abs(s-r)<1e-9&&(t-v.at>t-best.at||(t-v.at==t-best.at&&!v.c&&best.c))))best=v}});return best}
+function sim(b,nc){nc=nc||5;var q=[],n=0,mc=0,me=0,id=0,w,v,t,k;for(t=1;t<=T;t++){arrivals(t,nc).forEach(function(a){q.push({id:id++,c:a.c,i:a.i,at:t,tag:a.c?CI[a.i]:EI[a.i]})});v=pick(q,t,b);if(v){w=t-v.at;if(v.c)mc=Math.max(mc,w);else me=Math.max(me,w);q.splice(q.indexOf(v),1)}}
+q.forEach(function(x){w=T-x.at+1;if(x.c)mc=Math.max(mc,w);else me=Math.max(me,w)});return {c:mc,e:me,left:q.filter(function(x){return x.c}).length}}
+
+/* ---- demo ---- */
+var mode='g',D=null,speed=3000,timer=null,tleft=0,tstart=0,tfn=null,autoOn=false,paused=false,atimer=null,gap=true,gen=0;
+function fresh(m){D={m:m,nc:m=='g'?6:5,t:0,q:[],id:0,ce:0,cc:0,mc:0,me:0,busy:false,done:false,cur:null}}
+function sched(fn,ms){tfn=fn;tleft=ms;tstart=Date.now();timer=setTimeout(function(){timer=null;tfn=null;fn()},ms)}
+function pauseT(){if(timer){clearTimeout(timer);timer=null;tleft-=Date.now()-tstart}}
+function resumeT(){if(tfn&&!timer){var f=tfn;tstart=Date.now();timer=setTimeout(function(){timer=null;tfn=null;f()},tleft)}}
+function clearT(){if(timer)clearTimeout(timer);timer=null;tfn=null}
+function lab(){$('auto').textContent=autoOn?'Pause':paused?'Resume':(D&&D.done?'Replay shift':(mode=='f'?'Play':'Auto-play'))}
+function stopAuto(){autoOn=false;paused=false;if(atimer){clearTimeout(atimer);atimer=null}$('s3').classList.remove('paused');resumeT();lab()}
+function bonus(){return mode=='g'?0:+$('dl').value}
+var DO=[[0,'Emergency always first'],[0.5,'Tiny bonus'],[0.75,'Small bonus'],[1,'Medium bonus'],[1.5,'Large bonus'],[3,'Longest wait first']];
+function updateDial(){var b=+$('dl').value,r=sim(b),okc=r.c<=9,oke=r.e<=4;$('dv').textContent=b;
+$('dopts').innerHTML=DO.map(function(o){return '<button class="do'+(o[0]==b?' on':'')+'" data-v="'+o[0]+'">'+o[1]+' ('+o[0]+')</button>'}).join('');
+$('fcst').innerHTML='<b>Forecast for this rule:</b> longest ordinary wait <b>'+r.c+'</b> turns <span class="'+(okc?'ok':'no')+'">'+(okc?'(goal met)':'(goal: 9 or less)')+'</span>, longest emergency wait <b>'+r.e+'</b> turns <span class="'+(oke?'ok':'no')+'">'+(oke?'(goal met)':'(goal: 4 or less)')+'</span>. '+(okc&&oke?'Press Play to watch it happen.':'This rule would miss a goal.')}
+function showCross(v){var e=$('xe');e.className='xe';void e.offsetWidth;e.innerHTML=v.tag[0];e.style.fontSize='34px';e.classList.add(v.c?'gov':'go');$('xt').textContent='Last across: '+v.tag[1]+' ('+(v.c?'ordinary driver':'emergency vehicle')+')'}
+var WHY='';function emLeft(t){return [1,4,7,10,13].filter(function(x){return x>t}).length*2}
+function updateScene(t,q,kLeft,cLeft){var we=$('wayE'),wc=$('wayC'),al=$('alert'),mw=-1;q.forEach(function(v){if(v.c)mw=Math.max(mw,t-v.at)});
+we.textContent=kLeft>0?'➜ '+kLeft+' more emergency vehicle'+(kLeft>1?'s':'')+' on the way':'No more emergency vehicles on the way';
+wc.textContent=cLeft>0?cLeft+' more ordinary driver'+(cLeft>1?'s':'')+' arriving later':'';
+al.className='alert'+(mw>=5?' w2':mw>=3?' w1':'');al.textContent=mw<0?'No ordinary driver is waiting right now.':'⏱ The longest-waiting ordinary driver has been stuck for '+mw+' turn'+(mw==1?'':'s')+'.'}
+function clearCross(){var e=$('xe');e.className='xe';e.style.fontSize='';e.innerHTML='🚦';$('xt').textContent='No vehicle has crossed yet'}
+function log(t,k){var e=document.createElement('div');e.className='lg '+(k||'');e.textContent=t;$('log').appendChild(e);$('log').scrollTop=1e5}
+function chip(v,b,go){var w=D.t-v.at,s=score(v,D.t,b),d=document.createElement('div');d.className='v '+(v.c?'vc':'ve')+(w>=5?' w2':w>=3?' w1':'')+(go?' go':'');d.innerHTML='<div class="i">'+v.tag[0]+'</div><div class="cap"><b>'+v.tag[1]+'</b><i>waited '+w+'</i>'+(mode=='f'?'<i>score '+s.toFixed(s%1?2:0)+'</i>':'')+'</div>';
+if(go){var sc=s.toFixed(s%1?2:0),emW=D.q.some(function(x){return !x.c}),nm;
+if(v.c)nm=emW?'<b>'+v.tag[1]+'</b> has waited for the longest time ('+w+' turns), so it goes first (score '+sc+').':'No emergency vehicle is waiting, so the <b>'+v.tag[1]+'</b> finally gets to go.';
+else nm=mode=='g'?'<b>'+v.tag[1]+'</b> goes first because emergency vehicles always have priority.':'<b>'+v.tag[1]+'</b> goes first: highest score ('+sc+').';
+WHY=nm}return d}
+function render(sel){if(mode=='f'&&FC==1){renderM();return}renderR(sel)}
+function renderR(sel){var b=bonus(),e=$('qe'),c=$('qc');ctlShow(true);updateScene(D.t,D.q,emLeft(D.t),0);$('hist').style.display='none';if(mode=='f')updateDial();e.innerHTML='';c.innerHTML='';WHY='';D.q.forEach(function(v){(v.c?c:e).appendChild(chip(v,b,sel&&sel.id==v.id))});$('why').className='why'+(WHY?' on':'');$('why').innerHTML='<span>'+(WHY||'The reason a vehicle goes first appears here.')+'</span>';
+$('st').textContent=D.t+' / '+T;$('se').textContent=D.ce;$('sc').textContent=D.cc;$('dv').textContent=b;
+var mc=D.mc,me=D.me;D.q.forEach(function(v){var w=D.t-v.at;if(v.c)mc=Math.max(mc,w);else me=Math.max(me,w)});$('wc').textContent=mc;$('we').textContent=me;
+var g1=$('g1'),g2=$('g2');g1.textContent='Ordinary waits 9 turns or less';g2.textContent='Emergency waits 4 turns or less';g1.className='goal '+(mc>9?'no':D.done?'ok':'');g2.className='goal '+(me>4?'no':D.done?'ok':'');
+$('yo').innerHTML='👉 '+(mode=='g'?(D.done?'That is the problem: round after round, emergency vehicles went first, and one ordinary driver was left waiting the whole time.':D.t?'Watching... see how long the ordinary drivers wait.':'Just watch. Press Auto-play and see what happens when emergency vehicles always go first.'):(D.done?(mc<=9&&me<=4?'Well done! Both goals are met.':'One goal was missed. Pick a different waiting bonus and press Replay shift.'):D.t?'The shift is running. You can still change the rule.':'Pick a waiting bonus below, then press Play.'));$('dialbox').style.display=mode=='f'?'block':'none';lab()}
+function turn(){if(D.busy||D.done)return;var g=gen,b=bonus();D.t++;arrivals(D.t,D.nc).forEach(function(a){D.q.push({id:D.id++,c:a.c,i:a.i,at:D.t,tag:a.c?CI[a.i]:EI[a.i]})});
+var v=pick(D.q,D.t,b);D.busy=true;D.cur=v;render(v);
+var cs=D.q.filter(function(x){return x.c}).sort(function(x,y){return x.at-y.at})[0];
+sched(function(){if(g!=gen)return;var w=D.t-v.at;if(v.c){D.cc++;D.mc=Math.max(D.mc,w)}else{D.ce++;D.me=Math.max(D.me,w)}D.q.splice(D.q.indexOf(v),1);showCross(v);
+if(v.c)log('Turn '+D.t+': the '+v.tag[1].toLowerCase()+' finally crosses after waiting '+w+' turns.','g');
+else if(cs&&D.t-cs.at>=4)log('Turn '+D.t+': '+v.tag[1]+' goes first again. The '+cs.tag[1].toLowerCase()+' has now waited '+(D.t-cs.at)+' turns.','b');
+else log('Turn '+D.t+': '+v.tag[1]+' crosses.');
+D.busy=false;D.cur=null;if(D.t>=T)finish();else render()},speed)}
+function finish(){D.done=true;var mc=D.mc,me=D.me;D.q.forEach(function(v){var w=T-v.at+1;if(v.c)mc=Math.max(mc,w);else me=Math.max(me,w)});D.fc=mc;D.fe=me;render();stopAuto();var ok=mc<=9&&me<=4;
+log(ok?'Shift over. Nobody waited too long and emergencies stayed quick!':'Shift over. '+(mc>9?'An ordinary driver was stuck for '+mc+' turns. ':'')+(me>4?'An emergency vehicle waited '+me+' turns.':''),ok?'g':'b');
+if(mode=='f'&&ok)win();else if(mode=='f')failHint('Over 15 turns, ordinary drivers may wait 9 turns at most and emergency vehicles 4. Pick a different waiting bonus and press "Replay shift".');else if(mode=='g'){log('Each round, emergency vehicles went first and a few ordinary drivers slipped through, but the '+(D.q.length?D.q[0].tag[1].toLowerCase():'last driver')+' was left behind every time. The game ends here with 1 ordinary driver still waiting.');log('Now solve it yourself: this time you decide who crosses.');later(function(){$('tf').classList.add('glow');$('tf').scrollIntoView({block:'center',behavior:'smooth'})},400)}}
+function atick(g){atimer=null;if(!autoOn||g!=gen)return;if(D.done){stopAuto();return}if(D.busy){atimer=setTimeout(function(){atick(g)},200);return}
+if(!gap){gap=true;atimer=setTimeout(function(){atick(g)},Math.max(300,speed*.2));return}gap=false;turn();atimer=setTimeout(function(){atick(g)},200)}
+$('auto').onclick=function(){if(autoOn){autoOn=false;paused=true;if(atimer){clearTimeout(atimer);atimer=null}pauseT();$('s3').classList.add('paused')}
+else if(paused){paused=false;autoOn=true;$('s3').classList.remove('paused');resumeT()}else{if(D.done){if(mode=='g')reset('g');else startRule(true)}autoOn=true;gap=true}lab();if(autoOn)atick(gen)};
+$('sp').onchange=function(e){speed=+e.target.value};
+function reset(m){gen++;clearT();stopAuto();mode=m;$('p3n').classList.remove('glow');$('tf').classList.remove('glow');$('log').innerHTML='';$('toast').classList.remove('on');
+$('tg').classList.toggle('on',m=='g');$('tf').classList.toggle('on',m=='f');
+if(m=='g'){$('ban').classList.remove('glow-box');clearCross();fresh('g');$('dl').disabled=true;$('dl').value=0;$('dialbox').style.display='none';$('ban').innerHTML='<b>Watch:</b> emergency vehicles always go first. Press Auto-play and keep an eye on the ordinary drivers.';render()}
+else{FC=1;fresh('f');startM()}}
+function restartF(){gen++;clearT();stopAuto();$('log').innerHTML='';if(FC==1)startM();else startRule(true)}
+$('tg').onclick=function(){reset('g')};$('tf').onclick=function(){reset('f')};$('rs').onclick=function(){if(mode=='g')reset('g');else restartF()};$('dopts').onclick=function(e){var b=e.target.closest('.do');if(!b||mode!='f'||FC!=2)return;$('dl').value=b.dataset.v;if(D&&!D.busy)render();else updateDial()};
+
+/* ---- Challenge 1: you decide each turn ---- */
+var FC=1,H=null,TM=15,NX=2400;
+function later(fn,ms){var g=gen;sched(function(){if(g==gen)fn()},ms)}
+function ctlShow(rule){var show=rule?'':'none';$('auto').style.display=$('lsp').style.display=$('sp').style.display=show}
+function startM(){$('ban').classList.remove('glow-box');clearCross();H={t:0,q:[],id:0,mc:0,me:0,cc:0,ce:0,done:false,res:null,hist:[]};$('dialbox').style.display='none';$('ban').innerHTML='<b>Challenge 1 of 2: you decide.</b> Emergency vehicles arrive in 5 groups of 2. Each turn, click who crosses: one emergency vehicle or one ordinary driver. No ordinary driver may wait more than 9 turns, and no emergency vehicle more than 4.';nextM()}
+function nextM(){H.t++;if(H.t==1)[0,1,2,3,4].forEach(function(i){H.q.push({id:H.id++,c:1,at:0,tag:CI[i]})});if((H.t-1)%3==0&&H.t<=13){var k=(H.t-1)/3*2;H.q.push({id:H.id++,c:0,at:H.t,tag:EI[k]});H.q.push({id:H.id++,c:0,at:H.t,tag:EI[k+1]})}renderM()}
+function renderM(){var e=$('qe'),c=$('qc'),mc=H.mc,me=H.me,he='',hc='';ctlShow(false);updateScene(H.t,H.q,emLeft(H.t),0);
+H.q.forEach(function(v){var w=H.t-v.at;if(v.c)mc=Math.max(mc,w);else me=Math.max(me,w);var d='<div class="v '+(v.c?'vc':'ve')+(H.res?'':' pk')+(w>=5?' w2':w>=3?' w1':'')+'" '+(H.res?'':'role="button" tabindex="0" title="Click to let this vehicle cross" ')+'data-id="'+v.id+'"><div class="i">'+v.tag[0]+'</div><div class="cap"><b>'+v.tag[1]+'</b><i>waited '+w+'</i></div></div>';if(v.c)hc+=d;else he+=d});
+e.innerHTML=he;c.innerHTML=hc;$('why').className='why';$('why').innerHTML=H.res?'Shift over. Your turn-by-turn summary is below.':'👆 Tap any vehicle with the blue dashed outline to let it cross.';$('st').textContent=H.t+' / '+TM;$('se').textContent=H.ce;$('sc').textContent=H.cc;$('wc').textContent=mc;$('we').textContent=me;
+var g1=$('g1'),g2=$('g2');g1.textContent='Ordinary waits 9 turns or less';g2.textContent='Emergency waits 4 turns or less';g1.className='goal '+(mc>9?'no':H.done?'ok':'');g2.className='goal '+(me>4?'no':H.done?'ok':'');
+$('yo').innerHTML='👉 '+(H.res=='ok'?'Well done! You kept both groups moving.':H.res?'That missed a goal. Press "Restart shift" and think about when an ordinary driver should cross.':'Turn '+H.t+' of '+TM+': tap who crosses now, one emergency vehicle or one ordinary driver. Emergency vehicles are urgent, but ordinary drivers are waiting too.');
+$('rs').textContent='Restart shift';$('dialbox').style.display='none';
+var hs=$('hist');if(H.res){var ct=H.hist.filter(function(h){return h.c}).map(function(h){return h.t}),mc2=H.mc,me2=H.me;H.q.forEach(function(v){var w2=TM+1-v.at;if(v.c)mc2=Math.max(mc2,w2);else me2=Math.max(me2,w2)});
+hs.innerHTML='<h4>Your shift, turn by turn</h4><div class="hs">'+H.hist.map(function(h){return '<div class="hc '+(h.c?'c':'e')+'">'+h.tag[0]+'<small>'+h.t+'</small></div>'}).join('')+'</div><p>'+(ct.length?'You let ordinary drivers cross on turn'+(ct.length>1?'s ':' ')+ct.join(', ')+'.':'You never let an ordinary driver cross.')+' Longest ordinary wait: <b>'+mc2+'</b> turns. Longest emergency wait: <b>'+me2+'</b> turns.</p><p>Every turn you give to an ordinary driver is a turn an emergency vehicle waits. Your job is to share the turns so that nobody waits too long.</p>';hs.style.display='block'}else{hs.style.display='none';hs.innerHTML=''}}
+function pickM(id){if(!H||H.res)return;var v=H.q.filter(function(x){return x.id==id})[0];if(!v)return;var w=H.t-v.at,old=H.q.filter(function(x){return x.c&&x!==v}).sort(function(a,b){return a.at-b.at})[0];H.hist.push({t:H.t,c:v.c,tag:v.tag});showCross(v);
+if(v.c){H.cc++;H.mc=Math.max(H.mc,w);log('Turn '+H.t+': the '+v.tag[1].toLowerCase()+' crosses after waiting '+w+' turns. Emergency vehicles wait a little longer now.','g')}
+else{H.ce++;H.me=Math.max(H.me,w);if(old&&H.t-old.at>=5)log('Turn '+H.t+': '+v.tag[1]+' crosses. The '+old.tag[1].toLowerCase()+' has now waited '+(H.t-old.at)+' turns.','b');else log('Turn '+H.t+': '+v.tag[1]+' crosses.')}
+H.q.splice(H.q.indexOf(v),1);if(H.t>=TM)finishM();else nextM()}
+function finishM(){var mc=H.mc,me=H.me;H.q.forEach(function(v){var w=TM+1-v.at;if(v.c)mc=Math.max(mc,w);else me=Math.max(me,w)});H.done=true;H.res=mc<=9&&me<=4?'ok':'bad';renderM();
+log(H.res=='ok'?'Shift over. Longest ordinary wait '+mc+', longest emergency wait '+me+'. Both goals met!':'Shift over. Longest ordinary wait '+mc+', longest emergency wait '+me+'. '+(mc>9?'An ordinary driver waited too long. ':'')+(me>4?'An emergency vehicle waited too long.':''),H.res=='ok'?'g':'b');
+if(H.res=='ok'){burst(70);flash('Challenge 1 complete! 🎉');later(function(){startRule()},NX)}else failHint('No ordinary driver may wait more than 9 turns, and no emergency vehicle more than 4. Press "Restart shift" and try again.')}
+$('qe').onclick=$('qc').onclick=function(e){var b=e.target.closest('.pk');if(b)pickM(+b.dataset.id)};
+$('qe').onkeydown=$('qc').onkeydown=function(e){var b=e.target.closest('.pk');if(b&&(e.key=='Enter'||e.key==' ')){e.preventDefault();pickM(+b.dataset.id)}};
+/* ---- Challenge 2: write a rule ---- */
+function startRule(keep){$('ban').classList.remove('glow-box');clearCross();FC=2;gen++;clearT();stopAuto();fresh('f');$('log').innerHTML='';$('dl').disabled=false;if(!keep)$('dl').value=0;$('ban').innerHTML='<b>Challenge 2 of 2: write a rule.</b> That was a lot of clicking. Pick a waiting bonus, then press Play. Over 15 turns, ordinary drivers may wait 9 turns at most and emergency vehicles 4.';render()}
+function failHint(txt){var b=$('ban');b.classList.add('glow-box');var p=document.createElement('div');p.className='bpop';p.innerHTML='📖 <b>Read the challenge again.</b> '+txt;p.onclick=function(){p.remove();b.classList.remove('glow-box')};b.appendChild(p);b.scrollIntoView({block:'center',behavior:'smooth'})}
+function flash(t){var r=$('rp');r.textContent=t;r.className='rp on';clearTimeout(flash.t);flash.t=setTimeout(function(){r.classList.remove('on')},2400)}
+function burst(n){var cf=$('cf');for(var i=0;i<n;i++){var p=document.createElement('i');p.style.left=Math.random()*100+'vw';p.style.background=['#4A9BD1','#2B6FA3','#EA8C36','#4B7A4A'][i%4];p.style.animationDuration=2.2+Math.random()*1.6+'s';cf.appendChild(p);setTimeout(function(x){return function(){x.remove()}}(p),4500)}}
+function win(){burst(110);flash('All challenges done! Press Next 🎉');clearTimeout(flash.t);flash.t=setTimeout(function(){$('rp').classList.remove('on')},4500);var nb=$('p3n');nb.classList.add('glow');nb.scrollIntoView({block:'center',behavior:'smooth'})}
+$('again').onclick=function(){reset('f')};$('nx').onclick=function(){$('toast').classList.remove('on');go(4)};
+
+/* ---- reflect, concept, checkpoint ---- */
+var RQ=["When emergency vehicles kept getting priority, what happened to the ordinary drivers waiting on the side road? Could one of them keep waiting indefinitely? Explain why.", "Was there a moment when you felt an ordinary driver should be allowed to cross, even though an emergency vehicle was waiting? What made you think it was time?", "In Challenge 2, how did increasing the waiting bonus change which vehicles crossed? What happened when the bonus was too small or too large?", "Before running Challenge 2, did you expect the waiting bonus to solve the problem? Did the actual result match your prediction? What surprised you?", "Suppose the number of emergency vehicles suddenly increases during a shift. Would the waiting bonus you selected still be effective? What might need to change?"];
+$('rq').innerHTML=RQ.map(function(q,i){return '<div class="qc"><div class="bd">'+(i+1)+'</div><p>'+q+'</p></div>'}).join('');
+function concept(){var a=sim(0),m=sim(1),h=sim(3);var mx=Math.max(a.c,a.e,m.c,m.e,h.c,h.e,1);
+function row(n,r){return '<div class="br"><span>'+n+'</span><div><div class="bt"><i class="'+(r.c>9?'r':'')+'" style="width:'+r.c/mx*100+'%"></i></div>Ordinary: '+r.c+' turns<div class="bt" style="margin-top:6px"><i class="'+(r.e>4?'r':'')+'" style="width:'+r.e/mx*100+'%;background:linear-gradient(90deg,#9AC8E8,#4A9BD1)"></i></div>Emergency: '+r.e+' turns</div></div>'}
+$('bars').innerHTML=row('Bonus 0 (priority only)',a)+row('Bonus 1 (aging)',m)+row('Bonus 3 (longest wait first)',h);$('n1').textContent='Stuck for '+a.c+' turns';$('n2').textContent=m.c+' and '+m.e+' turns'}
+var EX=[["Hospital Management", "A hospital always treats critical patients first. During an outbreak, patients with minor conditions have been waiting for several hours, while new critical patients keep arriving. You are asked to redesign the patient selection process. What two rules would you introduce to prevent indefinite waiting without compromising emergency care?"], ["Generalising Starvation", "Consider three situations: A student repeatedly misses access to a laboratory because research scholars receive priority. A computer process waits indefinitely while higher-priority processes execute. A local train keeps getting delayed because express trains are always given preference. What common pattern connects these situations? Express it as a general rule that could apply to any system where multiple participants compete for limited resources."], ["Numerical: Aging", "A process starts with a priority of 3 and gains 2 priority points at the end of every turn it waits. What will its priority be after waiting for 4 turns?"], ["Testing Aging", "A programmer introduces aging to prevent starvation. Every waiting process gains one priority point every five seconds. However, new processes with very high priorities continue arriving. The programmer claims, “Starvation is now impossible because every process eventually gains priority.” Is this claim always correct? Construct a situation where the rule works or fails."], ["Autonomous Vehicle Scheduling", "An autonomous vehicle processes several tasks simultaneously: detecting pedestrians, monitoring engine temperature, updating navigation, and downloading software updates. During a dangerous situation, pedestrian detection continuously receives priority, while the software update makes no progress. Would you consider this a scheduling failure? Should every task be guaranteed execution time, regardless of its importance? Defend your answer."], ["Starvation vs Deadlock", "A process waits indefinitely because other processes keep getting selected. Another process cannot proceed because it is waiting for a resource held by another process. Identify the two problems and explain how they differ."], ["Manufacturing", "A factory prioritises urgent orders, while routine orders keep getting postponed as new urgent orders arrive. What could happen to the factory’s production schedule if this continues for several days?"], ["Network Traffic", "A network router gives priority to video calls over file downloads. During heavy network traffic, large downloads barely make progress. What could the router do to ensure both types of traffic receive network bandwidth?"], ["Cloud Storage", "A cloud storage service prioritises frequently accessed files for processing, while requests for rarely accessed files remain pending. What problem could this create for users, and how might the service address it?"], ["Public Transportation", "Buses on an express route receive priority at a busy terminal, while regular-route buses repeatedly miss their departure slots. How could the terminal manage departures without consistently disadvantaging regular routes?"]];
+$('ex').innerHTML=EX.map(function(x,i){return '<div class="qc"><div class="bd">'+(i+1)+'</div><p>'+x[1]+'</p></div>'}).join('');
+$('rst').onclick=function(){reset('g');go(1)};
+prog();fresh('g');reset('g');
+})();
+</script></body></html>
