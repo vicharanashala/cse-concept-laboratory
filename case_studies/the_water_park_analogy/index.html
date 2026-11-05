@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Splash Park Express: The Water Slide Queue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   THEME: Water park aqua blue & orange splash styling.
+   ========================================================== */
+:root{
+  --bg-1:#EBF8FF; --bg-2:#E0F2FE; --bg-3:#BAE6FD; --bg-4:#7DD3FC;
+  --primary:#0284C7; --primary-dark:#0369A1; --primary-deep:#0C4A6E;
+  --amber:#F97316; --amber-dark:#C2410C;
+  --danger:#E11D48; --success:#15803D; --violet:#F97316;
+  --ink:#0F172A; --muted:#475569; --faint:#94A3B8;
+  --card-bg:#FFFFFF;
+  --footer-bg:#0C4A6E;
+  --glass-border:#BAE6FD;
+  --shadow-card:rgba(12,74,110,0.12); --shadow-btn:rgba(3,105,161,0.28);
+  --success-bg:#DCFCE7; --success-text:#14532D; --success-border:#15803D;
+  --error-bg:#FFE4E6; --error-text:#881337; --error-border:#E11D48;
+  --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:'Inter', sans-serif;font-weight:400;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-2) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Poppins', sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{line-height:1.65;color:var(--muted);margin:0;}
+button{font-family:'Poppins', sans-serif;cursor:pointer;}
+button:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
+.wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px;}
+
+/* ---- top brand bar: institution logos ---- */
+.brand-bar{
+  position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-space-between;
+  padding:12px 22px;z-index:500;pointer-events:none;
+}
+.brand-badge{pointer-events:auto;display:flex;align-items:center;gap:8px;background:transparent;border:none;padding:0;}
+.brand-badge img{height:90px;width:auto;display:block;}
+@media(max-width:640px){
+  .brand-bar{padding:8px 10px;}
+  .brand-badge img{height:44px;}
+}
+
+/* ---- stepper ---- */
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
+.step-circle{
+  width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;
+  font-family:'Poppins', sans-serif;
+}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins', sans-serif;}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1;}
+.step-item:first-child .step-line{display:none;}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.step-item.done .step-line{background:var(--primary-dark);}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(2,132,199,.25);}
+.step-item.active .step-label{color:var(--primary-dark);}
+
+/* ---- section framing ---- */
+.section{display:none;}
+.section.active-view{display:block;animation:sectionFade .35s ease;}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);
+  background:#FFEDD5;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins', sans-serif;
+}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center;}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted);}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--ink);margin:0 0 12px;}
+
+.card{background:transparent;border:none;border-radius:0;box-shadow:none;padding:6px 0 0;}
+.btn{
+  border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 24px -10px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 28px -8px var(--shadow-btn);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none;text-align:left;}
+.btn.secondary.selected{border-color:var(--amber);background:#FFEDD5;color:var(--amber-dark);}
+.btn.secondary:disabled{opacity:.55;}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px;}
+.btn.small{padding:9px 18px;font-size:13px;}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+
+/* ---- Chapter 1: the case ---- */
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0;}
+.problem-card p{margin:0 0 14px;font-size:15.5px;}
+.problem-card p:last-child{margin-bottom:0;}
+.problem-card b{color:var(--primary-deep);}
+.story-lines{
+  text-align:left;max-width:680px;margin:26px auto 0;background:transparent;
+  border:none;border-radius:0;padding:0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.story-lines p{font-size:15px;}
+.story-lines .highlight{color:var(--amber-dark);font-weight:700;}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px;}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+.rules-list li::before{content:"\2715";color:var(--danger);font-weight:700;flex-shrink:0;}
+.rules-list li.ok::before{content:"\2022";color:var(--primary);}
+
+/* ---- game shell ---- */
+.game-shell{width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.topbar{
+  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  background:transparent;border:none;padding:4px 0;
+}
+.status-cluster{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
+.status-pill{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);}
+.status-pill.score{color:var(--amber-dark);font-weight:700;}
+.status-pill.warn{color:var(--danger);font-weight:700;}
+
+.game-main{display:grid;grid-template-columns:1fr 220px;gap:14px;}
+@media(max-width:760px){.game-main{grid-template-columns:1fr;}.trail-panel{order:3;border-left:none;padding-left:0;border-top:1px dashed var(--glass-border);padding-top:14px;}}
+
+.explorer-panel{
+  background:transparent;border:none;border-radius:0;
+  padding:0;min-height:360px;display:flex;flex-direction:column;gap:16px;position:relative;
+}
+.dialogue-box{
+  display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);
+  border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 14px;
+}
+.dialogue-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#0284C7,#0369A1);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.dialogue-text{font-size:14px;color:var(--ink);line-height:1.5;}
+.dialogue-text .speaker{font-size:11px;color:var(--primary-dark);display:block;margin-bottom:2px;letter-spacing:.05em;font-weight:700;}
+
+.current-folder-heading{display:flex;align-items:center;gap:10px;}
+.current-folder-heading .folder-icon-lg{font-size:26px;}
+.current-folder-heading h2{font-size:20px;}
+.current-folder-heading .fill-tag{font-size:13px;color:var(--muted);font-weight:600;font-family:'Inter',sans-serif;}
+.current-folder-heading .fill-tag b{color:var(--primary-deep);}
+
+/* ---- bucket visual: horizontal fill row ---- */
+.bucket-visual{position:relative;padding:12px;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);}
+.bucket-slots{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;}
+.bucket-slot{
+  width:30px;height:30px;border-radius:8px;background:var(--bg-3);border:1.5px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;font-size:15px;animation:stackPop .35s ease both;
+  transition:opacity .45s ease, transform .45s ease, background .2s ease, border-color .2s ease;
+}
+.bucket-slot.filled{background:#fff;border-color:var(--primary);}
+.bucket-slot.newest{border-color:var(--amber);box-shadow:0 0 0 2px rgba(249,115,22,.25);}
+.bucket-slot.draining{opacity:0;transform:scale(.35) translateY(16px);border-color:var(--success);}
+.bucket-empty-note{font-size:12.5px;color:var(--faint);align-self:center;padding-left:4px;transition:opacity .3s ease;}
+
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px 10px;color:var(--muted);text-align:center;}
+.empty-state .eicon{font-size:44px;opacity:.7;}
+.empty-state p{font-size:14px;}
+
+.trail-panel{
+  background:transparent;border:none;border-left:1px dashed var(--glass-border);border-radius:0;
+  padding:0 0 0 16px;display:flex;flex-direction:column;gap:10px;max-height:520px;
+}
+.trail-panel .trail-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;font-weight:700;}
+.tree-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-right:2px;}
+.log-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:2px;}
+.log-entry{position:relative;padding:5px 0 5px 4px;font-size:12px;color:var(--muted);animation:treePop .3s ease both;line-height:1.4;border-bottom:1px dashed var(--glass-border);}
+.log-entry:first-child{border-bottom:none;}
+@keyframes treePop{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:translateX(0);}}
+.log-entry.log-process{color:var(--primary-dark);}
+.log-entry.log-send{color:var(--muted);}
+.log-entry.log-burst{color:var(--amber-dark);font-weight:700;}
+.log-entry.log-drop{color:var(--danger);font-weight:700;}
+
+/* ---- control bar ---- */
+.control-bar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  background:transparent;border:none;border-top:1px dashed var(--glass-border);padding:16px 0 0;
+}
+.control-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.control-btn{
+  border:1.5px solid var(--primary);background:#fff;color:var(--primary-dark);border-radius:999px;padding:9px 18px;
+  font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px;font-family:inherit;
+  transition:transform .12s,background .15s,border-color .15s,opacity .15s;
+}
+.control-btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--amber);}
+.control-btn:disabled{opacity:.35;cursor:not-allowed;}
+.control-btn.play{background:var(--primary-dark);color:#fff;border-color:transparent;}
+.control-btn.pause{background:var(--amber);color:#fff;border-color:transparent;}
+
+.control-btn.reset{
+  position:relative;background:transparent;color:var(--danger);border-color:var(--danger);
+  animation:resetGlow 2.2s ease-in-out infinite;
+}
+@keyframes resetGlow{0%,100%{box-shadow:0 0 0 0 rgba(225,29,72,.4);}50%{box-shadow:0 0 0 8px rgba(225,29,72,0);}}
+.control-btn.reset .r-spin{display:inline-block;transition:transform .4s;}
+.control-btn.reset:hover .r-spin{transform:rotate(180deg);}
+
+.speed-control{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px;}
+.speed-control button{width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-border);background:var(--bg-3);color:var(--primary-dark);font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.speed-control button:hover:not(:disabled){border-color:var(--amber);}
+.speed-control button:disabled{opacity:.3;cursor:not-allowed;}
+.speed-value{min-width:34px;text-align:center;color:var(--amber-dark);font-weight:700;}
+
+/* ---- overlays ---- */
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,0.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.overlay.active{display:flex;animation:sectionFade .3s ease both;}
+.overlay-card{background:#fdfffe;border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:30px;max-width:460px;width:100%;text-align:center;display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 50px -20px rgba(12,74,110,.4);}
+.overlay-card h2{font-size:24px;}
+.overlay-card p{color:var(--muted);font-size:14.5px;line-height:1.55;}
+
+/* ---- completion ---- */
+.result-card{max-width:560px;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.result-icon{font-size:56px;}
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-chip{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 18px;min-width:110px;}
+.stat-chip .num{font-size:20px;color:var(--amber-dark);font-weight:800;}
+.stat-chip .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+
+/* ---- open question cards ---- */
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+.qcard{
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;
+  padding:22px 20px 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 14px 30px -18px rgba(12,74,110,.3);min-height:190px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .18s,box-shadow .18s;
+}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(12,74,110,.38);}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary);letter-spacing:.03em;}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600;}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.qgrid{grid-template-columns:1fr;}.qcard{min-height:auto;padding:18px 18px 16px;}}
+.qcard.qcard-wide{grid-column:1 / -1;min-height:auto;}
+.pattern-layout{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.pattern-svg{width:100%;max-width:280px;flex-shrink:0;}
+.pattern-label{font-size:11px;fill:var(--muted);font-weight:700;}
+.pattern-dot-a{fill:var(--primary);}
+.pattern-dot-b{fill:var(--amber-dark);}
+.pattern-axis{stroke:var(--glass-border);stroke-width:2;}
+.pattern-questions{flex:1;min-width:220px;display:flex;flex-direction:column;gap:10px;}
+
+/* ---- Chapter: the method ---- */
+.learning-flow{max-width:640px;margin:0 auto;text-align:left;}
+.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border);}
+.bucket-diagram-wrap{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;}
+#bucket-svg{width:100%;max-width:420px;height:auto;}
+.pkt-in{fill:var(--glass-border);opacity:.55;transform:translateY(0px);transform-box:fill-box;transform-origin:center;
+  transition:transform .9s cubic-bezier(.3,.6,.35,1), opacity .9s ease .35s, fill .35s ease;}
+.pkt-in.active{fill:var(--amber);opacity:0;transform:translateY(58px);}
+.bucket-outline{stroke:var(--ink);stroke-width:3;opacity:.75;fill:none;}
+.bucket-hole{fill:var(--amber-dark);}
+.bucket-fill-rect{fill:var(--primary);opacity:.5;transition:height .7s ease,y .7s ease;}
+.df-node circle{fill:#fff;stroke:var(--glass-border);stroke-width:2;transition:fill .45s ease,stroke .45s ease,transform .45s cubic-bezier(.34,1.56,.64,1);transform-origin:center;transform-box:fill-box;}
+.df-node text{font-size:12px;text-anchor:middle;pointer-events:none;user-select:none;}
+.df-node.active circle{fill:var(--success);stroke:var(--success);transform:scale(1.22);}
+.bucket-summary{text-align:left;}
+.bucket-summary-lead{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:8px;}
+.bucket-summary ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.bucket-summary li{font-size:13.5px;color:var(--muted);line-height:1.55;}
+.bucket-summary strong{color:var(--amber-dark);}
+.definition-block{background:rgba(2,132,199,0.08);border:1px dashed var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;margin-top:10px;}
+.definition-block p{font-size:13.5px;color:var(--primary-deep);font-style:italic;}
+.fill-stop-a{stop-color:var(--primary);stop-opacity:.85;}
+.fill-stop-b{stop-color:var(--primary-dark);stop-opacity:.6;}
+.flow-line{stroke:var(--amber);stroke-width:2.5;stroke-dasharray:5 5;opacity:.7;fill:none;animation:marchAnts 1s linear infinite;}
+@keyframes marchAnts{to{stroke-dashoffset:-20;}}
+
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center;}
+.kl-grid{display:flex;flex-direction:column;gap:14px;}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left;}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border);}
+.kl-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px;}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+/* ---- mission banner ---- */
+.mission-banner{
+  max-width:640px;margin:0 auto 16px;text-align:center;padding:14px 18px;border-radius:var(--radius-md);
+  background:linear-gradient(135deg,rgba(2,132,199,.12),rgba(249,115,22,.10));
+  border:1px dashed var(--primary);
+}
+.mission-banner .mission-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-dark);display:block;margin-bottom:4px;}
+.mission-banner .mission-text{font-size:15px;font-weight:700;color:var(--ink);font-family:'Poppins',sans-serif;}
+
+/* ---- io labels ---- */
+.io-label{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin-bottom:2px;}
+.io-label .io-sub{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:11.5px;}
+
+/* ---- output flow lane ---- */
+.output-lane{position:relative;height:38px;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);overflow:hidden;}
+.output-lane-icon{font-size:15px;flex-shrink:0;opacity:.7;}
+.output-track{position:relative;flex:1;height:100%;}
+.flow-pkt{position:absolute;left:0%;top:50%;transform:translate(-50%,-50%);font-size:17px;animation:flowOut linear forwards;}
+@keyframes flowOut{from{left:0%;opacity:1;}85%{opacity:1;}to{left:100%;opacity:0;}}
+
+/* ---- turned away riders ---- */
+.bucket-visual.overflow-flash{animation:overflowFlash .9s ease;}
+@keyframes overflowFlash{0%,100%{box-shadow:none;border-color:var(--glass-border);}30%{box-shadow:0 0 0 3px rgba(225,29,72,.45);border-color:var(--danger);}}
+.dropped-ghost{
+  width:28px;height:28px;border-radius:8px;background:var(--error-bg);border:1.5px solid var(--danger);color:var(--error-text);
+  display:flex;align-items:center;justify-content:center;font-size:14px;animation:dropShake 1.3s ease forwards;
+}
+@keyframes dropShake{
+  0%{opacity:1;transform:translateY(0) rotate(0deg);}
+  15%{transform:translateY(-3px) rotate(-6deg);}
+  30%{transform:translateY(0) rotate(5deg);}
+  45%{transform:translateY(-2px) rotate(-4deg);}
+  70%{opacity:1;transform:translateY(2px) rotate(0deg);}
+  100%{opacity:0;transform:translateY(14px) rotate(0deg);}
+}
+.overflow-banner{
+  position:absolute;left:50%;top:-6px;transform:translate(-50%,-100%);background:var(--error-bg);color:var(--error-text);
+  border:1.5px solid var(--danger);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:700;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:5;
+}
+.overflow-banner.show{opacity:1;transform:translate(-50%,-130%);}
+
+/* ---- instructions ---- */
+.howto-card{
+  max-width:640px;margin:0 auto 14px;padding:16px 20px;border-radius:var(--radius-md);
+  background:var(--card-bg);border:1px solid var(--glass-border);
+}
+.howto-card .howto-tag{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-dark);margin-bottom:8px;}
+.howto-list{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.howto-list li{font-size:13px;color:var(--muted);line-height:1.55;}
+.howto-list b{color:var(--ink);}
+
+.mode-select{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:4px;}
+.mode-hint{width:100%;text-align:center;font-size:12.5px;color:var(--primary-deep);font-weight:700;}
+
+.dept-strip{font-size:11px;line-height:1.8;letter-spacing:0;text-align:center;opacity:.85;margin:4px 0 10px;display:flex;flex-wrap:wrap;justify-content:center;gap:0 6px;color:var(--muted);}
+.dept-strip span{color:var(--amber-dark);}
+.manual-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+
+.explain-icon{font-size:38px;}
+.explain-text{font-size:14.5px;color:var(--ink);line-height:1.65;}
+.explain-text b{color:var(--amber-dark);}
+
+.capacity-bar{width:100%;height:9px;border-radius:999px;background:var(--bg-3);border:1px solid var(--glass-border);overflow:hidden;margin-top:8px;}
+.capacity-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--primary-dark));transition:width .4s ease,background .3s ease;border-radius:999px;}
+.capacity-fill.high{background:linear-gradient(90deg,var(--amber),var(--danger));}
+
+.concept-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px;}
+.concept-table th{text-align:left;font-family:'Poppins',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--primary-dark);padding:8px 10px;border-bottom:2px solid var(--glass-border);}
+.concept-table td{padding:9px 10px;border-bottom:1px dashed var(--glass-border);color:var(--ink);}
+.concept-table tr:last-child td{border-bottom:none;}
+.concept-table td.story-col{color:var(--muted);}
+.concept-table td.tech-col{font-weight:700;color:var(--amber-dark);}
+
+.hidden{display:none!important;}
+
+.game-shell{max-width:1100px;gap:12px}
+.howto-card{max-width:900px;margin:0 auto 12px;padding:10px 16px}
+.howto-card .howto-tag{margin-bottom:4px}
+.howto-list{gap:3px}
+.howto-list li{font-size:12.5px;line-height:1.45}
+.mission-banner{margin-bottom:8px;padding:10px 14px}
+.mission-banner .mission-text{font-size:14px}
+.game-main{grid-template-columns:minmax(0,1.6fr) minmax(230px,1fr);gap:18px}
+.explorer-panel{min-height:0;gap:12px}
+.dialogue-box{background:#fff;border-left:4px solid var(--primary);padding:14px 16px}
+.dialogue-text{font-size:15px}
+.dialogue-text .speaker{font-size:10px}
+.io-label{margin-bottom:8px}
+.bucket-visual{padding:14px;min-height:92px;background:#f0f9ff;border:2px solid var(--glass-border)}
+.bucket-slots{gap:7px;min-height:40px;align-items:center}
+.bucket-slot{width:auto;min-width:34px;height:34px;padding:0 7px;border-radius:7px;font-size:11px;font-weight:700;letter-spacing:.1px}
+.output-lane{height:44px}
+.topbar{padding:0}
+.status-cluster{gap:8px}
+.status-pill{font-size:12px;padding:7px 11px}
+.control-bar{justify-content:center;padding-top:10px;gap:12px}
+#btn-reset{animation:none}
+#btn-sim-continue{min-width:220px}
+.trail-panel{min-width:0}
+@media(max-width:760px){.game-main{grid-template-columns:1fr}.trail-panel{order:3;border-left:none;padding-left:0;border-top:1px dashed var(--glass-border);padding-top:14px}}
+@media(max-width:640px){.bucket-slot{min-width:27px;height:27px;padding:0 5px;font-size:10px}.game-main{grid-template-columns:1fr}.control-bar{flex-wrap:wrap}}
+
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="brand-badge"><img src="../Assets/iitropar.png" alt="IIT Ropar logo"></div>
+  <div class="brand-badge"><img src="../Assets/vicharanashala.png" alt="Vicharanshala logo"></div>
+</div>
+
+<div class="wrap">
+
+  <div class="stepper" id="stepper">
+    <div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Problem</span></div>
+    <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">The Briefing</span></div>
+    <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Simulation</span></div>
+    <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Debrief</span></div>
+    <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Mechanism</span></div>
+    <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">New Scenarios</span></div>
+  </div>
+
+  <!-- ================= CHAPTER 1: THE PROBLEM ================= -->
+  <section class="section active-view" id="sec-puzzle">
+    <div class="hero">
+      <span class="eyebrow">Chapter 1 &middot; The Problem</span>
+      <h1>🛝 The Giant Water Slide Queue</h1>
+    </div>
+    <div class="problem-card">
+      <p>Imagine a popular water park featuring a huge thrill slide called <b>"Tsunami Splash."</b> Visitors arrive at the slide from various areas: Splash Campers, VIP Passholders, Family Swimmers, and Swim Teams.</p>
+      <p>The problem is that visitors arrive irregularly. Sometimes only 1 or 2 walk up the stairs. But occasionally, a huge splash group of 15 people suddenly rushes the top platform all at once.</p>
+      <p>For safety reasons, the water slide permits <b>exactly 1 person to slide down every 10 seconds</b> (Constant Outflow), no matter how many people are waiting on the platform.</p>
+      <p>Furthermore, the railed waiting platform at the top of the slide has a <b>maximum capacity of 10 people</b> (Finite Buffer Capacity).</p>
+      <p>Let me show you how the platform platform queue operates under heavy traffic 👇</p>
+    </div>
+    <div class="section-nav">
+      <button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 2: THE BRIEFING ================= -->
+  <section class="section" id="sec-briefing">
+    <div class="hero">
+      <span class="eyebrow">Chapter 2 &middot; Splash Platform</span>
+      <h1>You're Managing the Platform Line</h1>
+    </div>
+
+    <div class="story-lines" id="intro-story-lines"><!-- filled by JS --></div>
+
+    <ul class="rules-list">
+      <li>You cannot dispatch riders down the slide any faster than 1 person per slide interval.</li>
+      <li>You cannot control when large groups of swimmers arrive at the platform.</li>
+      <li class="ok">Riders fill the small railed platform queue up to its maximum capacity of 10 people.</li>
+      <li class="ok">If space is available, people get in line and wait for their turn on the slide.</li>
+      <li class="ok">If a sudden rush of 15 people arrives, only the first 10 get on the platform. The remaining 5 are turned away at the gate and told to leave the park entirely!</li>
+    </ul>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-briefing-back">⬅ Back to the Problem</button>
+      <button class="btn" id="btn-briefing-start">Open the Slide Line ▶</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3: THE SIMULATION ================= -->
+  <section class="section" id="sec-sim">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 &middot; The Simulation</span>
+    <h2 class="section-title">Manage the Water Slide Platform Queue</h2>
+
+    <div class="section-nav" style="margin-top:0;margin-bottom:14px;">
+      <button class="btn ghost small" id="btn-case-back">⬅ Back to the Briefing</button>
+      <button class="btn ghost small" id="btn-case-skip">Skip to Reflection ➜</button>
+    </div>
+
+    <div class="game-shell">
+
+      <div class="howto-card">
+        <span class="howto-tag">🎬 How to Play</span>
+        <ol class="howto-list">
+          <li>Click <b>▶ Watch Auto Demo</b> to see small arrivals, a massive group rush of 15, and constant single-rider slide outflow.</li>
+          <li>Use <b>Pause / Resume</b> and <b>Speed − / +</b> to inspect platform queue occupancy.</li>
+          <li>After the demo, click <b>🎮 Play it Yourself</b> to send swimmers or trigger a 15-person rush.</li>
+        </ol>
+      </div>
+
+      <div class="mission-banner">
+        <span class="mission-tag">Watch the flow</span>
+        <span class="mission-text">Steady arrivals → 15-person rush → 10 max on platform → 5 turned away at gate</span>
+      </div>
+
+      <div class="mode-select">
+        <button class="btn" id="btn-watch-auto">▶ Watch Auto Demo</button>
+        <button class="btn secondary" id="btn-play-manual" disabled title="Watch the Auto Demo first">🎮 Play it Yourself</button>
+        <span class="mode-hint" id="mode-hint">Click Watch Auto Demo to begin.</span>
+      </div>
+
+      <div class="topbar">
+        <div class="status-cluster">
+          <div class="status-pill">🪣 <span id="waiting-value">0</span> on platform</div>
+          <div class="status-pill">✅ <span id="score-value">0</span> slid down</div>
+          <div class="status-pill warn">⚠️ <span id="dropped-value">0</span> turned away</div>
+        </div>
+      </div>
+
+      <div class="game-main">
+        <div class="explorer-panel">
+          <div class="dialogue-box">
+            <div class="dialogue-avatar">🏊</div>
+            <div class="dialogue-text">
+              <span class="speaker">LIFEGUARD</span>
+              <span id="dialogue-text">Ready at the splash tower platform.</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="io-label">📥 ARRIVALS <span class="io-sub">— swimmers arrive at the top platform anytime</span></div>
+            <div class="dept-strip">Splash Camp <span>·</span> Swim Team <span>·</span> Family Group <span>·</span> VIP Pass <span>·</span> Express</div>
+            <div class="manual-actions">
+              <button class="btn secondary small" id="btn-send-packages" disabled>📤 Send Swimmers</button>
+              <button class="btn secondary small" id="btn-manual-burst" disabled>🚨 Massive Group Rush (+15)</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="current-folder-heading">
+              <span class="folder-icon-lg" id="current-folder-icon">🛝</span>
+              <h2 id="current-folder-name">Railed Waiting Platform</h2>
+              <span class="fill-tag">(<b id="bucket-fill-text">0/10</b> on platform)</span>
+            </div>
+            <div class="bucket-visual" id="bucket-visual">
+              <div class="bucket-slots" id="bucket-slots"></div>
+              <span class="overflow-banner" id="overflow-banner">Platform full! Turning people away!</span>
+            </div>
+            <div class="capacity-bar"><div class="capacity-fill" id="capacity-fill"></div></div>
+          </div>
+
+          <div>
+            <div class="io-label">📤 WATER SLIDE EXIT <span class="io-sub">— constant outflow: exactly 1 person slides per 10s interval</span></div>
+            <div class="output-lane">
+              <span class="output-lane-icon">🛝</span>
+              <div class="output-track" id="output-track"></div>
+              <span class="output-lane-icon">🌊</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="trail-panel" id="trail-panel">
+          <span class="trail-label">📜 Platform Log</span>
+          <div class="tree-scroll"><ul class="log-list" id="log-container"></ul></div>
+        </aside>
+      </div>
+
+      <div class="control-bar">
+        <div class="control-group">
+          <button class="control-btn pause" id="btn-pause" disabled>⏸ Pause</button>
+          <button class="control-btn play" id="btn-resume" disabled>▶ Resume</button>
+          <button class="control-btn reset" id="btn-reset"><span class="r-spin">⟲</span> Replay demonstration</button>
+        </div>
+        <div class="control-group">
+          <div class="speed-control">
+            <span>Speed</span>
+            <button id="speed-down" aria-label="Slower">−</button>
+            <span class="speed-value" id="speed-value">0.5×</span>
+            <button id="speed-up" aria-label="Faster">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-nav">
+        <button class="btn" id="btn-sim-continue" disabled title="Watch or trigger a burst first">Continue to Debrief ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 3b: SUMMARY ================= -->
+  <section class="section" id="sec-complete">
+    <div class="result-card">
+      <div class="result-icon">🧭</div>
+      <h2>You watched the entire water slide queue system in action.</h2>
+      <div class="stat-row">
+        <div class="stat-chip"><div class="num" id="complete-sent">0</div><div class="lbl">Arrived</div></div>
+        <div class="stat-chip"><div class="num" id="complete-score">0</div><div class="lbl">Slid Down</div></div>
+        <div class="stat-chip"><div class="num" id="complete-dropped">0</div><div class="lbl">Turned Away</div></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-complete-replay">⟲ Run Again</button>
+        <button class="btn" id="btn-complete-continue">Continue to Debrief ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 4: DEBRIEF ================= -->
+  <section class="section" id="sec-notes">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 &middot; Debrief</span>
+    <h2 class="section-title">What did you notice?</h2>
+    <p class="section-sub">Reflect on the slide platform dynamics in your own words.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; </span><span class="q-text">What did you notice about how the water slide handled a few swimmers arriving slowly compared to a large group arriving all at once?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; </span><span class="q-text">Why do you think the platform turns away extra swimmers when it is full, rather than allowing everyone to wait?</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; </span><span class="q-text">Imagine you are managing the water park. What changes would you make to handle sudden crowds while keeping the slide safe and the waiting time reasonable?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; </span><span class="q-text">What might happen if the slide allowed everyone to go down at once whenever a large group arrived? How would this affect the people waiting and those already sliding?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; </span><span class="q-text">Can you think of a situation outside a water park where many people or things arrive suddenly, but only a few can be handled at a time? How would the water slide help you understand that situation?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-notes-back">⬅ Back to the Simulation</button>
+        <button class="btn" id="btn-notes-continue">Continue to the Mechanism ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 5: THE MECHANISM ================= -->
+  <section class="section" id="sec-method">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 &middot; The Mechanism</span>
+    <h2 class="section-title">How the water slide system maps to networking</h2>
+    <p class="section-sub">Here is the exact algorithmic strategy you were managing.</p>
+
+    <div class="hero" style="margin-bottom:6px;">
+      <div class="result-icon">🪣</div>
+      <h2>You Discovered: The Leaky Bucket Algorithm!</h2>
+    </div>
+
+    <div class="learning-flow">
+      <div class="bucket-diagram-wrap">
+        <svg id="bucket-svg" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop class="fill-stop-a" offset="0%"></stop>
+              <stop class="fill-stop-b" offset="100%"></stop>
+            </linearGradient>
+          </defs>
+          <g id="burst-in">
+            <rect class="pkt-in" x="145" y="6" width="16" height="16" rx="3"></rect>
+            <rect class="pkt-in" x="167" y="6" width="16" height="16" rx="3"></rect>
+            <rect class="pkt-in" x="189" y="6" width="16" height="16" rx="3"></rect>
+            <rect class="pkt-in" x="211" y="6" width="16" height="16" rx="3"></rect>
+            <rect class="pkt-in" x="233" y="6" width="16" height="16" rx="3"></rect>
+          </g>
+          <path class="bucket-outline" d="M130,60 L270,60 L250,175 L150,175 Z"></path>
+          <clipPath id="bucket-clip"><path d="M130,60 L270,60 L250,175 L150,175 Z"></path></clipPath>
+          <rect id="bucket-fill-rect" class="bucket-fill-rect" x="130" y="175" width="140" height="0" fill="url(#fillGrad)" clip-path="url(#bucket-clip)"></rect>
+          <circle class="bucket-hole" cx="200" cy="175" r="4"></circle>
+          <path class="flow-line" id="flow-line" d="M200,179 L200,196"></path>
+          <g id="out-0" class="df-node"><circle cx="120" cy="200" r="12"></circle><text x="120" y="204">🌊</text></g>
+          <g id="out-1" class="df-node"><circle cx="160" cy="200" r="12"></circle><text x="160" y="204">🌊</text></g>
+          <g id="out-2" class="df-node"><circle cx="200" cy="200" r="12"></circle><text x="200" y="204">🌊</text></g>
+          <g id="out-3" class="df-node"><circle cx="240" cy="200" r="12"></circle><text x="240" y="204">🌊</text></g>
+          <g id="out-4" class="df-node"><circle cx="280" cy="200" r="12"></circle><text x="280" y="204">🌊</text></g>
+        </svg>
+        <button class="btn ghost small" id="btn-replay-bucket">↻ Replay Animation</button>
+      </div>
+
+      <div class="bucket-summary">
+        <p class="bucket-summary-lead">This matches your water slide model directly:</p>
+        <ul>
+          <li>Swimmers arrive at unpredictable times (bursty incoming traffic).</li>
+          <li>The platform holds up to 10 waiting swimmers (finite buffer memory).</li>
+          <li>The slide releases exactly 1 person every fixed interval (constant outflow rate).</li>
+          <li>Any swimmers arriving when all 10 platform spots are filled are turned away and leave (packet discard/loss).</li>
+        </ul>
+        <p class="bucket-summary-lead">This mechanism is called the <strong>Leaky Bucket Algorithm</strong>. It converts bursty inputs into a smooth, steady output stream.</p>
+        <div class="definition-block">
+          <p>"The Leaky Bucket algorithm enforces a strict, constant output rate by buffering incoming items up to a fixed capacity limit. Any burst exceeding the buffer size causes immediate packet drop."</p>
+        </div>
+        <table class="concept-table">
+          <thead><tr><th>Water Slide Analogy</th><th>Networking Concept</th></tr></thead>
+          <tbody>
+            <tr><td class="story-col">Swimmers / Groups arriving</td><td class="tech-col">Data Packets / Network Traffic</td></tr>
+            <tr><td class="story-col">Railed Waiting Platform (Max 10)</td><td class="tech-col">Queue Buffer (Capacity = 10)</td></tr>
+            <tr><td class="story-col">Slide Outflow (1 person / interval)</td><td class="tech-col">Constant Transmission Rate (Leak)</td></tr>
+            <tr><td class="story-col">Riders Turned Away (5 of 15)</td><td class="tech-col">Discarded Packets (Buffer Overflow)</td></tr>
+            <tr><td class="story-col">Group Rush (15 swimmers)</td><td class="tech-col">Bursty Burst Rate</td></tr>
+            <tr><td class="story-col">Smooth Splash Entry</td><td class="tech-col">Traffic Shaping</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="key-learnings">
+        <h3>🔑 Key Technical Principles</h3>
+        <div class="kl-grid">
+          <div class="kl-item"><span class="kl-icon">🚰</span><div><b>Strict Rate Limiting</b><p>Ensures output bandwidth never exceeds the predefined constant rate, eliminating network congestion spikes downstream.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">🪣</span><div><b>Finite Buffer Limit</b><p>A maximum queue size prevents memory overflow. Once full, tail drops occur immediately.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">✅</span><div><b>Protection Against Bursts</b><p>Bursts are absorbed up to buffer limits and output smoothly, protecting downstream servers/routers.</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-method-back">⬅ Back to Debrief</button>
+      <button class="btn" id="btn-method-continue">Continue to New Scenarios ➜</button>
+    </div>
+  </section>
+
+  <!-- ================= CHAPTER 6: NEW SCENARIOS ================= -->
+  <section class="section" id="sec-cases">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; New Scenarios</span>
+    <h2 class="section-title">Test your understanding</h2>
+    <p class="section-sub">Apply the Leaky Bucket idea to these real-world situations.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1 &middot; Design for a Real Situation</span><span class="q-text">An online ticket-booking website receives thousands of booking requests within a few seconds when ticket sales open. Design a Leaky Bucket configuration that could help manage this rush. What factors would you consider while choosing the bucket capacity and output rate?</span></div>
+        <div class="qcard"><span class="q-num">2 &middot; Investigate a Failure</span><span class="q-text">A server uses a Leaky Bucket to control incoming requests. During a sudden traffic spike, users start receiving rejection messages even though the server is still processing requests. Investigate what might be happening and suggest two ways to improve the situation.</span></div>
+        <div class="qcard"><span class="q-num">3 &middot; Optimize Under Pressure</span><span class="q-text">A payment system must handle regular traffic smoothly but also accommodate occasional bursts without rejecting too many requests. You can change only the bucket capacity or the output rate. Which would you adjust first, and how would you test whether your change actually improves performance?</span></div>
+        <div class="qcard"><span class="q-num">4 &middot; Build a Better System</span><span class="q-text">Imagine a food-delivery platform where hundreds of restaurants send order updates to a central server simultaneously. The server can process only a limited number of updates per second. How would you use a Leaky-Bucket-style mechanism to manage these updates? What would you do when the waiting capacity is exhausted?</span></div>
+        <div class="qcard"><span class="q-num">5 &middot; Design for Different Needs</span><span class="q-text">A live gaming service needs requests to be processed with minimum delay, while a file-upload service can tolerate some waiting but should avoid rejecting incoming data. Would you configure the Leaky Bucket in the same way for both systems? Explain how you would adjust the bucket capacity and output rate for each, and why.</span></div>
+        <div class="qcard"><span class="q-num">6 &middot; Optimize the System</span><span class="q-text">A news website experiences sudden traffic spikes whenever breaking news is published. Initially, its Leaky Bucket handles the traffic well, but during prolonged spikes, many requests get rejected. What changes would you make to improve the system? Explain how you would decide whether those changes are effective.</span></div>
+        <div class="qcard"><span class="q-num">7 &middot; Extend the Application</span><span class="q-text">Imagine a hospital monitoring system receives health readings from hundreds of devices simultaneously. The central server must process these readings continuously without becoming overloaded. How could a Leaky-Bucket-style mechanism help manage this flow? What additional considerations would be important if some readings are more urgent than others?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-cases-back">⬅ Back to the Mechanism</button>
+        <button class="btn ghost" id="btn-cases-lab">🧪 Back to the CSE Concept Laboratory</button>
+        <button class="btn" id="btn-cases-finish">🔄 Restart from the Beginning</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= OVERLAYS ================= -->
+<div class="overlay" id="overlay-pause">
+  <div class="overlay-card">
+    <h2>⏸ Paused</h2>
+    <p>Simulation frozen. Platform queue state preserved.</p>
+    <div class="section-nav">
+      <button class="btn" id="btn-overlay-resume">▶ Resume</button>
+      <button class="btn ghost" id="btn-overlay-quit">Quit to Briefing</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-progress">
+  <div class="overlay-card">
+    <div class="explain-icon">⚠️</div>
+    <h2>Leave the game?</h2>
+    <p>If you move forward or backward, your current game progress will be reset.</p>
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-progress-cancel">Stay Here</button>
+      <button class="btn" id="btn-progress-confirm">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay-explain">
+  <div class="overlay-card">
+    <div class="explain-icon" id="explain-icon">💡</div>
+    <h2 id="explain-title">Heads up</h2>
+    <p class="explain-text" id="explain-text"></p>
+    <div class="section-nav">
+      <button class="btn" id="btn-explain-gotit">Got it ✅</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   NAVIGATION: 6-chapter stepper
+   ============================================================ */
+const STEP_FOR_SECTION = {
+  'sec-puzzle':1, 'sec-briefing':2, 'sec-sim':3, 'sec-complete':3, 'sec-notes':4, 'sec-method':5, 'sec-cases':6
+};
+function setStep(n){
+  for (let i = 1; i <= 6; i++){
+    const el = document.getElementById('step-' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view'));
+  document.getElementById(id).classList.add('active-view');
+  setStep(STEP_FOR_SECTION[id] || 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* =========================================================================
+   STORY DATA (Water Slide Analogy)
+   ========================================================================= */
+const INTRO_LINES = [
+  'Swimmers arrive at Tsunami Splash platform whenever they like.',
+  'Sometimes it\'s a trickle, 1 swimmer walking up the tower stairs.',
+  'Suddenly, a <span class="highlight">massive group rush of 15 swimmers</span> arrives all at once!',
+  'The slide permits <span class="highlight">exactly 1 person down every interval</span> (constant rate).',
+  'The platform holds a <span class="highlight">maximum of 10 people in line</span>.',
+];
+
+const DEPARTMENTS = [
+  { id:'camp',   name:'Splash Campers',    shortName:'CAMP' },
+  { id:'team',   name:'Swim Team',         shortName:'TEAM' },
+  { id:'family', name:'Family Group',      shortName:'FAMILY' },
+  { id:'vip',    name:'VIP Passholders',   shortName:'VIP' },
+  { id:'express',name:'Express Swimmers',  shortName:'EXPRESS' },
+];
+
+const DIALOGUE = {
+  sendSmall: ["Swimmers arrived at the platform queue.", "Steady walk-ups, platform space available.", "Swimmers in line waiting their turn."],
+  sendBurst: "🚨 Massive group rush of 15 swimmers! Watch the 10-person platform fill up.",
+  drop: "⚠️ Platform queue is full (10 max)! Extra swimmers turned away at the gate!",
+  processed: ["1 swimmer dispatched down the water slide.", "Constant outflow: 1 rider sliding down safely.", "Releasing 1 rider down the slide."],
+  idle: ["Platform queue is currently empty.", "Waiting for swimmers to arrive at the splash tower."],
+  ready: "Ready at the water slide platform.",
+};
+function say(list){ return Array.isArray(list) ? list[Math.floor(Math.random() * list.length)] : list; }
+
+/* =========================================================================
+   GAME STATE (Parameters matching new Leaky Bucket specs)
+   ========================================================================= */
+const BUCKET_CAPACITY = 10;
+const DRAIN_RATE = 1; // 1 person down the slide per interval
+const DRAIN_ANIM_MS = 700;
+const SPEED_STEPS = [
+  { label:'0.5×', ms:3000 }, { label:'1×', ms:2000 }, { label:'1.5×', ms:1400 }, { label:'2×', ms:900 },
+];
+
+const state = {
+  queue: [], score: 0, sentTotal: 0, droppedTotal: 0,
+  status: 'idle',
+  explaining: false,
+  mode: null,
+  autoDemoDone: false,
+  tickId: null, logEntries: [], seq: 0, drainingInProgress: false,
+  speedIndex: 0, autoTimers: [], awaitingDrainCallback: null,
+};
+function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+function TICK_MS(){ return SPEED_STEPS[state.speedIndex].ms; }
+function scaleDelay(ms){ return ms * (TICK_MS() / SPEED_STEPS[1].ms); }
+
+/* =========================================================================
+   RENDERING
+   ========================================================================= */
+function renderCaseStory(){
+  document.getElementById('intro-story-lines').innerHTML = INTRO_LINES.map(l => `<p>${l}</p>`).join('');
+}
+function renderBucketVisual(){
+  const wrap = document.getElementById('bucket-slots');
+  document.getElementById('bucket-fill-text').textContent = state.queue.length + '/' + BUCKET_CAPACITY;
+  const fillBar = document.getElementById('capacity-fill');
+  fillBar.style.width = Math.round(state.queue.length / BUCKET_CAPACITY * 100) + '%';
+  fillBar.classList.toggle('high', state.queue.length >= 8);
+
+  if (state.queue.length === 0){
+    wrap.innerHTML = '<span class="bucket-empty-note">Platform line is empty. Arriving swimmers will wait here.</span>';
+    return;
+  }
+  let drainIdx = 0;
+  wrap.innerHTML = state.queue.map((pkg, i) => {
+    const isNewest = !pkg.draining && i === state.queue.length - 1;
+    let cls = 'bucket-slot filled' + (isNewest ? ' newest' : '');
+    let style = '';
+    if (pkg.draining){
+      cls += ' draining';
+      style = ` style="transition-delay:${drainIdx * 80}ms"`;
+      drainIdx++;
+    }
+    return `<div class="${cls}"${style} title="${pkg.dept}">${pkg.shortName}</div>`;
+  }).join('');
+}
+function spawnOutputFlow(n){
+  const track = document.getElementById('output-track');
+  const dur = Math.max(700, Math.round(TICK_MS() * 0.85));
+  for (let i = 0; i < n; i++){
+    setTimeout(() => {
+      const pkt = document.createElement('span');
+      pkt.className = 'flow-pkt';
+      pkt.textContent = '🏄';
+      pkt.style.animationDuration = dur + 'ms';
+      track.appendChild(pkt);
+      setTimeout(() => pkt.remove(), dur + 100);
+    }, i * Math.min(170, dur / 4));
+  }
+}
+function renderLog(){
+  const container = document.getElementById('log-container');
+  container.innerHTML = state.logEntries.slice(-40).map(e =>
+    `<li class="log-entry log-${e.type}">${e.text}</li>`
+  ).join('');
+}
+function renderHUD(){
+  document.getElementById('waiting-value').textContent = state.queue.length;
+  document.getElementById('score-value').textContent = state.score;
+  document.getElementById('dropped-value').textContent = state.droppedTotal;
+  document.getElementById('btn-sim-continue').disabled = state.droppedTotal === 0;
+}
+function renderDialogue(text){ document.getElementById('dialogue-text').textContent = text; }
+
+function renderGameControls(){
+  const active = state.status === 'playing' && !state.explaining;
+  document.getElementById('btn-pause').disabled = !active;
+  document.getElementById('btn-resume').disabled = !(state.status === 'paused');
+  document.getElementById('btn-watch-auto').disabled = (state.mode !== null) || state.explaining;
+  document.getElementById('btn-play-manual').disabled = !state.autoDemoDone || state.mode === 'manual' || state.explaining;
+  const manualActive = active && state.mode === 'manual';
+  document.getElementById('btn-send-packages').disabled = !manualActive;
+  document.getElementById('btn-manual-burst').disabled = !manualActive;
+}
+
+/* =========================================================================
+   CENTERED EXPLAIN POPUP
+   ========================================================================= */
+function showExplain(icon, title, text, onContinue){
+  state.explaining = true;
+  stopTick(); clearAutoTimers();
+  renderGameControls();
+  document.getElementById('explain-icon').textContent = icon;
+  document.getElementById('explain-title').textContent = title;
+  document.getElementById('explain-text').innerHTML = text;
+  document.getElementById('overlay-explain').classList.add('active');
+  document.getElementById('btn-explain-gotit').onclick = () => {
+    document.getElementById('overlay-explain').classList.remove('active');
+    state.explaining = false;
+    if (state.status === 'playing') startTick();
+    renderGameControls();
+    if (onContinue) onContinue();
+  };
+}
+
+/* =========================================================================
+   OVERFLOW (Packets Discarded)
+   ========================================================================= */
+function flashOverflow(n){
+  const outer = document.getElementById('bucket-visual');
+  outer.classList.remove('overflow-flash'); void outer.offsetWidth; outer.classList.add('overflow-flash');
+  const banner = document.getElementById('overflow-banner');
+  banner.textContent = (n === 1 ? '1 swimmer turned away at gate!' : n + ' swimmers turned away at gate!');
+  banner.classList.add('show');
+  const slots = document.getElementById('bucket-slots');
+  for (let i = 0; i < Math.min(n, 6); i++){
+    const ghost = document.createElement('span');
+    ghost.className = 'dropped-ghost';
+    ghost.textContent = '✕';
+    ghost.style.animationDelay = (i * 70) + 'ms';
+    slots.appendChild(ghost);
+    setTimeout(() => ghost.remove(), 1500);
+  }
+  setTimeout(() => banner.classList.remove('show'), 1900);
+}
+
+/* =========================================================================
+   NAVIGATION / MISSION FLOW
+   ========================================================================= */
+function initLevel(){
+  state.queue = []; state.score = 0; state.sentTotal = 0; state.droppedTotal = 0;
+  state.status = 'idle'; state.explaining = false; state.mode = null; state.autoDemoDone = false;
+  state.logEntries = []; state.seq = 0; state.drainingInProgress = false;
+  state.speedIndex = 0; state.awaitingDrainCallback = null;
+  stopTick(); clearAutoTimers();
+
+  document.getElementById('overlay-explain').classList.remove('active');
+  document.getElementById('overlay-pause').classList.remove('active');
+
+  showSection('sec-sim');
+  renderBucketVisual(); renderHUD(); renderLog();
+  document.getElementById('output-track').innerHTML = '';
+  renderDialogue(DIALOGUE.ready);
+
+  document.getElementById('mode-hint').textContent = 'Click Watch Auto Demo to begin.';
+  document.getElementById('speed-value').textContent = SPEED_STEPS[0].label;
+  document.getElementById('speed-down').disabled = true;
+  document.getElementById('speed-up').disabled = false;
+
+  renderGameControls();
+  document.getElementById('btn-sim-continue').disabled = true;
+}
+function pauseMission(){
+  if (state.status !== 'playing' || state.explaining) return;
+  state.status = 'paused'; stopTick(); clearAutoTimers();
+  document.getElementById('overlay-pause').classList.add('active');
+  renderGameControls();
+}
+function resumeMission(){
+  if (state.status !== 'paused') return;
+  state.status = 'playing';
+  startTick();
+  document.getElementById('overlay-pause').classList.remove('active');
+  renderGameControls();
+}
+function resetMission(){ stopTick(); clearAutoTimers(); initLevel(); }
+function quitToBriefing(){
+  stopTick(); clearAutoTimers();
+  document.getElementById('overlay-pause').classList.remove('active');
+  document.getElementById('overlay-explain').classList.remove('active');
+  showSection('sec-briefing');
+}
+
+/* =========================================================================
+   AUTO DEMO
+   ========================================================================= */
+function clearAutoTimers(){ state.autoTimers.forEach(t => clearTimeout(t)); state.autoTimers = []; }
+function autoAfter(ms, fn){
+  const id = setTimeout(() => { if (state.mode === 'auto' && state.status === 'playing' && !state.explaining) fn(); }, scaleDelay(ms));
+  state.autoTimers.push(id);
+}
+function startAutoDemo(){
+  if (state.mode !== null) return;
+  state.mode = 'auto'; state.status = 'playing';
+  document.getElementById('mode-hint').textContent = 'Observe the 10-person platform line and 1-person slide outflow.';
+  document.getElementById('btn-sim-continue').disabled = true;
+  renderGameControls();
+  renderDialogue('Phase 1: Swimmers arrive in small groups. 1 rider slides down every interval.');
+  startTick();
+
+  autoAfter(3000, () => sendPackages(DEPARTMENTS[0], 2, false));
+  autoAfter(7000, () => sendPackages(DEPARTMENTS[1], 3, false));
+
+  autoAfter(13000, () => {
+    renderDialogue('Phase 2: A massive group rush of 15 swimmers arrives at once! Platform holds 10 max; remaining 5 are turned away at the gate.');
+    sendPackages(DEPARTMENTS[2], 15, true);
+    state.awaitingDrainCallback = () => {
+      renderDialogue('Phase 3: The slide drains 1 rider at a time at a constant rate until the platform is clear.');
+      const finishWhenEmpty = () => {
+        if (state.status !== 'playing') return;
+        if (state.queue.length === 0 && !state.drainingInProgress) {
+          state.autoDemoDone = true;
+          state.status = 'finished';
+          stopTick();
+          renderDialogue('Demo complete! 15-person rush → 10 accepted on platform → 5 discarded → constant slide outflow.');
+          document.getElementById('mode-hint').textContent = 'Demonstration complete. Proceed to debrief.';
+          document.getElementById('btn-sim-continue').disabled = false;
+          renderGameControls();
+        } else {
+          autoAfter(900, finishWhenEmpty);
+        }
+      };
+      finishWhenEmpty();
+    };
+  });
+}
+
+/* =========================================================================
+   MANUAL PLAY
+   ========================================================================= */
+function startManual(){
+  if (!state.autoDemoDone || state.mode === 'manual') return;
+  state.mode = 'manual'; state.status = 'playing';
+  document.getElementById('mode-hint').textContent = 'Manual mode: send swimmers or trigger a 15-person rush.';
+  renderGameControls();
+  startTick();
+  showExplain('🎮', 'Your Turn',
+    'Click <b>Send Swimmers</b> to add a small group, or <b>Trigger Massive Rush</b> to send 15 riders at once to test the 10-capacity platform.',
+    () => {}
+  );
+}
+function onSendClick(){
+  if (state.status !== 'playing' || state.mode !== 'manual' || state.explaining) return;
+  const grp = DEPARTMENTS[randInt(0, DEPARTMENTS.length - 1)];
+  sendPackages(grp, randInt(1,3), false);
+}
+function onBurstClick(){
+  if (state.status !== 'playing' || state.mode !== 'manual' || state.explaining) return;
+  showExplain('🤔', 'Predict Outcome',
+    '15 swimmers rush the platform, but capacity is 10 and outflow is 1 per interval. How many swimmers will be turned away?',
+    () => {
+      runBurstSequence(() => {
+        showExplain('💡', 'Observed Result',
+          'Exactly 10 swimmers entered the platform line while 5 were turned away at the gate. Outflow rate remained constant!',
+          () => {}
+        );
+      });
+    }
+  );
+}
+function sendPackages(grp, amount, isBurst){
+  const room = BUCKET_CAPACITY - state.queue.length;
+  const accepted = Math.max(0, Math.min(amount, room));
+  const dropped = amount - accepted;
+  for (let i = 0; i < accepted; i++){
+    state.queue.push({ dept: grp.name, shortName: grp.shortName, id: 'p' + (state.seq++) });
+  }
+  state.sentTotal += amount;
+  state.droppedTotal += dropped;
+
+  const swimmerWord = amount === 1 ? 'swimmer' : 'swimmers';
+  let logText = isBurst 
+    ? `A ${grp.name} arrived with ${amount} ${swimmerWord}`
+    : `${amount} ${swimmerWord} arrived from ${grp.name}`;
+
+  let logType = isBurst ? 'burst' : 'send';
+  if (dropped > 0){
+    logText += ` — platform full, ${dropped} turned away at gate!`;
+    logType = 'drop';
+  }
+  state.logEntries.push({ type: logType, text: logText });
+
+  if (dropped > 0){ renderDialogue(DIALOGUE.drop); flashOverflow(dropped); }
+  else if (isBurst){ renderDialogue(DIALOGUE.sendBurst); }
+  else { renderDialogue(say(DIALOGUE.sendSmall)); }
+
+  renderBucketVisual(); renderHUD(); renderLog();
+}
+function runBurstSequence(afterDrainFn){
+  const grp = DEPARTMENTS[1];
+  sendPackages(grp, 15, true);
+  state.awaitingDrainCallback = afterDrainFn;
+}
+
+/* =========================================================================
+   DRAIN STEP (Constant Outflow: 1 person per interval)
+   ========================================================================= */
+function startTick(){
+  stopTick();
+  state.tickId = setInterval(() => { if (state.status === 'playing' && !state.explaining) drainStep(); }, TICK_MS());
+}
+function stopTick(){ if (state.tickId){ clearInterval(state.tickId); state.tickId = null; } }
+
+function drainStep(){
+  if (state.status !== 'playing' || state.explaining || state.drainingInProgress) return;
+  if (state.queue.length === 0){
+    renderDialogue(say(DIALOGUE.idle));
+    return;
+  }
+  const n = Math.min(DRAIN_RATE, state.queue.length);
+  for (let i = 0; i < n; i++) state.queue[i].draining = true;
+  state.drainingInProgress = true;
+  renderDialogue(say(DIALOGUE.processed));
+  renderBucketVisual();
+  spawnOutputFlow(n);
+
+  setTimeout(() => {
+    state.queue.splice(0, n);
+    state.score += n;
+    state.drainingInProgress = false;
+    state.logEntries.push({ type:'process', text:`⚙️ Dispatched ${n} swimmer down water slide` });
+    renderBucketVisual(); renderHUD(); renderLog();
+    if (state.queue.length === 0 && state.awaitingDrainCallback){
+      const cb = state.awaitingDrainCallback;
+      state.awaitingDrainCallback = null;
+      cb();
+    }
+  }, DRAIN_ANIM_MS);
+}
+
+function changeSpeed(delta){
+  const next = state.speedIndex + delta;
+  if (next < 0 || next >= SPEED_STEPS.length) return;
+  state.speedIndex = next;
+  document.getElementById('speed-value').textContent = SPEED_STEPS[next].label;
+  document.getElementById('speed-down').disabled = next === 0;
+  document.getElementById('speed-up').disabled = next === SPEED_STEPS.length - 1;
+  if (state.status === 'playing' && !state.explaining) startTick();
+}
+
+/* =========================================================================
+   SUMMARY
+   ========================================================================= */
+function goToSummary(){
+  stopTick(); clearAutoTimers();
+  document.getElementById('complete-score').textContent = state.score;
+  document.getElementById('complete-sent').textContent = state.sentTotal;
+  document.getElementById('complete-dropped').textContent = state.droppedTotal;
+  showSection('sec-complete');
+}
+
+/* =========================================================================
+   CHAPTER 5 ANIMATION
+   ========================================================================= */
+let bucketAnimTimers = [];
+function playBucketAnimation(){
+  bucketAnimTimers.forEach(t => clearTimeout(t));
+  bucketAnimTimers = [];
+
+  const pkts = Array.from(document.querySelectorAll('#bucket-svg .pkt-in'));
+  const fillRect = document.getElementById('bucket-fill-rect');
+  document.querySelectorAll('#bucket-svg .df-node').forEach(el => el.classList.remove('active'));
+  pkts.forEach((el, i) => {
+    el.classList.remove('active');
+    el.style.transitionDelay = (i * 140) + 'ms';
+  });
+  setFillLevel(fillRect, 0);
+
+  bucketAnimTimers.push(setTimeout(() => {
+    pkts.forEach(el => el.classList.add('active'));
+  }, 60));
+
+  bucketAnimTimers.push(setTimeout(() => setFillLevel(fillRect, 5), 1250));
+
+  [0,1,2,3,4].forEach((i, idx) => {
+    bucketAnimTimers.push(setTimeout(() => {
+      document.getElementById('out-' + i).classList.add('active');
+      setFillLevel(fillRect, 4 - idx);
+    }, 1950 + idx * 650));
+  });
+}
+function setFillLevel(rect, level){
+  const clamped = Math.max(0, Math.min(5, level));
+  const h = clamped * 23;
+  rect.setAttribute('height', h);
+  rect.setAttribute('y', 175 - h);
+}
+
+/* ============================================================
+   EVENT LISTENERS
+   ============================================================ */
+document.getElementById('btn-puzzle-continue').addEventListener('click', () => showSection('sec-briefing'));
+document.getElementById('btn-briefing-back').addEventListener('click', () => showSection('sec-puzzle'));
+document.getElementById('btn-briefing-start').addEventListener('click', initLevel);
+let pendingNav = null;
+function askLeaveGame(target){
+  pendingNav = target;
+  document.getElementById('overlay-progress').classList.add('active');
+}
+document.getElementById('btn-case-back').addEventListener('click', () => askLeaveGame('sec-briefing'));
+document.getElementById('btn-case-skip').addEventListener('click', () => askLeaveGame('sec-notes'));
+document.getElementById('btn-progress-cancel').addEventListener('click', () => {
+  pendingNav = null;
+  document.getElementById('overlay-progress').classList.remove('active');
+});
+document.getElementById('btn-progress-confirm').addEventListener('click', () => {
+  const target = pendingNav; pendingNav = null;
+  document.getElementById('overlay-progress').classList.remove('active');
+  if (target === 'sec-briefing') { quitToBriefing(); return; }
+  stopTick(); clearAutoTimers();
+  document.getElementById('overlay-pause').classList.remove('active');
+  document.getElementById('overlay-explain').classList.remove('active');
+  showSection(target);
+});
+
+document.getElementById('btn-watch-auto').addEventListener('click', startAutoDemo);
+document.getElementById('btn-play-manual').addEventListener('click', startManual);
+document.getElementById('btn-send-packages').addEventListener('click', onSendClick);
+document.getElementById('btn-manual-burst').addEventListener('click', onBurstClick);
+
+document.getElementById('btn-pause').addEventListener('click', pauseMission);
+document.getElementById('btn-resume').addEventListener('click', resumeMission);
+document.getElementById('btn-reset').addEventListener('click', resetMission);
+document.getElementById('speed-down').addEventListener('click', () => changeSpeed(-1));
+document.getElementById('speed-up').addEventListener('click', () => changeSpeed(1));
+document.getElementById('btn-sim-continue').addEventListener('click', goToSummary);
+
+document.getElementById('btn-overlay-resume').addEventListener('click', resumeMission);
+document.getElementById('btn-overlay-quit').addEventListener('click', quitToBriefing);
+
+document.getElementById('btn-complete-replay').addEventListener('click', initLevel);
+document.getElementById('btn-complete-continue').addEventListener('click', () => {
+  showSection('sec-notes');
+});
+
+document.getElementById('btn-notes-back').addEventListener('click', () => showSection('sec-complete'));
+document.getElementById('btn-notes-continue').addEventListener('click', () => {
+  showSection('sec-method');
+  playBucketAnimation();
+});
+
+document.getElementById('btn-method-back').addEventListener('click', () => showSection('sec-notes'));
+document.getElementById('btn-method-continue').addEventListener('click', () => showSection('sec-cases'));
+document.getElementById('btn-replay-bucket').addEventListener('click', playBucketAnimation);
+
+document.getElementById('btn-cases-back').addEventListener('click', () => showSection('sec-method'));
+document.getElementById('btn-cases-lab').addEventListener('click', () => {
+  window.location.href = '../../index.html';
+});
+document.getElementById('btn-cases-finish').addEventListener('click', () => {
+  stopTick(); clearAutoTimers();
+  showSection('sec-puzzle');
+});
+
+/* ---------------- initial render ---------------- */
+renderCaseStory();
+
+})();
+</script>
+</body>
+</html>

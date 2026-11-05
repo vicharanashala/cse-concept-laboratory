@@ -67,6 +67,8 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 17 | The Bank Rush | ✅ Available |
 | 18 | Hungry Mouse | ✅ Available |
 | 19 | The Ant Colony | ✅ Available |
+| 20 | Cross Road | ✅ Available |
+| 21 | The Water Park Analogy | ✅ Available |
 
 ## Repository Structure
 
