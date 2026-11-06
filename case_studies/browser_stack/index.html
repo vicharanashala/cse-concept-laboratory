@@ -96,35 +96,33 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 
 <section class="section active-view" id="sec-puzzle">
 <div class="hero">
-<span class="eyebrow">Chapter 1 · The Puzzle</span>
-<h1>You clicked 10 links. How do you go back 3 steps?</h1>
+<span class="eyebrow">Chapter 1 &middot; A familiar problem</span>
+<h1>You&#39;ve reached for the top one before</h1>
 </div>
 <div class="problem-card">
-<p>Aisha has 10 tabs open: <b>Google → Wiki → YouTube → Docs → Reddit</b>. She needs Wiki from 3 clicks ago, but <b>Back only undoes one step</b>.</p>
-<p>To reach Wiki she must go back through <b>Reddit → Docs → YouTube</b> one by one. With 20 pages, the first page takes 20 Backs.</p>
-<div style="display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:12px;padding:12px 14px;margin-top:14px">
-<div style="width:36px;height:36px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#EA8C36,#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px">👩‍🎓</div>
-<div style="font-size:13.5px;color:var(--ink);line-height:1.5"><span style="font-size:11px;color:var(--amber-dark);font-weight:700;letter-spacing:.05em">AISHA</span><br>“Why can’t I just jump to Wiki? Why must I go back step by step?”</div>
+<p>At a cafeteria, clean plates are placed one on top of another. When you need a plate, you take the one on <b>top</b>, not the one at the bottom. To reach a plate lower down, you would have to lift off every plate above it first.</p>
+<p>The same thing happens with a pile of notebooks on a desk: the last notebook you put down is the easiest one to pick up again. When you can only reach the top, <b>the order you added things decides the order you can take them back</b>.</p>
+<p>Now imagine you put down a red notebook, then a blue one, then a green one. You want the red notebook again. Which ones do you have to pick up first, and why can&#39;t you grab the red one right away?</p>
 </div>
-</div>
-<div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button></div>
+<div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Rules &rarr;</button></div>
 </section>
 
 <section class="section" id="sec-briefing">
 <div class="hero">
-<span class="eyebrow">Chapter 2 · The Briefing</span>
-<h1>Back Again</h1>
+<span class="eyebrow">Chapter 2 &middot; How to play</span>
+<h1>Before You Browse</h1>
 </div>
 <div class="card" style="text-align:center;max-width:640px;margin:0 auto">
-<p style="margin-bottom:14px">Everything you visit forms a <b>pile</b>: every new page lands <b>on top</b>. <b>Back</b> removes the page you just saw, one at a time.</p>
+<p style="margin-bottom:14px"><b>Goal:</b> build a visit pile and notice which page you return to when you go back.</p>
 <ul class="rules-list">
-<li>No jumping: you can't open a middle page directly.</li>
-<li>You can't search your old pages.</li>
-<li class="ok">Every new page → lands on top</li>
-<li class="ok">Back → removes the top page only</li>
+<li class="ok">Use <b>+ Visit Page</b> to open a new page. It lands on <b>top</b> of your visit pile.</li>
+<li class="ok">Use <b>Back</b> (or the browser back arrow) to return. It removes the <b>top</b> page, the one you saw last.</li>
+<li>Try <b>Auto Surf</b> to watch a full run, or use the <b>Challenge</b> to reach a target page in a set number of Backs.</li>
+<li>No jumping: you cannot open a middle page directly, and you cannot search old pages from the pile.</li>
+<li>Visiting a new page after going back clears the pages that were ahead of you.</li>
 </ul>
 </div>
-<div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn" id="btn-briefing-start">Enter the Browser ▶</button></div>
+<div class="section-nav"><button class="btn ghost" id="btn-briefing-back">&larr; Back</button><button class="btn" id="btn-briefing-start">Enter the Browser &rarr;</button></div>
 </section>
 
 <section class="section" id="sec-search">
@@ -175,77 +173,60 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 </section>
 
 <section class="section" id="sec-notes">
-<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 · Case Notes</span>
-<h2 class="section-title">What did you notice?</h2>
-<p class="section-sub">No single right answer: just what you felt while surfing.</p>
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 &middot; What did you notice?</span>
+<h2 class="section-title">Think back on what just happened</h2>
+<p class="section-sub">No right answers here. Just sit with these for a moment.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · Reading your pile</span><span class="q-text">Visit four pages without pressing Back, then look at the rail. Which page is marked TOP, and where in that column is the very first page you visited?</span></div>
-<div class="qcard"><span class="q-num">02 · Back with nothing there</span><span class="q-text">Press Back before you visit anything. What does the button do, and what message appears? Have you seen this happen in a real browser?</span></div>
-<div class="qcard"><span class="q-num">03 · The vanishing arrow</span><span class="q-text">Press Back twice, press Forward once, then visit a new page. What happens to the Forward arrow? Why do you think a real browser behaves that way?</span></div>
-<div class="qcard"><span class="q-num">04 · Watching the counters</span><span class="q-text">Keep an eye on Pages and Back ops while you work. Which number moves when you press Back, and does the pile shrink from the top or the bottom?</span></div>
-<div class="qcard"><span class="q-num">05 · Beating the Challenge</span><span class="q-text">The Challenge asked for a set number of visits and then exactly so many Backs. What sequence did you run, and what did the page tell you if you ever pressed Back too many times?</span></div>
-<div class="qcard"><span class="q-num">06 · Auto Surf versus your own hands</span><span class="q-text">Let Auto Surf run once, then repeat the same run by hand. What did watching it show you that doing it yourself did not?</span></div>
-<div class="qcard"><span class="q-num">07 · Reset is not Back</span><span class="q-text">Press Reset in the middle of a run. What all did it clear at once, and why does that feel different from pressing Back a few times?</span></div>
+<div class="qcard"><span class="q-num">01</span><span class="q-text">When you visited several pages without pressing Back, where did each new page appear in the visit pile, and which one was marked <b>TOP</b>?</span></div>
+<div class="qcard"><span class="q-num">02</span><span class="q-text">Each time you pressed <b>Back</b>, which page left the pile: the one you visited first, or the one you visited most recently? Did that match what you expected?</span></div>
+<div class="qcard"><span class="q-num">03</span><span class="q-text">Press Back, press Forward once, then visit a brand-new page. What happened to the Forward option? Why do you think that happened?</span></div>
+<div class="qcard"><span class="q-num">04</span><span class="q-text">Try the <b>Challenge</b>. What sequence of visits and Backs solved it, and what went wrong if you pressed Back at the wrong time?</span></div>
+<div class="qcard"><span class="q-num">05</span><span class="q-text">If you wanted to reach a page buried deep under many others, what would you have to do first? What makes it hard to jump straight to a page in the middle of the pile?</span></div>
 </div>
-<div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
+<div class="section-nav"><button class="btn ghost" id="btn-notes-back">&larr; Back</button><button class="btn" id="btn-notes-continue">Continue to The Method &rarr;</button></div></div>
 </section>
 
 <section class="section" id="sec-method">
-<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 · The Method</span>
-<h2 class="section-title">How it really worked</h2>
-<p class="section-sub">You just lived a Stack. Here's the name for what you felt.</p>
-<div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🥞</div><h2>The Stack (LIFO)</h2></div>
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 &middot; The Method</span>
+<h2 class="section-title">What you just discovered</h2>
+<p class="section-sub">The visit pile you used in the browser has a name.</p>
 <div class="learning-flow">
 <div class="concept-blank">
-<h4>Definition</h4><p><code>LIFO</code>, Last In, First Out: like plates, you can only touch the top. The last thing you put in is the first thing you get back.</p>
-<h4>Mechanism</h4>
-<ol class="mech-steps">
-<li><code>push(x)</code>: visit a page and place it on top of the pile.</li>
-<li><code>peek()</code>: glance at the top page without removing it.</li>
-<li><code>pop()</code>: press Back, which removes the top page.</li>
-<li>All three touch only the top, so each is <code>O(1)</code>. No middle jump: you must pop everything above the page you want.</li>
-</ol>
-<h4>Vocabulary</h4>
-<div class="vocab-grid">
-<div class="vocab-card"><div class="vocab-term"><code>top</code></div><div class="vocab-def">The current page: the one you can see and the only one you can touch.</div></div>
-<div class="vocab-card"><div class="vocab-term"><code>underflow</code></div><div class="vocab-def">Pressing Back when the pile is empty: nothing is left to return to.</div></div>
-<div class="vocab-card"><div class="vocab-term"><code>overflow</code></div><div class="vocab-def">Pushing onto a pile that is already full.</div></div>
-<div class="vocab-card"><div class="vocab-term"><code>LIFO</code></div><div class="vocab-def">Last In, First Out: the newest item leaves first, as in browser Back or Undo.</div></div>
+<p>The visit pile worked because every new page was placed on <b>top</b>, and <b>Back</b> always removed the top page. The page you saw most recently was the first one you returned to. You could not reach the middle without removing what was above it.</p>
+<p style="margin-top:10px">In computer science, this is called a <b>stack</b>. A stack follows one simple rule: <b>Last In, First Out (LIFO)</b>, the last item you put in is the first item you take out.</p>
+<ul class="rules-list" style="margin-top:14px">
+<li class="ok"><b>Push</b>, add a new item to the <b>top</b> of the stack.</li>
+<li class="ok"><b>Pop</b>, remove the item from the <b>top</b> of the stack.</li>
+<li>Because you only touch the top, adding and removing stay quick, even when the pile is large.</li>
+</ul>
+<p style="margin-top:12px">That is why the Back button feels natural: it returns you to the most recent page first. When you visited a new page after going back, the old forward path disappeared, because the top of the pile changed.</p>
 </div>
-</div>
-<div class="compare-cards">
-<div class="compare-card"><span class="compare-title">If it were a Queue (FIFO).</span> <span class="compare-sub">Back would give Google first, not last. Undo would erase H from HELLO → ELLO!</span></div>
-<div class="compare-card"><span class="compare-title">Because it’s a Stack (LIFO).</span> <span class="compare-sub">Back gives last visited, exactly what you expect. Undo fixes last mistake.</span></div>
-</div>
-<div class="key-learnings"><h3>🔑 Key Learnings</h3><div class="kl-grid">
-<div class="kl-item"><span class="kl-icon">🥞</span><div><b>The Shape</b><p>Only the top is reachable. That constraint is the whole power, and the limit.</p></div></div>
-<div class="kl-item"><span class="kl-icon">⚡</span><div><b>O(1) Top</b><p>Push, pop, peek never scan. They touch top only.</p></div></div>
-<div class="kl-item"><span class="kl-icon">↩️</span><div><b>Where You'll See It</b><p>Browser Back, Undo, function calls, plate piles, coal heaps, all want the newest thing first. Printer jobs, grocery shelves and checkout lines expect the oldest first.</p></div></div>
+<div class="key-learnings"><h3>Key learnings</h3><div class="kl-grid">
+<div class="kl-item"><span class="kl-icon">1.</span><div><b>Only the top is reachable</b><p>You add to the top and remove from the top. The middle stays out of reach.</p></div></div>
+<div class="kl-item"><span class="kl-icon">2.</span><div><b>Last in, first out</b><p>The most recent item is the first one to come back out.</p></div></div>
+<div class="kl-item"><span class="kl-icon">3.</span><div><b>The rule shapes the behavior</b><p>Because Back always removes the newest page, your steps retrace in reverse order.</p></div></div>
 </div></div>
 </div>
-<div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn" id="btn-method-continue">Continue to New Cases ➜</button></div>
+<div class="section-nav"><button class="btn ghost" id="btn-method-back">&larr; Back</button><button class="btn" id="btn-method-continue">Continue to New Cases &rarr;</button></div>
 </section>
 
 <section class="section" id="sec-cases">
-<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Cases</span>
+<span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; New Cases</span>
 <h2 class="section-title">Try on your own</h2>
-<p class="section-sub">Trace the steps in your head.</p>
+<p class="section-sub">Same idea, new situations. Think each one through.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 · A pile a thousand deep</span><span class="q-text">A page you opened on Monday is now buried under a thousand more. To reach it, how many Back presses do you actually need, and why can’t the browser just jump straight to it? What would it have to keep for that jump to be possible?</span></div>
-<div class="qcard"><span class="q-num">02 · The branch you abandoned</span><span class="q-text">You press Back five times to reread something, then click a brand-new link. Every page stacked above you is now gone. Was throwing that branch away the right call? What would your program have to store if it decided to keep both branches?</span></div>
-<div class="qcard"><span class="q-num">03 · Nothing to go back to</span><span class="q-text">The history is empty and someone presses Back. What does the page tell them, and what would your code have to check before it goes anywhere near the top of the pile? Name the two cases a stack handler must never miss.</span></div>
-<div class="qcard"><span class="q-num">04 · Looking without taking</span><span class="q-text">The pile shows you which page is on top before you press Back. Which operation is that? Now suppose it had been written so that it shows you the page and then removes it. What breaks the first time someone clicks it?</span></div>
-<div class="qcard"><span class="q-num">05 · Two arrows, two piles</span><span class="q-text">Back and Forward move in opposite directions, so one pile cannot answer for both. Visit A, visit B, press Back, then press Forward: where did A go when you pressed Back, and which pile handed it back? What would a single shared pile do to the Forward arrow?</span></div>
-<div class="qcard"><span class="q-num">06 · Four visits, four Backs</span><span class="q-text">Auto Surf visits four pages and then backs out four times, and the pile ends up empty again. Why must those two counts match exactly? What would appear on screen if it pressed Back a fifth time?</span></div>
-<div class="qcard"><span class="q-num">07 · Three tabs, three piles</span><span class="q-text">Each browser tab keeps its own history. Open three tabs, browse a different number of pages in each, then press Back in every one. Why did each tab answer independently, and what would break if all three tabs shared a single pile?</span></div>
-<div class="qcard"><span class="q-num">08 · If Undo held a queue</span><span class="q-text">You type H, then E, then L, then L, then O, and press Undo five times to clear it. If those letters were waiting in a queue instead of a stack, what would the text box say at the end, and would that feel right for an Undo button?</span></div>
-<div class="qcard"><span class="q-num">09 · Leaving before you finish</span><span class="q-text">The game warns that leaving the section resets your progress. Why is that warning honest, given how the pile is stored? What would the game have to write down if it wanted to let you come back later and pick up where you left off?</span></div>
-<div class="qcard"><span class="q-num">10 · When keeping it all breaks</span><span class="q-text">A browser that keeps every page you ever opened will eventually exhaust your laptop’s memory. What should it give up first, and what does each choice cost you the next time you press Back or Forward?</span></div>
+<div class="qcard"><span class="q-num">01 &middot; Trace the pile</span><span class="q-text">Your visit pile is empty. You visit <b>Home</b>, then <b>Search</b>, then <b>Article</b>. You press Back once, visit <b>Video</b>, then press Back twice. Which page is on top now, and in what order did the pages leave the pile?</span></div>
+<div class="qcard"><span class="q-num">02 &middot; Undo in an editor</span><span class="q-text">You type A, then B, then C. You press Undo twice. Which letters disappear first, and why does Undo feel like the Back button in your browser?</span></div>
+<div class="qcard"><span class="q-num">03 &middot; A deep jump</span><span class="q-text">You visited 12 pages and want the page you opened 8 steps ago. Can Back take you there in one step? How many Back presses do you need, and what happens to the pages above the one you want?</span></div>
+<div class="qcard"><span class="q-num">04 &middot; Empty pile</span><span class="q-text">You press <b>Back</b> when there are no pages in the visit pile. What should the browser do, and why is it important for a program to handle this case before removing anything?</span></div>
+<div class="qcard"><span class="q-num">05 &middot; The lost Forward path</span><span class="q-text">You visit A, B, C, press Back twice (you are on A), then visit D. Can you still Forward to B or C? Where did that path go, and what does this tell you about how the pile changes?</span></div>
+<div class="qcard"><span class="q-num">06 &middot; Finding a middle page</span><span class="q-text">You want to reopen a page that sits in the middle of the pile without losing the pages above it. In a strict stack you can only touch the top. What would you need to do, and what does this show a stack is not good at?</span></div>
+<div class="qcard"><span class="q-num">07 &middot; Two tools, different rules</span><span class="q-text">A browser&#39;s Back button returns you to the most recent page. A print queue prints the document that arrived first. Both handle a list of things, but in different orders. When is &ldquo;most recent first&rdquo; the right choice, and when is &ldquo;first arrived first&rdquo; better?</span></div>
+<div class="qcard"><span class="q-num">08 &middot; Design a breadcrumb trail</span><span class="q-text">You are designing a &ldquo;Back&rdquo; feature for a learning app with many screens. Which part of this problem fits a stack, and what would you store each time the user moves to a new screen so Back works correctly?</span></div>
 </div>
-<div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Concept Laboratory</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
+<div class="section-nav"><button class="btn ghost" id="btn-cases-back">&larr; Back</button><button class="btn" id="btn-cases-home">Back to CSE Concept Laboratory</button><button class="btn" id="btn-cases-finish">Restart &rarr;</button></div></div>
 </section>
 
-</div>
 <div class="toast" id="toast"></div>
 <div class="modal-overlay" id="modal-back-warn">
 <div class="modal-box">
