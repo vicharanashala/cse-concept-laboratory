@@ -185,14 +185,16 @@ code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rg
 <p class="section-sub">The fair line you used in the kitchen has a name.</p>
 <div class="learning-flow">
 <div class="concept-blank">
-<p>The order rail worked because every new order joined at the <b>back</b> and every served order left from the <b>front</b>. The one that arrived first was the one that got cooked first. Nothing in the middle was touched.</p>
-<p style="margin-top:10px">In computer science, this is called a <b>queue</b>. A queue follows one simple rule: <b>First In, First Out (FIFO)</b> ,  the first item to arrive is the first item to leave.</p>
-<ul class="rules-list" style="margin-top:14px">
-<li class="ok"><b>Enqueue</b> ,  a new item joins the <b>rear</b> (back) of the line.</li>
-<li class="ok"><b>Dequeue</b> ,  the item at the <b>front</b> leaves the line to be handled.</li>
-<li>Because you only touch the two ends, adding and serving stay quick, even when the line is long.</li>
+<p>On the order rail, every new order joined at the <b>back</b> and every order that was served left from the <b>front</b>. The one that arrived first was the one handled first. Orders in the middle were never picked out or moved ahead.</p>
+<p style="margin-top:10px">In computer science, this structure is called a <b>queue</b>. A queue follows one rule: <b>First In, First Out (FIFO)</b>. The first item to arrive is the first item to leave, just like people waiting in an orderly line.</p>
+<h4 style="margin-top:14px">How a queue works</h4>
+<ul class="rules-list" style="margin-top:8px">
+<li class="ok"><b>Enqueue</b>: add a new item at the <b>rear</b> (back) of the line.</li>
+<li class="ok"><b>Dequeue</b>: remove the item from the <b>front</b> of the line to handle it.</li>
+<li class="ok"><b>Peek</b> (or front): look at the front item without removing it.</li>
+<li>Work happens only at the two ends. Because the middle is not searched or rearranged, adding and serving stay quick even when the queue is long.</li>
 </ul>
-<p style="margin-top:12px">That is why queues feel fair: arrival order becomes service order. When you pressed <b>Skip the Line</b>, you broke FIFO ,  the newest order jumped ahead, and the older orders had to wait longer.</p>
+<p style="margin-top:12px">Queues are useful when fairness and order matter: arrival order becomes service order, so no one who arrived earlier is skipped by someone newer. When a newer item is handled before older ones, that FIFO order is broken and some items can end up waiting much longer.</p>
 </div>
 <div class="key-learnings"><h3>Key learnings</h3><div class="kl-grid">
 <div class="kl-item"><span class="kl-icon">1.</span><div><b>A line with two ends</b><p>New items enter at the rear, and items leave from the front.</p></div></div>
@@ -208,14 +210,14 @@ code{font-family:inherit;font-weight:700;color:var(--primary-deep);background:rg
 <h2 class="section-title">Try on your own</h2>
 <p class="section-sub">Same idea, new situations. Think each one through.</p>
 <div class="card"><div class="qgrid">
-<div class="qcard"><span class="q-num">01 &middot; Number the arrivals</span><span class="q-text">At a toll booth, cars arrive and are served in this order of arrival: C1, C2, C3, C4, C5. After C1 and C2 pass through, two more cars arrive in order: C6, C7. If the booth keeps following a queue, which car is served next, and which car will be served last among these seven?</span></div>
-<div class="qcard"><span class="q-num">02 &middot; The printer</span><span class="q-text">A shared printer receives print jobs from three students in this order: Anu, Bilal, Chen. If the printer follows a queue, whose pages come out first? What would happen to Chen if the printer always picked the newest job instead?</span></div>
-<div class="qcard"><span class="q-num">03 &middot; Cutting in</span><span class="q-text">At a help desk, a person who just arrived asks to be helped before the five people already waiting. If the staff agrees every time a new person asks, what happens to the person at the front of the line? Who could end up waiting far longer than everyone else?</span></div>
-<div class="qcard"><span class="q-num">04 &middot; Nothing to serve</span><span class="q-text">A ticket system tries to call the next person when no one is waiting. What should the system do, and why is it important for a program to handle this case instead of trying to process something that is not there?</span></div>
-<div class="qcard"><span class="q-num">05 &middot; A change in the middle</span><span class="q-text">A person waiting in the middle of a line decides to leave. In a strict queue, you can only reach the front and the back. What steps would be needed to remove that person, and what does this show a queue is good at, and not so good at?</span></div>
-<div class="qcard"><span class="q-num">06 &middot; Two kinds of fairness</span><span class="q-text">A hospital treats emergency patients before routine checkups. A food counter serves people in the order they arrived. Both are trying to be fair, but in different ways. When is &ldquo;first come, first served&rdquo; the right rule, and when might a different rule make more sense?</span></div>
-<div class="qcard"><span class="q-num">07 &middot; Messages on a network</span><span class="q-text">A chat app sends messages in the order a user typed them. Why is following arrival order important here? What could go wrong for the reader if a newer message was delivered before an older one?</span></div>
-<div class="qcard"><span class="q-num">08 &middot; Design a call center</span><span class="q-text">You are designing the waiting system for a customer support helpline. Calls come in all day and only a few agents are free at once. Which part of this problem fits a queue, and what information would you show a caller so the wait feels clear and fair?</span></div>
+<div class="qcard"><span class="q-num">01</span><span class="q-text">At a toll booth, cars arrive and are served in this order: C1, C2, C3, C4, C5. After C1 and C2 pass through, two more cars arrive in order: C6, C7. If the booth keeps following a queue, which car is served next, and which car will be served last among these seven?</span></div>
+<div class="qcard"><span class="q-num">02</span><span class="q-text">Songs S1, S2, S3 are added to a music playlist in that order. The player plays S1, then the user adds S4, and the player finishes S2. If songs play in the order they were added, which song plays next and which plays last? What would a listener experience if S4 played immediately instead?</span></div>
+<div class="qcard"><span class="q-num">03</span><span class="q-text">A support desk issues ticket numbers in order: 101, 102, 103, 104, 105. Tickets 101 and 102 are resolved, then 106 and 107 arrive. Which ticket should be handled next, and how many tickets will still be waiting after that one is handled? Why does giving numbers in arrival order help people trust the process?</span></div>
+<div class="qcard"><span class="q-num">04</span><span class="q-text">A ticket system tries to call the next person when no one is waiting. What should the system do, and why is it important for a program to handle this case instead of trying to process something that is not there?</span></div>
+<div class="qcard"><span class="q-num">05</span><span class="q-text">A person waiting in the middle of a line decides to leave. In a strict queue, you can only reach the front and the back. What steps would be needed to remove that person, and what does this show a queue is good at, and not so good at?</span></div>
+<div class="qcard"><span class="q-num">06</span><span class="q-text">A hospital treats emergency patients before routine checkups, while a food counter serves people in the order they arrived. Both try to be fair in different ways. When is first come, first served the right rule, and when might a different rule make more sense?</span></div>
+<div class="qcard"><span class="q-num">07</span><span class="q-text">A chat app delivers messages in the order a user typed them. Why is preserving arrival order important here? What could go wrong for the reader if a newer message appeared before an older one?</span></div>
+<div class="qcard"><span class="q-num">08</span><span class="q-text">You are designing the waiting system for a customer support helpline where calls arrive all day and few agents are free at once. Which part of this problem fits a queue, and what information would you show a caller so the wait feels clear and fair?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-cases-back">&larr; Back</button><button class="btn" id="btn-cases-home">Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart &rarr;</button></div></div>
 </section>
