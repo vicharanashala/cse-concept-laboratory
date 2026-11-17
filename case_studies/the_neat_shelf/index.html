@@ -104,13 +104,16 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <section class="section active-view" id="sec-puzzle">
 <div class="hero">
 <span class="eyebrow">Chapter 1 · The Puzzle</span>
-<h1>How do you keep a shelf neat, one jar at a time?</h1>
+<h1>You've seen this before</h1>
 </div>
 <div class="problem-card">
-<p>Meera has a box of 6 jars, all different heights. She wants them lined up on a shelf: tallest at the back, shortest at the front.</p>
-<p>But there's a catch: she must take the jars out of the box one at a time, in the order they're packed. Each jar has to find its spot on the shelf as soon as it comes out of the box.</p>
-<p>Say the shelf already holds 3 and 8, and jar 6 comes out next. Its spot is between them, so 8 has to shuffle one step over to make room.</p>
-
+<p>You are dealt a hand of cards one at a time. You don't wait for all the cards before arranging them. Each new card slips into its place among the ones you already hold.</p>
+<p>A teacher gathers exam papers as they come off the printer. Without thinking twice, each paper slides into its spot in a pile that is already ordered by roll number.</p>
+<p>Even lining up for a school photo works this way. Students arrive one by one, and each finds a place in a row that is already sorted by height.</p>
+<div style="background:#F5F9FD;border:1px solid var(--glass-border);border-left:4px solid var(--amber);border-radius:12px;padding:18px 20px;margin:18px auto 0;max-width:680px">
+<p style="margin:0;line-height:1.7">Notice the shape: things arrive one at a time, and each new one is placed into a row that is already in order. You never take everything out and start over. The neat part just grows, one item at a time.</p>
+</div>
+<p style="margin-top:14px">Next stop, you'll do this yourself with jars of different heights on a shelf.</p>
 </div>
 <div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue to the Briefing ➜</button></div>
 </section>
@@ -118,16 +121,21 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 <section class="section" id="sec-briefing">
 <div class="hero">
 <span class="eyebrow">Chapter 2 · The Briefing</span>
-<h1>The Neat Shelf</h1>
+<h1>How this stop works</h1>
 </div>
-<div class="card" style="text-align:center;max-width:640px;margin:0 auto">
-<p style="margin-bottom:14px">Jars come out of the box <b>one at a time, in a fixed order</b>. You slide each one into its place among the jars already on the shelf.</p>
-<ul class="rules-list">
-<li>No peeking: jars come out one at a time.</li>
-<li>No rebuilding: once placed, a jar stays where it is.</li>
-<li class="ok">Take the next jar, find its spot, slide it in.</li>
-<li class="ok">Only the neighbours that must move slide over.</li>
-</ul>
+<div class="card" style="text-align:left;max-width:680px;margin:0 auto">
+<p style="margin-bottom:14px">Six jars of different heights sit in a box. Your job is to build a shelf that runs from shortest at the front to tallest at the back, placing one jar at a time as it comes out of the box.</p>
+<div style="background:#F5F9FD;border:1px solid var(--glass-border);border-radius:12px;padding:18px 20px;margin-bottom:16px">
+<p style="margin:0 0 10px"><b>Goal:</b> arrange all 6 jars in height order with <b>0 slips</b>. A slip is a jar placed in a gap that would break the order.</p>
+<p style="margin:0">The shelf shows the jars placed so far, the jar in your hand, and the jars still in the box.</p>
+</div>
+<p style="margin:0 0 8px"><b>Rules of the shelf</b></p>
+<ol style="margin:0;padding-left:20px;line-height:1.8;color:var(--muted);font-size:14.5px">
+<li><b>Take the next jar.</b> Press <b>Take Next Jar</b>, or press <b>Start Auto</b> to watch it happen. Only one jar can be held at a time.</li>
+<li><b>Find its spot.</b> Tap the dashed gap where the jar belongs. Jars taller than it slide one step over to make room, and the counter shows how many slid.</li>
+<li><b>Keep the order.</b> A jar can only go in a gap that leaves the shelf shortest to tallest. A wrong tap counts as a slip, and the jar stays in your hand.</li>
+<li><b>Watch or play.</b> Use <b>Start Auto</b> and <b>Pause</b>, the speed menu, or <b>New Round</b> for a fresh box. In the first round the right gap blinks green. After that, you find it yourself.</li>
+</ol>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-briefing-back">⬅ Back</button><button class="btn" id="btn-briefing-start">Enter the Shelf ▶</button></div>
 </section>
@@ -179,70 +187,65 @@ h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-.01em;
 
 <section class="section" id="sec-notes">
 <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 · Case Notes</span>
-<h2 class="section-title">What did you notice?</h2>
-<p class="section-sub">No single right answer, just what you saw happen on the shelf.</p>
+<h2 class="section-title">What just happened?</h2>
+<p class="section-sub">Think back on the shelf. Talk these through. No answer to click.</p>
 <div class="card"><div class="qgrid">
-                <div class="qcard"><span class="q-num">01 · Find the spot</span><span class="q-text">You need to place a new jar into a sorted row. Did you scan from the end, or look for where it belongs? How did you know when to stop?</span></div>
-                <div class="qcard"><span class="q-num">02 · Make room</span><span class="q-text">When placing the jar, did you swap it in or shift jars to the right? What did shifting do to the sorted part of the shelf?</span></div>
-                <div class="qcard"><span class="q-num">03 · Prefix stays sorted</span><span class="q-text">After inserting one jar, was the left side still sorted? Why does keeping that prefix sorted help with the next insertion?</span></div>
-                <div class="qcard"><span class="q-num">04 · Slide vs swap</span><span class="q-text">How is sliding jars to make room different from selection sort's direct swap to a final position?</span></div>
-                <div class="qcard"><span class="q-num">05 · Already sorted</span><span class="q-text">If jars arrived already sorted, did you do many shifts? What happened when the new jar was bigger than all on the shelf?</span></div>
+<div class="qcard"><span class="q-num">01</span><span class="q-text">When a new jar came out of the box, how did you decide which gap it belonged in? What did you look at first?</span></div>
+<div class="qcard"><span class="q-num">02</span><span class="q-text">When you placed a jar in the middle of the row, what happened to the jars that were already there? How many of them moved?</span></div>
+<div class="qcard"><span class="q-num">03</span><span class="q-text">After each placement, was the row on the shelf still in correct height order? What made it possible to keep building on that order?</span></div>
+<div class="qcard"><span class="q-num">04</span><span class="q-text">Was there a jar that slid over more than the others? What was different about that moment compared with a jar that went straight to the end?</span></div>
+<div class="qcard"><span class="q-num">05</span><span class="q-text">Imagine the jars had arrived already in height order. What would you have noticed about the number of slides then?</span></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-notes-back">⬅ Back</button><button class="btn" id="btn-notes-continue">Continue to The Method ➜</button></div></div>
 </section>
 
 <section class="section" id="sec-method">
 <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 · The Method</span>
-<h2 class="section-title">How it really worked</h2>
-<p class="section-sub">Every time you slotted a jar into its spot, you were inserting. Here's the name for it.</p>
-<div class="hero" style="margin-bottom:6px"><div style="font-size:48px">🍶</div><h2>Insertion Sort</h2></div>
+<h2 class="section-title">The formal picture</h2>
+<p class="section-sub">The shape behind what you just did.</p>
 <div class="learning-flow">
 <div class="concept-blank">
-<h4>Definition</h4><p><strong>Insertion Sort: build one neat stretch.</strong> Keep everything before you in order. For each new item, slide it left, shifting larger items over one at a time, until it belongs.</p>
-<h4>Mechanism</h4>
+<h4>What it is called</h4>
+<p>What you just did is called <strong>insertion sort</strong>. You keep the part you have handled in order, then take the next item and slot it into that ordered part. One by one, the ordered part grows until the whole row is neat.</p>
+<h4>How it works</h4>
 <ol class="mech-steps">
-<li><code>take(x)</code>: lift the next item that is not yet placed.</li>
-<li><code>shift</code>: slide the bigger neighbours over one space right to open a gap.</li>
-<li><code>insert(x)</code>: drop the item into the gap, where it belongs.</li>
-<li>Repeat for every item until none are left; the neat stretch has grown across the whole shelf.</li>
+<li>Take the next item from the part that is not yet ordered.</li>
+<li>Compare it with the items in the ordered part, starting at the right end.</li>
+<li>Shift any larger items one step to the right to open a gap.</li>
+<li>Put the item into the gap. The ordered part is now one item longer. Repeat until nothing is left.</li>
 </ol>
-<h4>Vocabulary</h4>
+<h4>Words you will see</h4>
 <div class="vocab-grid">
-<div class="vocab-card"><div class="vocab-term"><code>pass</code></div><div class="vocab-def">One item handled: taken, shifted over, and placed.</div></div>
-<div class="vocab-card"><div class="vocab-term"><code>shift</code></div><div class="vocab-def">A neighbour sliding over one space to make room.</div></div>
-<div class="vocab-card"><div class="vocab-term"><code>sorted prefix</code></div><div class="vocab-def">The neat part already built, which only ever grows.</div></div>
-<div class="vocab-card"><div class="vocab-term"><code>stable</code></div><div class="vocab-def">Equal items keep the order they arrived in.</div></div>
+<div class="vocab-card"><div class="vocab-term">pass</div><div class="vocab-def">One full take, shift and place of a single item.</div></div>
+<div class="vocab-card"><div class="vocab-term">shift</div><div class="vocab-def">Moving an item one place to make room, not swapping it into a final spot.</div></div>
+<div class="vocab-card"><div class="vocab-term">sorted prefix</div><div class="vocab-def">The ordered part you have built so far. It never shrinks.</div></div>
+<div class="vocab-card"><div class="vocab-term">stable</div><div class="vocab-def">Equal items keep the order they arrived in, because shifting stops when an equal value is reached.</div></div>
 </div>
 </div>
 <div class="compare-cards" style="margin-top:18px">
-<div class="compare-card"><span class="compare-title">If you swept the line again and again</span><span class="compare-sub">You'd keep walking the whole shelf, nudging neighbours each time, even after early jars were settled.</span></div>
-<div class="compare-card"><span class="compare-title">Because you inserted each jar</span><span class="compare-sub">Only the newest jar moves; the neat stretch just grows, no jar is ever moved twice.</span></div>
+<div class="compare-card"><span class="compare-title">Starting over each time</span><span class="compare-sub">Rebuilding the whole row for every new item touches every item again and again, even the ones already in place.</span></div>
+<div class="compare-card"><span class="compare-title">Inserting into the growing part</span><span class="compare-sub">Only the items that must give way are shifted. When a row is already nearly in order, very few items move at all.</span></div>
 </div>
-<div class="key-learnings"><h3>🔑 Key Learnings</h3><div class="kl-grid">
-<div class="kl-item"><span class="kl-icon">🃏</span><div><b>The Growing Neat Part</b><p>Only the part you've handled stays neat, the box behind stays messy until its turn.</p></div></div>
-<div class="kl-item"><span class="kl-icon">➡️</span><div><b>Slide, Don't Sweep</b><p>A new item shifts only the neighbours that must move, nothing else in the line is touched.</p></div></div>
-<div class="kl-item"><span class="kl-icon">🌍</span><div><b>Where You'll See It</b><p>Cards in a hand, books you slot onto a shelf, paper slips into a stack, all insert one at a time. Great when the pile is already nearly neat.</p></div></div>
-</div></div>
 </div>
 <div class="section-nav"><button class="btn ghost" id="btn-method-back">⬅ Back</button><button class="btn" id="btn-method-continue">Continue to New Cases ➜</button></div>
 </section>
 
 <section class="section" id="sec-cases">
 <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 · New Cases</span>
-<h2 class="section-title">Try on your own</h2>
-<p class="section-sub">Work it out in your head.</p>
+<h2 class="section-title">Spot the pattern elsewhere</h2>
+<p class="section-sub">Same shape, different scenery. Talk through each one.</p>
 <div class="card"><div class="qgrid">
-                <div class="qcard"><span class="q-num">01 · New book</span><span class="q-text">You get a new book and want to put it on a shelf where books are already sorted by year. Instead of resorting everything, how would you do it? How is this like insertion sort?</span></div>
-                <div class="qcard"><span class="q-num">02 · Insert at front</span><span class="q-text">You need to insert a very old book at the very front of a sorted shelf of 100 books. How many would you need to shift? Why does insertion at front cost more?</span></div>
-                <div class="qcard"><span class="q-num">03 · Nearly sorted</span><span class="q-text">You're filing report cards that just arrived mostly in order. Would insertion sort do much work? When does it shine compared to a method that always scans everything?</span></div>
-                <div class="qcard"><span class="q-num">04 · Play cards</span><span class="q-text">You're sorting cards in your hand by drawing one at a time and placing it in the right spot among the ones you're already holding. Which cards slide? How is this exactly like insertion sort?</span></div>
-                <div class="qcard"><span class="q-num">05 · Shift vs swap</span><span class="q-text">Compare insertion sort (slide elements right) with selection sort (swap to place minimum). For inserting into the middle of an already-sorted prefix, why might sliding feel different?</span></div>
-                <div class="qcard"><span class="q-num">06 · End of row</span><span class="q-text">A new jar is bigger than every jar already on the shelf. How many shifts happen, and where does it go? Does the algorithm still scan?</span></div>
-<div class="qcard"><span class="q-num">07 · Marksheet stack</span><span class="q-text">A teacher files marksheets by roll number, sliding only the sheets after each new one. When is this fastest, when the stack is nearly sorted or fully shuffled? Why?</span></div>
-
-<div class="qcard"><span class="q-num">08 · A jar already in place</span><span class="q-text">You hold jar 6 and every jar on the shelf is 5 or shorter. Do you need to slide anything at all? What does a single insertion pass do when the new jar belongs at the very end, and how does the shelf stop being touched?</span></div>
-<div class="qcard"><span class="q-num">09 · Halve the search</span><span class="q-text">Someone suggests finding the spot by jumping to the middle of the shelf instead of comparing from the tallest end. Could that find the spot faster? What still has to be done one step at a time, and why does jumping not change that?</span></div>
-<div class="qcard"><span class="q-num">10 · Cards in your hand</span><span class="q-text">You hold six cards in sorted order and pick up a seventh. Where does your eye go, and how many cards actually slide? Does the number of slides depend on the size of your hand, or on where the new card belongs?</span></div></div>
+<div class="qcard"><span class="q-num">01</span><span class="q-text">You are dealt the cards 7, 2, 9, 4 one at a time and keep your hand sorted after every card. Where does each card go, and how many cards slide each time? Which card causes the most movement?</span></div>
+<div class="qcard"><span class="q-num">02</span><span class="q-text">A teacher files exam papers by roll number as they come off the printer, slipping each one into a pile that is already ordered. Why is this a natural fit for insertion sort? What changes if the papers arrive completely shuffled?</span></div>
+<div class="qcard"><span class="q-num">03</span><span class="q-text">A sorted list holds 100 entries. A new smallest entry shifts all 100, while a new largest entry shifts none. How many shifts happen in each case, and what does that tell you about when insertion sort is cheap and when it is expensive?</span></div>
+<div class="qcard"><span class="q-num">04</span><span class="q-text">A school has 500 student records already sorted by name, and 5 new records arrive in almost the right order. Would insertion sort or a method that rescans everything from scratch do less work? Explain why.</span></div>
+<div class="qcard"><span class="q-num">05</span><span class="q-text">A classmate says, "Insertion sort has a loop inside a loop, so it is always slow, even when the input is already sorted." Is that claim correct? Construct a specific input where the inner loop barely runs, and explain why.</span></div>
+<div class="qcard"><span class="q-num">06</span><span class="q-text">Two students have the same score in a sorted result list. In insertion sort, the later one is placed after the earlier one because shifting stops at an equal value. Why does that matter if each entry also carries the student's name? What does "stable" mean here?</span></div>
+<div class="qcard"><span class="q-num">07</span><span class="q-text">Someone suggests using binary search to find where a new item belongs in a sorted list of 1,000 items, cutting comparisons from about 1,000 to about 10. Does that make insertion sort fast overall? Explain what still has to happen one step at a time.</span></div>
+<div class="qcard"><span class="q-num">08</span><span class="q-text">You are building a game leaderboard that stays sorted as new scores arrive during the day. Only a few scores arrive each minute, and the board is already in order. Which approach would you choose and why? What would change if thousands of scores arrived at once?</span></div>
+<div class="qcard"><span class="q-num">09</span><span class="q-text">Insertion sort shifts items right to open a gap, while selection sort swaps the smallest remaining item into place. For a list that is already sorted, how many swaps does selection sort still make, and how many shifts does insertion sort make? Which one notices that the work is already done?</span></div>
+<div class="qcard"><span class="q-num">10</span><span class="q-text">A library must sort 50,000 books arriving in random order. A student suggests insertion sort because it worked well for a hand of cards. Why might that be a poor choice, and what property of the card example made it easy?</span></div>
+</div>
 <div class="section-nav"><button class="btn ghost" id="btn-cases-back">⬅ Back</button><button class="btn" id="btn-cases-home">🏠 Back to CSE Lab</button><button class="btn" id="btn-cases-finish">Restart ↻</button></div></div>
 </section>
 
