@@ -69,6 +69,8 @@ Explore the live case studies here: [vicharanashala.github.io/cse-concept-labora
 | 19 | The Ant Colony | ✅ Available |
 | 20 | Cross Road | ✅ Available |
 | 21 | The Water Park Analogy | ✅ Available |
+| 22 | The Busy Helpdesk | ✅ Available |
+| 23 | The Locked Archive | ✅ Available |
 
 ## Repository Structure
 

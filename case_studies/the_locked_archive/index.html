@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Archive You Can't Walk Into: A Library Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   THEME: soft blue & orange, white cards, pill buttons.
+   ========================================================== */
+:root{
+  --bg-1:#FDF1E9; --bg-2:#EDF3FA; --bg-3:#E4EEFA; --bg-4:#D9E5F2;
+  --primary:#4A9BD1; --primary-dark:#2B6FA3; --primary-deep:#1B4A66;
+  --amber:#EA8C36; --amber-dark:#C96F1F;
+  --danger:#D9714F; --success:#4B7A4A; --violet:#EA8C36;
+  --ink:#1F2E37; --muted:#54666D; --faint:#93A5AB;
+  --card-bg:#FFFFFF;
+  --footer-bg:#22496B;
+  --glass-border:#D9E5F2;
+  --shadow-card:rgba(23,50,77,0.12); --shadow-btn:rgba(43,111,163,0.28);
+  --success-bg:#DCEAD8; --success-text:#274B26; --success-border:#4B7A4A;
+  --error-bg:#FBE1DC; --error-text:#8A3420; --error-border:#D9714F;
+  --radius-lg:18px; --radius-md:12px; --radius-sm:8px;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;min-height:100vh;font-family:'Inter', sans-serif;font-weight:400;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-2) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Poppins', sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{line-height:1.65;color:var(--muted);margin:0;}
+button{font-family:'Poppins', sans-serif;cursor:pointer;}
+button:focus-visible{outline:3px solid var(--primary);outline-offset:2px;}
+.wrap{max-width:960px;margin:0 auto;padding:96px 20px 70px;}
+
+/* ---- top brand bar: institution logos ---- */
+.brand-bar{
+  position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 22px;z-index:500;pointer-events:none;
+}
+.brand-badge{pointer-events:auto;display:flex;align-items:center;gap:8px;background:transparent;border:none;padding:0;}
+.brand-badge img{height:90px;width:auto;display:block;}
+@media(max-width:640px){
+  .brand-bar{padding:8px 10px;}
+  .brand-badge img{height:44px;}
+}
+
+/* ---- stepper ---- */
+.stepper{max-width:700px;margin:0 auto 30px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;}
+.step-circle{
+  width:32px;height:32px;border-radius:50%;background:var(--bg-3);color:var(--primary-deep);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--glass-border);transition:.25s;z-index:2;
+  font-family:'Poppins', sans-serif;
+}
+.step-label{font-size:10px;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.03em;font-family:'Poppins', sans-serif;}
+.step-line{position:absolute;top:16px;left:-50%;width:100%;height:2px;background:var(--glass-border);z-index:1;}
+.step-item:first-child .step-line{display:none;}
+.step-item.done .step-circle{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.step-item.done .step-line{background:var(--primary-dark);}
+.step-item.active .step-circle{background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(74,155,209,.25);}
+.step-item.active .step-label{color:var(--primary-dark);}
+
+/* ---- section framing ---- */
+.section{display:none;}
+.section.active-view{display:block;animation:sectionFade .35s ease;}
+@keyframes sectionFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--amber-dark);
+  background:#FBE9DA;padding:6px 14px;border-radius:999px;margin-bottom:12px;font-family:'Poppins', sans-serif;
+}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--ink);margin:0 0 8px;text-align:center;}
+.section-sub{max-width:640px;margin:0 auto 18px;text-align:center;font-size:14.5px;color:var(--muted);}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(26px,4.4vw,40px);color:var(--ink);margin:0 0 12px;}
+
+.card{background:transparent;border:none;border-radius:0;box-shadow:none;padding:6px 0 0;}
+.btn{
+  border:none;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 24px -10px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
+}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 28px -8px var(--shadow-btn);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn.secondary{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);box-shadow:none;text-align:left;}
+.btn.secondary.selected{border-color:var(--amber);background:#FBE9DA;color:var(--amber-dark);}
+.btn.secondary:disabled{opacity:.55;}
+.btn.ghost{background:transparent;color:var(--primary-dark);box-shadow:none;border:1.5px solid var(--primary);padding:10px 16px;}
+.btn.small{padding:9px 18px;font-size:13px;}
+.section-nav{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px;}
+
+
+/* ---- Chapter 1: the case ---- */
+.problem-card{text-align:left;max-width:680px;margin:20px auto 0;}
+.problem-card p{margin:0 0 14px;font-size:15.5px;}
+.problem-card p:last-child{margin-bottom:0;}
+.problem-card b{color:var(--primary-deep);}
+.story-lines{
+  text-align:left;max-width:680px;margin:26px auto 0;background:transparent;
+  border:none;border-radius:0;padding:0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.story-lines p{font-size:15px;}
+.story-lines .highlight{color:var(--amber-dark);font-weight:700;}
+.rules-list{list-style:none;margin:20px auto 0;padding:0;max-width:560px;display:flex;flex-direction:column;gap:8px;}
+.rules-list li{font-size:14px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.5;}
+.rules-list li::before{content:"\2715";color:var(--danger);font-weight:700;flex-shrink:0;}
+.rules-list li.ok::before{content:"\2022";color:var(--primary);}
+
+/* ---- game shell ---- */
+.game-shell{width:100%;max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.topbar{
+  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  background:transparent;border:none;padding:4px 0;
+}
+.status-cluster{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
+.game-note{
+  max-width:640px;margin:0 auto 14px;text-align:center;font-size:13.5px;color:var(--primary-deep);
+  background:rgba(74,155,209,0.08);border:1px dashed var(--glass-border);border-radius:var(--radius-md);
+  padding:10px 16px;
+}
+.status-pill{font-size:13px;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);}
+.status-pill.score{color:var(--amber-dark);font-weight:700;}
+.status-pill.warn{color:var(--danger);font-weight:700;}
+
+.game-main{display:grid;grid-template-columns:1fr 220px;gap:14px;}
+@media(max-width:760px){.game-main{grid-template-columns:1fr;}.trail-panel{order:3;border-left:none;padding-left:0;border-top:1px dashed var(--glass-border);padding-top:14px;}}
+
+.explorer-panel{
+  background:transparent;border:none;border-radius:0;
+  padding:0;min-height:360px;display:flex;flex-direction:column;gap:16px;position:relative;
+}
+.dialogue-box{
+  display:flex;gap:12px;align-items:flex-start;background:var(--card-bg);
+  border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 14px;
+}
+.dialogue-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--violet),#C96F1F);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.dialogue-text{font-size:14px;color:var(--ink);line-height:1.5;}
+.dialogue-text .speaker{font-size:11px;color:var(--violet);display:block;margin-bottom:2px;letter-spacing:.05em;font-weight:700;}
+
+.current-folder-heading{display:flex;align-items:center;gap:10px;}
+.current-folder-heading .folder-icon-lg{font-size:26px;}
+.current-folder-heading h2{font-size:20px;}
+.current-folder-heading .fill-tag{font-size:13px;color:var(--muted);font-weight:600;font-family:'Inter',sans-serif;}
+.current-folder-heading .fill-tag b{color:var(--primary-deep);}
+
+/* ---- bucket visual: horizontal fill row ---- */
+.bucket-visual{position:relative;padding:12px;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);}
+.bucket-slots{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;}
+.bucket-slot{
+  width:30px;height:30px;border-radius:8px;background:var(--bg-3);border:1.5px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;font-size:15px;animation:stackPop .35s ease both;
+  transition:opacity .45s ease, transform .45s ease, background .2s ease, border-color .2s ease;
+}
+.bucket-slot.filled{background:#fff;border-color:var(--primary);}
+.bucket-slot.newest{border-color:var(--amber);box-shadow:0 0 0 2px rgba(234,140,54,.25);}
+.bucket-slot.draining{opacity:0;transform:scale(.35) translateY(16px);border-color:var(--success);}
+.bucket-empty-note{font-size:12.5px;color:var(--faint);align-self:center;padding-left:4px;transition:opacity .3s ease;}
+
+.folder-grid{display:flex;flex-wrap:wrap;gap:8px 24px;}
+.folder-card{
+  background:none;border:none;border-bottom:1.5px solid transparent;border-radius:0;
+  padding:4px 2px;display:inline-flex;flex-direction:row;align-items:center;gap:9px;text-align:left;
+  transition:border-color .15s,transform .15s;animation:cardPop .35s ease both;
+}
+@keyframes cardPop{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.folder-card:hover{border-bottom-color:var(--amber);transform:translateY(-1px);}
+.folder-card .ficon{font-size:20px;transition:transform .2s ease;}
+.folder-card:hover .ficon{transform:scale(1.1) rotate(-2deg);}
+.folder-card .fname{font-size:14px;color:var(--ink);font-weight:700;word-break:break-word;}
+.folder-card .fvisited{font-size:10px;color:var(--muted);}
+.folder-card.auto-target{box-shadow:0 0 0 2px var(--violet);border-radius:8px;}
+
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px 10px;color:var(--muted);text-align:center;}
+.empty-state .eicon{font-size:44px;opacity:.7;}
+.empty-state p{font-size:14px;}
+
+.explorer-footer{display:flex;justify-content:flex-start;gap:10px;flex-wrap:wrap;}
+
+.flip-in{animation:flipIn .4s ease both;}
+@keyframes flipIn{from{opacity:0;transform:perspective(600px) rotateX(-8deg) translateY(6px);}to{opacity:1;transform:perspective(600px) rotateX(0) translateY(0);}}
+
+.trail-panel{
+  background:transparent;border:none;border-left:1px dashed var(--glass-border);border-radius:0;
+  padding:0 0 0 16px;display:flex;flex-direction:column;gap:10px;max-height:520px;
+}
+.trail-panel .trail-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;font-weight:700;}
+.tree-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-right:2px;}
+.log-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:2px;}
+.log-entry{position:relative;padding:5px 0 5px 4px;font-size:12px;color:var(--muted);animation:treePop .3s ease both;line-height:1.4;border-bottom:1px dashed var(--glass-border);}
+.log-entry:first-child{border-bottom:none;}
+@keyframes treePop{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:translateX(0);}}
+.log-entry.log-process{color:var(--primary-dark);}
+.log-entry.log-send{color:var(--muted);}
+.log-entry.log-burst{color:var(--amber-dark);font-weight:700;}
+.log-entry.log-drop{color:var(--danger);font-weight:700;}
+
+/* ---- control bar ---- */
+.control-bar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+  background:transparent;border:none;border-top:1px dashed var(--glass-border);padding:16px 0 0;
+}
+.control-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.control-btn{
+  border:1.5px solid var(--primary);background:#fff;color:var(--primary-dark);border-radius:999px;padding:9px 18px;
+  font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px;font-family:inherit;
+  transition:transform .12s,background .15s,border-color .15s,opacity .15s;
+}
+.control-btn:hover:not(:disabled){transform:translateY(-1px);border-color:var(--amber);}
+.control-btn:disabled{opacity:.35;cursor:not-allowed;}
+.control-btn.play{background:var(--primary-dark);color:#fff;border-color:transparent;}
+.control-btn.pause{background:var(--amber);color:#fff;border-color:transparent;}
+.control-btn.auto{background:var(--amber);color:#fff;border-color:transparent;}
+.control-btn.auto.active{box-shadow:0 0 0 3px rgba(234,140,54,.35);}
+/* reset button: gentle attention-grabbing pulse */
+.control-btn.reset{
+  position:relative;background:transparent;color:var(--danger);border-color:var(--danger);
+  animation:resetGlow 2.2s ease-in-out infinite;
+}
+@keyframes resetGlow{0%,100%{box-shadow:0 0 0 0 rgba(217,113,79,.4);}50%{box-shadow:0 0 0 8px rgba(217,113,79,0);}}
+.control-btn.reset .r-spin{display:inline-block;transition:transform .4s;}
+.control-btn.reset:hover .r-spin{transform:rotate(180deg);}
+
+.speed-control{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--glass-border);border-radius:10px;padding:6px 10px;}
+.speed-control button{width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-border);background:var(--bg-3);color:var(--primary-dark);font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.speed-control button:hover:not(:disabled){border-color:var(--amber);}
+.speed-control button:disabled{opacity:.3;cursor:not-allowed;}
+.speed-value{min-width:34px;text-align:center;color:var(--amber-dark);font-weight:700;}
+
+/* ---- overlays: pause / time-up (no answer collection) ---- */
+.overlay{position:fixed;inset:0;background:rgba(31,46,55,0.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+.overlay.active{display:flex;animation:sectionFade .3s ease both;}
+.overlay-card{background:#fdfffe;border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:30px;max-width:460px;width:100%;text-align:center;display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 50px -20px rgba(23,50,77,.4);}
+.overlay-card h2{font-size:24px;}
+.overlay-card p{color:var(--muted);font-size:14.5px;line-height:1.55;}
+
+.achv-toast{
+  position:fixed;top:-90px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--amber);
+  border-radius:999px;padding:12px 22px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;
+  box-shadow:0 20px 50px -20px rgba(23,50,77,.4);z-index:80;transition:top .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.achv-toast.show{top:20px;}
+
+/* ---- completion ---- */
+.result-card{max-width:560px;width:100%;margin:0 auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.result-icon{font-size:56px;}
+.stat-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%;}
+.stat-chip{background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 18px;min-width:110px;}
+.stat-chip .num{font-size:20px;color:var(--amber-dark);font-weight:800;}
+.stat-chip .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+
+/* ---- open question cards: reflection + exercise ---- */
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;}
+.qcard{
+  background:var(--card-bg);border:1px solid var(--glass-border);border-radius:18px;
+  padding:22px 20px 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 14px 30px -18px rgba(23,50,77,.3);min-height:190px;display:flex;flex-direction:column;gap:10px;
+  transition:transform .18s,box-shadow .18s;
+}
+.qcard:hover{transform:translateY(-3px);box-shadow:0 18px 34px -16px rgba(23,50,77,.38);}
+.qcard .q-num{font-weight:800;font-size:13px;color:var(--primary);letter-spacing:.03em;}
+.qcard .q-text{font-size:14.5px;color:var(--ink);line-height:1.6;font-weight:600;}
+@media(max-width:900px){.qgrid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.qgrid{grid-template-columns:1fr;}.qcard{min-height:auto;padding:18px 18px 16px;}}
+.qcard.qcard-wide{grid-column:1 / -1;min-height:auto;}
+.pattern-layout{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+.pattern-svg{width:100%;max-width:280px;flex-shrink:0;}
+.pattern-label{font-size:11px;fill:var(--muted);font-weight:700;}
+.pattern-dot-a{fill:var(--primary);}
+.pattern-dot-b{fill:var(--amber-dark);}
+.pattern-axis{stroke:var(--glass-border);stroke-width:2;}
+.pattern-questions{flex:1;min-width:220px;display:flex;flex-direction:column;gap:10px;}
+
+/* ---- Chapter: the concept, one continuous flow, no boxed sub-panels ---- */
+.learning-flow{max-width:640px;margin:0 auto;text-align:left;}
+.learning-flow > * + *{margin-top:22px;padding-top:22px;border-top:1px dashed var(--glass-border);}
+.bucket-diagram-wrap{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;}
+#bucket-svg{width:100%;max-width:420px;height:auto;}
+.pkt-in{fill:var(--glass-border);opacity:.55;transform:translateY(0px);transform-box:fill-box;transform-origin:center;
+  transition:transform .9s cubic-bezier(.3,.6,.35,1), opacity .9s ease .35s, fill .35s ease;}
+.pkt-in.active{fill:var(--amber);opacity:0;transform:translateY(58px);}
+.bucket-outline{stroke:var(--ink);stroke-width:3;opacity:.75;fill:none;}
+.bucket-hole{fill:var(--amber-dark);}
+.bucket-fill-rect{fill:var(--primary);opacity:.5;transition:height .7s ease,y .7s ease;}
+.df-node circle{fill:#fff;stroke:var(--glass-border);stroke-width:2;transition:fill .45s ease,stroke .45s ease,transform .45s cubic-bezier(.34,1.56,.64,1);transform-origin:center;transform-box:fill-box;}
+.df-node text{font-size:12px;text-anchor:middle;pointer-events:none;user-select:none;}
+.df-node.active circle{fill:var(--success);stroke:var(--success);transform:scale(1.22);}
+.bucket-summary{text-align:left;}
+.bucket-summary-lead{font-size:14.5px;color:var(--ink);line-height:1.6;margin-bottom:8px;}
+.bucket-summary ul{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.bucket-summary li{font-size:13.5px;color:var(--muted);line-height:1.55;}
+.bucket-summary strong{color:var(--amber-dark);}
+.definition-block{background:rgba(74,155,209,0.08);border:1px dashed var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;margin-top:10px;}
+.definition-block p{font-size:13.5px;color:var(--primary-deep);font-style:italic;}
+.fill-stop-a{stop-color:var(--primary);stop-opacity:.85;}
+.fill-stop-b{stop-color:var(--primary-dark);stop-opacity:.6;}
+.flow-line{stroke:var(--amber);stroke-width:2.5;stroke-dasharray:5 5;opacity:.7;fill:none;animation:marchAnts 1s linear infinite;}
+@keyframes marchAnts{to{stroke-dashoffset:-20;}}
+.control-btn.pulse-hint{animation:resetGlow 1.4s ease-in-out 3;}
+@keyframes stackPop{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.key-learnings h3{font-size:16px;margin-bottom:12px;color:var(--primary-deep);text-align:center;}
+.kl-grid{display:flex;flex-direction:column;gap:14px;}
+.kl-item{display:flex;gap:12px;align-items:flex-start;text-align:left;}
+.kl-item + .kl-item{padding-top:14px;border-top:1px dotted var(--glass-border);}
+.kl-icon{font-size:20px;flex-shrink:0;line-height:1.3;}
+.kl-item b{display:block;font-size:13.5px;color:var(--primary-deep);margin-bottom:3px;}
+.kl-item p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
+/* ---- mission banner (replaces score-first framing) ---- */
+.mission-banner{
+  max-width:640px;margin:0 auto 16px;text-align:center;padding:14px 18px;border-radius:var(--radius-md);
+  background:linear-gradient(135deg,rgba(74,155,209,.12),rgba(234,140,54,.10));
+  border:1px dashed var(--primary);
+}
+.mission-banner .mission-tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-dark);display:block;margin-bottom:4px;}
+.mission-banner .mission-text{font-size:15px;font-weight:700;color:var(--ink);font-family:'Poppins',sans-serif;}
+
+/* ---- input / bucket / output zone labels ---- */
+.io-label{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--primary-dark);margin-bottom:2px;}
+.io-label .io-sub{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:11.5px;}
+.traffic-meter{font-size:13px;color:var(--amber-dark);font-weight:700;min-height:18px;transition:opacity .3s ease;}
+
+/* ---- legacy output lane styles ---- */
+.output-lane{position:relative;height:38px;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--card-bg);border:1px solid var(--glass-border);border-radius:var(--radius-md);overflow:hidden;}
+.output-lane-icon{font-size:15px;flex-shrink:0;opacity:.7;}
+.output-track{position:relative;flex:1;height:100%;}
+.flow-pkt{position:absolute;left:0%;top:50%;transform:translate(-50%,-50%);font-size:17px;animation:flowOut linear forwards;}
+@keyframes flowOut{from{left:0%;opacity:1;}85%{opacity:1;}to{left:100%;opacity:0;}}
+
+/* ---- legacy highlight styles ---- */
+.bucket-visual.overflow-flash{animation:overflowFlash .9s ease;}
+@keyframes overflowFlash{0%,100%{box-shadow:none;border-color:var(--glass-border);}30%{box-shadow:0 0 0 3px rgba(217,113,79,.45);border-color:var(--danger);}}
+.dropped-ghost{
+  width:28px;height:28px;border-radius:8px;background:var(--error-bg);border:1.5px solid var(--danger);color:var(--error-text);
+  display:flex;align-items:center;justify-content:center;font-size:14px;animation:dropShake 1.3s ease forwards;
+}
+@keyframes dropShake{
+  0%{opacity:1;transform:translateY(0) rotate(0deg);}
+  15%{transform:translateY(-3px) rotate(-6deg);}
+  30%{transform:translateY(0) rotate(5deg);}
+  45%{transform:translateY(-2px) rotate(-4deg);}
+  70%{opacity:1;transform:translateY(2px) rotate(0deg);}
+  100%{opacity:0;transform:translateY(14px) rotate(0deg);}
+}
+.overflow-banner{
+  position:absolute;left:50%;top:-6px;transform:translate(-50%,-100%);background:var(--error-bg);color:var(--error-text);
+  border:1.5px solid var(--danger);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:700;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:5;
+}
+.overflow-banner.show{opacity:1;transform:translate(-50%,-130%);}
+
+/* ---- how-to-play instructions (sets expectations before anything moves) ---- */
+.howto-card{
+  max-width:640px;margin:0 auto 14px;padding:16px 20px;border-radius:var(--radius-md);
+  background:var(--card-bg);border:1px solid var(--glass-border);
+}
+.howto-card .howto-tag{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-dark);margin-bottom:8px;}
+.howto-list{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;}
+.howto-list li{font-size:13px;color:var(--muted);line-height:1.55;}
+.howto-list b{color:var(--ink);}
+
+/* ---- mode select: two explicit, sequenced steps instead of one auto-start toggle ---- */
+.mode-select{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:4px;}
+.mode-hint{width:100%;text-align:center;font-size:12.5px;color:var(--primary-deep);font-weight:700;}
+
+/* ---- simplified manual action row + decorative group strip ---- */
+.group-strip{font-size:11px;line-height:1.8;letter-spacing:0;text-align:center;opacity:.85;margin:4px 0 10px;display:flex;flex-wrap:wrap;justify-content:center;gap:0 6px;color:var(--muted);}
+.group-strip span{color:var(--amber-dark);}
+.manual-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+
+/* ---- centered explanation popup: pauses the sim, resumes only on "Got it" ---- */
+.explain-icon{font-size:38px;}
+.explain-text{font-size:14.5px;color:var(--ink);line-height:1.65;}
+.explain-text b{color:var(--amber-dark);}
+
+/* ---- capacity gauge: a literal "how full is it" bar under the bucket ---- */
+.capacity-bar{width:100%;height:9px;border-radius:999px;background:var(--bg-3);border:1px solid var(--glass-border);overflow:hidden;margin-top:8px;}
+.capacity-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--primary-dark));transition:width .4s ease,background .3s ease;border-radius:999px;}
+.capacity-fill.high{background:linear-gradient(90deg,var(--amber),var(--danger));}
+
+/* ---- concept mapping table (Chapter 5 final reveal) ---- */
+.concept-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px;}
+.concept-table th{text-align:left;font-family:'Poppins',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--primary-dark);padding:8px 10px;border-bottom:2px solid var(--glass-border);}
+.concept-table td{padding:9px 10px;border-bottom:1px dashed var(--glass-border);color:var(--ink);}
+.concept-table tr:last-child td{border-bottom:none;}
+.concept-table td.story-col{color:var(--muted);}
+.concept-table td.tech-col{font-weight:700;color:var(--amber-dark);}
+
+.hidden{display:none!important;}
+
+@media(max-width:640px){
+  .wrap{padding:96px 14px 50px;}
+  .folder-card{min-width:78px;padding:10px 6px;}
+}
+
+/* Focused game layout: keep all useful controls and feedback visible. */
+.game-shell{max-width:1100px;gap:12px}
+.howto-card{max-width:900px;margin:0 auto 12px;padding:10px 16px}
+.howto-card .howto-tag{margin-bottom:4px}
+.howto-list{gap:3px}
+.howto-list li{font-size:12.5px;line-height:1.45}
+.mission-banner{margin-bottom:8px;padding:10px 14px}
+.mission-banner .mission-text{font-size:14px}
+.game-main{grid-template-columns:minmax(0,1.6fr) minmax(230px,1fr);gap:18px}
+.explorer-panel{min-height:0;gap:12px}
+.dialogue-box{background:#fff;border-left:4px solid var(--primary);padding:14px 16px}
+.dialogue-text{font-size:15px}
+.dialogue-text .speaker{font-size:10px}
+.io-label{margin-bottom:8px}
+.bucket-visual{padding:14px;min-height:92px;background:#f8fbfe;border:2px solid var(--glass-border)}
+.bucket-slots{gap:7px;min-height:40px;align-items:center}
+.bucket-slot{width:auto;min-width:34px;height:34px;padding:0 7px;border-radius:7px;font-size:11px;font-weight:700;letter-spacing:.1px}
+.output-lane{height:44px}
+.topbar{padding:0}
+.status-cluster{gap:8px}
+.status-pill{font-size:12px;padding:7px 11px}
+.control-bar{justify-content:center;padding-top:10px;gap:12px}
+#btn-reset{animation:none}
+#btn-sim-continue{min-width:220px}
+.trail-panel{min-width:0}
+@media(max-width:760px){.game-main{grid-template-columns:1fr}.trail-panel{order:3;border-left:none;padding-left:0;border-top:1px dashed var(--glass-border);padding-top:14px}}
+@media(max-width:640px){.bucket-slot{min-width:27px;height:27px;padding:0 5px;font-size:10px}.game-main{grid-template-columns:1fr}.control-bar{flex-wrap:wrap}}
+
+
+/* ---- clarity helpers: flow legend, stage tracker, redirect lane ---- */
+.flow-legend{max-width:720px;margin:0 auto 6px;display:flex;align-items:stretch;justify-content:center;flex-wrap:wrap;gap:6px;}
+.fl-box{background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:8px 12px;font-size:13px;font-weight:700;color:var(--primary-deep);text-align:center;display:flex;flex-direction:column;gap:2px;}
+.fl-box small{font-size:11px;font-weight:500;color:var(--muted);}
+.fl-arrow{align-self:center;color:var(--amber-dark);font-weight:700;}
+.flow-note{max-width:640px;margin:0 auto 14px;text-align:center;font-size:12.5px;color:var(--amber-dark);font-weight:600;}
+.stage-strip{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:6px 0 12px;}
+.stage-strip span{font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;background:#fff;border:1px solid var(--glass-border);color:var(--faint);transition:.25s;}
+.stage-strip span.active{background:var(--amber);border-color:var(--amber-dark);color:#fff;}
+.stage-strip span.done{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text);}
+.redirect-lane{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;margin-top:8px;padding:8px 12px;border-radius:var(--radius-md);background:#FBE9DA;border:1.5px dashed var(--amber);font-size:12.5px;color:var(--amber-dark);transition:box-shadow .3s;}
+.redirect-lane .rd-label{font-weight:700;letter-spacing:.06em;}
+.redirect-lane.pulse{animation:redirectPulse 1.4s ease;}
+@keyframes redirectPulse{0%,100%{box-shadow:none;}30%{box-shadow:0 0 0 4px rgba(234,140,54,.4);}}
+.action-hint{margin-top:8px;text-align:center;font-size:12.5px;color:var(--muted);}
+.dropped-ghost{background:#FBE9DA !important;border-color:var(--amber) !important;color:var(--amber-dark) !important;}
+.overflow-banner{background:#FBE9DA !important;border-color:var(--amber) !important;color:var(--amber-dark) !important;}
+
+/* ===== Recoverability template: Crash Lab (unique game layout) ===== */
+.lvl-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:6px 0 14px;}
+.lvl-tab{font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:999px;border:1.5px solid var(--glass-border);background:#fff;color:var(--faint);cursor:default;font-family:inherit;}
+.lvl-tab.active{background:var(--amber);border-color:var(--amber-dark);color:#fff;}
+.lvl-tab.done{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text);cursor:pointer;}
+.lab{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;align-items:start;}
+@media(max-width:860px){.lab{grid-template-columns:1fr;}}
+.lab-panel{background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;}
+.tl{overflow-x:auto;padding-bottom:6px;}
+.tl-grid{display:grid;grid-template-columns:128px repeat(var(--cols),minmax(104px,1fr));gap:6px;min-width:600px;}
+.tl-h{font-size:11px;color:var(--faint);text-align:center;font-weight:700;letter-spacing:.06em;}
+.tl-lane{font-size:12px;font-weight:700;display:flex;align-items:center;padding:6px 8px;border-radius:var(--radius-sm);background:#F4F8FC;border:1px solid var(--glass-border);color:var(--primary-deep);line-height:1.3;}
+.cell{min-height:58px;}
+.ev{border:1.5px solid var(--glass-border);background:#fff;border-radius:var(--radius-sm);padding:7px 8px;font-size:12px;line-height:1.35;text-align:left;transition:.2s;font-family:inherit;width:100%;color:var(--ink);}
+.ev b{display:block;font-size:11px;letter-spacing:.04em;}
+.ev small{display:block;color:var(--muted);font-size:11px;}
+.ev.t1{border-left:4px solid var(--primary);} .ev.t2{border-left:4px solid var(--amber);} .ev.t3{border-left:4px solid var(--success);}
+.ev.move{cursor:pointer;border-style:dashed;border-color:var(--amber);}
+.ev.sel{background:#FBE9DA;box-shadow:0 0 0 3px rgba(234,140,54,.35);}
+.ev.now{transform:scale(1.05);box-shadow:0 0 0 3px rgba(74,155,209,.5);background:#EEF6FC;}
+.ev.wait{opacity:.55;border-style:dotted;}
+.notation{margin-top:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;background:rgba(74,155,209,.08);border:1px dashed var(--glass-border);border-radius:var(--radius-sm);padding:8px 10px;color:var(--primary-deep);overflow-x:auto;white-space:nowrap;}
+.lab-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:12px;}
+.cf-toggle{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700;color:var(--primary-deep);background:#fff;border:1.5px solid var(--primary);border-radius:999px;padding:8px 14px;cursor:pointer;}
+.meters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.meter{background:#F4F8FC;border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:8px 6px;text-align:center;}
+.meter .m-num{font-size:15px;font-weight:800;color:var(--amber-dark);display:block;}
+.meter .m-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.verdict{display:none;margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;line-height:1.5;border:1.5px solid;}
+.verdict.show{display:block;}
+.verdict.bad{background:var(--error-bg);color:var(--error-text);border-color:var(--error-border);}
+.verdict.cascade{background:#FBE9DA;color:var(--amber-dark);border-color:var(--amber);}
+.verdict.safe{background:var(--success-bg);color:var(--success-text);border-color:var(--success-border);}
+.lab-log{margin-top:10px;max-height:210px;overflow:auto;display:flex;flex-direction:column;gap:5px;}
+.lab-log div{font-size:12px;line-height:1.45;color:var(--muted);border-left:3px solid var(--glass-border);padding-left:8px;}
+.lab-log .warn{border-color:var(--amber);color:var(--amber-dark);} .lab-log .bad{border-color:var(--danger);color:var(--error-text);font-weight:700;} .lab-log .ok{border-color:var(--success);color:var(--success-text);}
+.side-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--primary-dark);margin:0 0 8px;display:block;}
+.vcard{background:#fff;border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:10px;}
+.vcard code{display:block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--primary-deep);margin-bottom:6px;overflow-x:auto;white-space:nowrap;}
+.vcard p{font-size:13.5px;margin:0 0 8px;}
+.stamps{display:flex;gap:8px;flex-wrap:wrap;}
+.stamps .btn{padding:7px 12px;font-size:12.5px;}
+.btn.secondary.right{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text);}
+.btn.secondary.wrong{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text);}
+.vfeed{font-size:12.5px;margin-top:6px;color:var(--muted);}
+.sets-svg{width:100%;max-width:420px;margin:0 auto;display:block;}
+
+
+.meters{grid-template-columns:1fr 1fr !important;}
+.rule-box{margin-top:10px;font-size:13px;background:#FBE9DA;border:1px dashed var(--amber);border-radius:var(--radius-sm);padding:8px 10px;color:var(--amber-dark);font-weight:600;line-height:1.5;}
+.tag-pending{background:#FBE9DA;color:var(--amber-dark);border-radius:6px;padding:1px 6px;font-weight:700;font-size:11px;}
+.tag-final{background:var(--error-bg);color:var(--error-text);border-radius:6px;padding:1px 6px;font-weight:700;font-size:11px;}
+
+
+.game-frame{width:100%;height:820px;border:1px solid var(--glass-border);border-radius:var(--radius-md);background:#fff;display:block;}
+@media(max-width:640px){.game-frame{height:900px;}}
+.flow3{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:14px 0;}
+.flow3 .fbox{background:#fff;border:1.5px solid var(--glass-border);border-radius:var(--radius-md);padding:10px 14px;text-align:center;font-weight:700;color:var(--primary-deep);font-size:14px;}
+.flow3 .fbox small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;}
+.flow3 .fbox.mid{border-color:var(--amber);background:#FBE9DA;color:var(--amber-dark);}
+.flow3 .farrow{font-size:12px;color:var(--muted);text-align:center;line-height:1.5;}
+.rule-box{margin-top:10px;font-size:13px;background:#FBE9DA;border:1px dashed var(--amber);border-radius:var(--radius-sm);padding:8px 10px;color:var(--amber-dark);font-weight:600;line-height:1.5;}
+
+
+.qcard .q-tag{display:inline-block;align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--amber-dark);background:#FBE9DA;border-radius:999px;padding:2px 10px;margin:4px 0 8px;}
+.qcard .q-text p{margin:0 0 8px;} .qcard .q-text ul{margin:0 0 8px;padding-left:20px;} .qcard .q-text li{margin-bottom:3px;}
+.qcard .q-text code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;background:rgba(74,155,209,.1);border-radius:6px;padding:1px 6px;}
+.qcard .q-ask{margin-top:8px;font-size:14px;line-height:1.55;color:var(--ink);} .qcard .q-ask ol{margin:6px 0 0;padding-left:20px;} .qcard .q-ask li{margin-bottom:4px;}
+.qcard .q-tests{margin-top:10px;font-size:12px;color:var(--muted);font-style:italic;}
+#sec-cases .qgrid{grid-template-columns:repeat(2,1fr);}
+#sec-cases .qcard .q-text{font-weight:500;}
+@media(max-width:760px){#sec-cases .qgrid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+
+
+<div class="wrap">
+
+  <div class="stepper" id="stepper">
+    <div class="step-item active" id="step-1"><span class="step-line"></span><span class="step-circle">1</span><span class="step-label">The Problem</span></div>
+    <div class="step-item" id="step-2"><span class="step-line"></span><span class="step-circle">2</span><span class="step-label">Your Role</span></div>
+    <div class="step-item" id="step-3"><span class="step-line"></span><span class="step-circle">3</span><span class="step-label">The Game</span></div>
+    <div class="step-item" id="step-4"><span class="step-line"></span><span class="step-circle">4</span><span class="step-label">Debrief</span></div>
+    <div class="step-item" id="step-5"><span class="step-line"></span><span class="step-circle">5</span><span class="step-label">The Idea</span></div>
+    <div class="step-item" id="step-6"><span class="step-line"></span><span class="step-circle">6</span><span class="step-label">Try It Yourself</span></div>
+  </div>
+
+  <section class="section active-view" id="sec-puzzle">
+    <div class="hero">
+      <span class="eyebrow">Chapter 1 &middot; The Problem</span>
+      <h1>📚 The Archive You Can't Walk Into</h1>
+    </div>
+    <div class="problem-card">
+      <p>You are a student who needs a rare book for your project. The book sits somewhere in the library's <b>archive</b>: endless shelves, dusty boxes, trolleys and staff who all know their own sections.</p>
+      <p>You could try walking in and finding it yourself. But you don't know how anything is shelved, you'd be in everyone's way, and a hundred other students would try the same.</p>
+      <p>Life has many situations like this. A farmer wants to sell grain in a huge, crowded wholesale market. A traveller wants a train ticket from a railway office buzzing with files and staff. In each case, <b>one side wants something from a busy place, and neither side should have to understand the other's inner workings.</b></p>
+      <p>How can a request go in and the book come back, without anyone having to enter the mess? Let's find out by playing 👇</p>
+    </div>
+    <div class="section-nav"><button class="btn" id="btn-puzzle-continue">Continue ➜</button></div>
+  </section>
+
+  <section class="section" id="sec-briefing">
+    <div class="hero">
+      <span class="eyebrow">Chapter 2 &middot; Your Role</span>
+      <h1>You're the Student in a Hurry</h1>
+    </div>
+    <div class="story-lines" id="intro-story-lines"></div>
+    <ul class="rules-list">
+      <li>You cannot see or control how the archive finds things.</li>
+      <li>You cannot walk into the archive without causing chaos.</li>
+      <li class="ok">You can ask for what you want in a simple way.</li>
+      <li class="ok">You can pause, skip ahead or change the speed at any time.</li>
+    </ul>
+    <p class="section-sub">How to play: press <b>Auto</b> to watch the story play by itself, or click through step by step. <b>Pause</b>, <b>Next</b> and <b>Speed</b> are always there if you need them.</p>
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-briefing-back">⬅ Back</button>
+      <button class="btn" id="btn-briefing-start">Start the Game ▶</button>
+    </div>
+  </section>
+
+  <section class="section" id="sec-sim">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 3 &middot; The Game</span>
+    <h2 class="section-title">Request a book, discover something bigger</h2>
+    <p class="section-sub">Play through the library. When the game ends, the Continue button unlocks.</p>
+    <iframe class="game-frame" id="game-frame" title="Library game"></iframe>
+    <div class="section-nav">
+      <button class="btn ghost small" id="btn-case-back">⬅ Back</button>
+      <button class="btn ghost small" id="btn-sim-skip">Skip the game ⏭</button>
+      <button class="btn" id="btn-sim-next" disabled>Finish the game to continue ➜</button>
+    </div>
+  </section>
+
+  <section class="section" id="sec-complete">
+    <div class="result-card">
+      <div class="result-icon">🚀</div>
+      <h2>You finished the library!</h2>
+      <div class="stat-row">
+        <div class="stat-chip"><div class="num" id="complete-score">0</div><div class="lbl">Game score</div></div>
+      </div>
+      <p class="section-sub" style="margin-top:12px;">You just used a clever idea without knowing its name. First, let's reflect on what you saw. The name comes in Chapter 5.</p>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-complete-replay">⟲ Play again</button>
+        <button class="btn" id="btn-complete-continue">Continue to Debrief ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sec-notes">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 4 &middot; Debrief</span>
+    <h2 class="section-title">Reflection</h2>
+    <p class="section-sub">Think about these in your own words before moving on.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">1</span><span class="q-text">When the game started, why did you first want to go into the archive yourself, and what made you change your mind?</span></div>
+        <div class="qcard"><span class="q-num">2</span><span class="q-text">When the librarian left, why did you choose the request desk? How could it work without the librarian?</span></div>
+        <div class="qcard"><span class="q-num">3</span><span class="q-text">What did you need to know to make a request, and what did you never need to know?</span></div>
+        <div class="qcard"><span class="q-num">4</span><span class="q-text">Before the archive was rebuilt, what did you predict would happen to your request, and why?</span></div>
+        <div class="qcard"><span class="q-num">5</span><span class="q-text">Where else in your life do you get something without seeing how it’s made? What works like the request desk there?</span></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-notes-back">⬅ Back</button>
+        <button class="btn" id="btn-notes-continue">Continue ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sec-method">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 5 &middot; The Idea</span>
+    <h2 class="section-title">The idea behind the library</h2>
+    <p class="section-sub">The librarian you invented has a name in the software world.</p>
+    <div class="hero" style="margin-bottom:6px;"><div class="result-icon">🚀</div><h2>You Discovered: API</h2></div>
+    <div class="learning-flow">
+      <div class="bucket-summary">
+        <p class="bucket-summary-lead">What happened in the library:</p>
+        <ul>
+          <li>Going straight into the archive was <b>chaotic</b> for everyone.</li>
+          <li>A <b>librarian</b> in the middle took your request in, and brought the book back. You never touched the archive.</li>
+          <li>Every order followed the <b>same simple path</b>, whether a book, a journal or a thesis.</li>
+          <li>When the archive was rebuilt, <b>your way of requesting stayed the same</b>, so nothing broke for you.</li>
+          <li>You see this outside libraries too: a commission agent in a crop market, a bank teller, a railway booking counter.</li>
+        </ul>
+        <p class="bucket-summary-lead">Now we can give names to what you did. In the world of computers, the librarian's job has a name: the <b>API</b>.</p>
+        <div class="definition-block"><p>An API (Application Programming Interface) is a way for one piece of software to ask another for something, and get an answer back, without knowing how the other one works inside.</p></div>
+        <div class="flow3">
+          <div class="fbox">👤 Client<small>the one who asks</small></div>
+          <div class="farrow">request ➜<br>⬅ response</div>
+          <div class="fbox mid">🧑‍💼 API<small>the agreed way to ask</small></div>
+          <div class="farrow">request ➜<br>⬅ response</div>
+          <div class="fbox">🖥️ Server<small>the one who does the work</small></div>
+        </div>
+        <table class="concept-table">
+          <thead><tr><th>Library Story</th><th>Software Concept</th></tr></thead>
+          <tbody>
+            <tr><td class="story-col">Student</td><td class="tech-col">Client (an app or website)</td></tr>
+            <tr><td class="story-col">Librarian and the way of requesting</td><td class="tech-col">API</td></tr>
+            <tr><td class="story-col">Archive</td><td class="tech-col">Server</td></tr>
+            <tr><td class="story-col">Request slip</td><td class="tech-col">Request</td></tr>
+            <tr><td class="story-col">Book coming back</td><td class="tech-col">Response</td></tr>
+            <tr><td class="story-col">The fixed way of requesting</td><td class="tech-col">Interface (the agreed rules)</td></tr>
+            <tr><td class="story-col">Catalogue</td><td class="tech-col">Documentation of what you can ask for</td></tr>
+            <tr><td class="story-col">Archive rebuilt, requesting unchanged</td><td class="tech-col">Server changes behind a stable API</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="key-learnings">
+        <h3>🔑 Key Learnings</h3>
+        <div class="kl-grid">
+          <div class="kl-item"><span class="kl-icon">🚪</span><div><b>Hide the complexity</b><p>An API lets you use a system without knowing what happens inside it.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">📦</span><div><b>Request and response</b><p>Every conversation has two parts: you ask (request), and you get an answer (response).</p></div></div>
+          <div class="kl-item"><span class="kl-icon">🔧</span><div><b>Change without breaking</b><p>As long as the way of asking stays the same, the inside can be rebuilt freely.</p></div></div>
+          <div class="kl-item"><span class="kl-icon">🌍</span><div><b>Everywhere</b><p>Weather apps, UPI payments, maps in delivery apps, and mandi-price apps all use APIs.</p></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-nav">
+      <button class="btn ghost" id="btn-method-back">⬅ Back</button>
+      <button class="btn" id="btn-method-continue">Continue ➜</button>
+    </div>
+  </section>
+
+  <section class="section" id="sec-cases">
+    <span class="eyebrow" style="display:block;text-align:center;margin:0 auto 6px;width:fit-content;">Chapter 6 &middot; Try It Yourself</span>
+    <h2 class="section-title">Exercise Questions</h2>
+    <p class="section-sub">Apply what you learned to new situations. Think through each one before moving on.</p>
+    <div class="card">
+      <div class="qgrid">
+        <div class="qcard"><span class="q-num">01 &middot; The Library Request Desk</span><div class="q-text"><p>Which of these work like a library’s request desk: a power socket, a restaurant waiter, cooking Maggi at home, or UPI payment at a shop?</p><p>For each example that does not work like a request desk, what is missing? Identify what makes something an API.</p></div></div>
+        <div class="qcard"><span class="q-num">02 &middot; Design the Library’s Request Slip</span><div class="q-text"><p>Imagine a library has an archive where all books are stored. Students cannot access the archive directly; they must submit a request through a request desk.</p><p>What information must every request include? What different responses could the archive send back besides “Here is your book”?</p><p>If you were designing this as an API, which HTTP methods would you use to request, add, update, or remove information?</p></div></div>
+        <div class="qcard"><span class="q-num">03 &middot; One Source, Multiple Applications</span><div class="q-text"><p>A university’s mobile app and website maintain separate attendance records, which often disagree.</p><p>How would you design one system so both applications access the same data and always display consistent attendance information? What role would an API play in this system?</p></div></div>
+        <div class="qcard"><span class="q-num">04 &middot; Different Users, Different Permissions</span><div class="q-text"><p>Students view marks, teachers update marks, and parents view their child’s marks, all from one database.</p><p>How would you design the API so each user can access only the information and operations they are authorized to use? How would the system identify and verify each user?</p></div></div>
+        <div class="qcard"><span class="q-num">05 &middot; Too Many Requests!</span><div class="q-text"><p>A weather app sends 50 separate requests for 50 cities every time it opens.</p><p>How could you make this process faster and reduce unnecessary API requests? Could you retrieve multiple cities’ weather information together or temporarily store previously received results? How long should a saved weather result be considered valid?</p></div></div>
+        <div class="qcard"><span class="q-num">06 &middot; The Double Booking Problem</span><div class="q-text"><p>A cab booking request is successfully processed, but the confirmation message gets lost. The customer assumes the booking failed and taps “Book” again.</p><p>How would you prevent the system from creating two bookings for the same request while still allowing the customer to retry safely?</p></div></div>
+        <div class="qcard"><span class="q-num">07 &middot; Updating Without Breaking the Old System</span><div class="q-text"><p>A library now wants every request slip to include a student ID, but thousands of students are still using the old version of the slip.</p><p>How would you introduce this change without breaking the existing system? How does the same problem occur when an API is updated while older applications are still using it?</p></div></div>
+        <div class="qcard"><span class="q-num">08 &middot; Design the Request Desks for a Hospital</span><div class="q-text"><p>Imagine designing a hospital system with separate departments for reception, laboratory, pharmacy, and billing.</p><p>How would you design the APIs for these departments so they can communicate and exchange information? Where does the library request desk analogy stop working when applied to a real software system?</p></div></div>
+      </div>
+      <div class="section-nav">
+        <button class="btn ghost" id="btn-cases-back">⬅ Back</button>
+        <button class="btn" id="btn-cases-finish">🏁 Restart from Beginning ➜</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<div class="overlay" id="leave-overlay" role="dialog" aria-modal="true" aria-labelledby="leave-title">
+  <div class="overlay-card">
+    <h2 id="leave-title">Leave the game?</h2>
+    <p id="leave-msg">Your progress will be gone if you skip this section.</p>
+    <div class="section-nav" style="margin-top:0;">
+      <button class="btn ghost small" id="leave-stay">Stay in the game</button>
+      <button class="btn small" id="leave-confirm">Yes, leave</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const GAME_HTML = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<title>The Library<\/title>\n<style>\n  :root{\n    --bg-page:#EDF3FA;\n    --bg-peach:#FDF1E9;\n    --card:#FFFFFF;\n\n    --ink:#1F2E37;\n    --muted:#54666D;\n    --faint:#93A5AB;\n\n    --primary:#4A9BD1;\n    --primary-dark:#2B6FA3;\n    --primary-light:#8FCBEF;\n\n    --accent:#EA8C36;\n    --accent-dark:#C96F1F;\n    --accent-light:#F3A65C;\n\n    --footer-bg:#22496B;\n    --border:#D9E5F2;\n\n    --success-bg:#DCEAD8;\n    --success-text:#274B26;\n    --success-border:#4B7A4A;\n\n    --error-bg:#FBE1DC;\n    --error-text:#8A3420;\n    --error-border:#D9714F;\n\n    --shadow-card: 0 10px 26px -14px rgba(23,50,77,0.12);\n    --shadow-btn: 0 12px 24px -10px rgba(43,111,163,0.3);\n    --radius: 18px;\n    --speed: 1;\n\n    --font-display: 'Poppins', -apple-system, 'Segoe UI', system-ui, sans-serif;\n    --font-body: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;\n    --font-mono: ui-monospace, 'SFMono-Regular', 'JetBrains Mono', Menlo, Consolas, monospace;\n  }\n\n  *{ box-sizing:border-box; }\n  body{\n    margin:0;\n    font-family:var(--font-body);\n    font-weight:400;\n    color:var(--ink);\n    background:linear-gradient(180deg, var(--bg-peach) 0%, var(--bg-page) 22%, var(--bg-page) 100%);\n    min-height:100vh;\n    -webkit-font-smoothing:antialiased;\n    padding-top:118px;\n    padding-bottom:82px;\n  }\n  body.paused *{ animation-play-state:paused !important; }\n  button{ font-family:var(--font-display); font-weight:600; cursor:pointer; }\n  h1,h2,h3{ font-family:var(--font-display); font-weight:700; letter-spacing:-0.01em; }\n  ::selection{ background:var(--primary-light); color:var(--ink); }\n\n  /* ---------------- control bar ---------------- */\n  .controlbar{\n    position:fixed; top:0; left:0; right:0; z-index:200;\n    background:rgba(255,255,255,0.9);\n    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);\n    border-bottom:1px solid var(--border);\n    padding:10px 16px;\n    box-shadow:0 4px 18px -12px rgba(23,50,77,0.18);\n  }\n  .cb-row{\n    max-width:980px; margin:0 auto;\n    display:flex; align-items:center; gap:10px; flex-wrap:wrap;\n  }\n  .cb-group{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }\n  .cb-btn{\n    border:1.5px solid var(--primary); background:transparent; color:var(--primary-dark);\n    border-radius:999px; padding:8px 15px; font-size:12.5px; font-weight:600;\n    display:inline-flex; align-items:center; gap:5px; transition:transform .15s, box-shadow .15s, background .15s, color .15s;\n  }\n  .cb-btn:hover:not(:disabled){ transform:translateY(-1px); box-shadow:0 8px 18px -10px rgba(43,111,163,0.35); }\n  .cb-btn:active:not(:disabled){ transform:translateY(0) scale(.97); }\n  .cb-btn:disabled{ opacity:.35; cursor:not-allowed; }\n  .cb-btn.primary{\n    background:linear-gradient(135deg,var(--primary-light),var(--primary-dark));\n    border-color:transparent; color:#fff; box-shadow:var(--shadow-btn);\n  }\n  .cb-btn.primary:hover:not(:disabled){ box-shadow:0 14px 28px -10px rgba(43,111,163,0.45); }\n  .cb-btn.primary.invite-pulse{ animation:invitePulse calc(2.2s / var(--speed,1)) ease-in-out infinite; }\n  @keyframes invitePulse{ 0%,100%{ box-shadow:var(--shadow-btn); } 50%{ box-shadow:0 0 0 8px rgba(74,155,209,0.22), var(--shadow-btn); } }\n  .cb-btn.danger{ border-color:var(--error-border); color:var(--error-text); }\n  .cb-btn.danger:hover:not(:disabled){ background:var(--error-bg); box-shadow:0 8px 18px -10px rgba(217,113,79,0.35); }\n\n  .cb-sep{ width:1px; align-self:stretch; background:var(--border); margin:0 2px; }\n\n  .speed-group{ display:flex; gap:3px; background:var(--bg-page); border:1px solid var(--border); border-radius:999px; padding:3px; }\n  .speed-btn{ border:none; background:transparent; color:var(--muted); font-family:var(--font-mono); font-size:11px; font-weight:700; padding:5px 10px; border-radius:999px; transition:.15s; }\n  .speed-btn.active{ background:linear-gradient(135deg,var(--primary-light),var(--primary-dark)); color:#fff; box-shadow:0 6px 14px -8px rgba(43,111,163,0.4); }\n\n  .mode-wrap{ display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-left:auto; }\n  #mode-label{ font-weight:700; color:var(--accent-dark); letter-spacing:.08em; }\n  #mode-label.auto{ color:var(--primary-dark); }\n\n  .progress-wrap{ max-width:980px; margin:8px auto 0; display:flex; align-items:center; gap:10px; }\n  .progress-track{ flex:1; height:5px; border-radius:999px; background:var(--border); overflow:hidden; }\n  .progress-fill{\n    height:100%; width:0%; border-radius:999px;\n    background:linear-gradient(90deg,var(--accent),var(--primary));\n    background-size:200% 100%;\n    transition:width .4s ease;\n    animation:progressShimmer 2.4s linear infinite;\n  }\n  @keyframes progressShimmer{ 0%{ background-position:0% 0; } 100%{ background-position:200% 0; } }\n  #progress-text{ font-family:var(--font-mono); font-size:10.5px; color:var(--faint); white-space:nowrap; }\n\n  /* ---------------- problem statement ---------------- */\n  .problem-statement{\n    max-width:700px; margin:22px auto 0; padding:0 22px;\n    animation:introFadeUp .6s cubic-bezier(.22,1,.36,1);\n  }\n  @keyframes introFadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }\n  .problem-kicker{\n    display:inline-block; font-family:var(--font-body); font-weight:700; font-size:11.5px;\n    letter-spacing:.12em; text-transform:uppercase; color:var(--accent-dark);\n    background:rgba(234,140,54,0.12); padding:4px 12px; border-radius:999px; margin-bottom:10px;\n  }\n  .problem-statement h2{ margin:0 0 8px; font-size:clamp(18px,3.4vw,23px); color:var(--ink); }\n  .problem-statement p{ margin:0; font-size:14.5px; line-height:1.65; color:var(--muted); }\n  .problem-statement p + p{ margin-top:8px; }\n\n  /* ---------------- stage (free-flowing, no card) ---------------- */\n  .stage{\n    max-width:760px; margin:34px auto 0; padding:0 22px 22px;\n  }\n\n  .flow-track{ position:relative; padding:8px 4px 4px; }\n  .track-inner{ position:relative; display:flex; align-items:center; justify-content:space-between; gap:6px; min-height:126px; }\n  .actor-slot{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; transition:opacity .3s, transform .3s; position:relative; }\n  .actor-slot.dim{ opacity:.32; }\n  .actor-icon-wrap{\n    width:clamp(52px,13vw,66px); height:clamp(52px,13vw,66px); border-radius:50%;\n    display:flex; align-items:center; justify-content:center;\n    background:var(--card); border:2px solid var(--border);\n    box-shadow:var(--shadow-card);\n    transition:box-shadow .3s, border-color .3s;\n  }\n  .actor-slot[data-role=\"client\"] .actor-icon-wrap{ box-shadow:var(--shadow-card), inset 0 0 0 3px rgba(234,140,54,0.14); }\n  .actor-slot[data-role=\"api\"] .actor-icon-wrap{ box-shadow:var(--shadow-card), inset 0 0 0 3px rgba(74,155,209,0.16); }\n  .actor-slot[data-role=\"server\"] .actor-icon-wrap{ box-shadow:var(--shadow-card), inset 0 0 0 3px rgba(75,122,74,0.16); }\n  .actor-icon{ font-size:clamp(24px,6vw,34px); line-height:1; }\n  .actor-label{ font-weight:700; font-size:clamp(11px,2.4vw,13.5px); letter-spacing:.02em; color:var(--ink); }\n  .actor-sub{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; color:var(--primary-dark); opacity:0; transform:translateY(-3px); transition:opacity .35s, transform .35s; }\n  .actor-sub.show{ opacity:1; transform:translateY(0); }\n  .actor-slot.pop-in .actor-icon{ animation:popIn .5s cubic-bezier(.34,1.56,.64,1); }\n  @keyframes popIn{ 0%{ transform:scale(.2); opacity:0; } 60%{ transform:scale(1.18); opacity:1; } 100%{ transform:scale(1); } }\n\n  .arrow-wrap{ flex:0 0 auto; display:flex; align-items:center; justify-content:center; width:clamp(22px,6vw,42px); }\n  .arrow{ color:var(--border); font-size:19px; transition:color .25s, transform .25s; }\n  .arrow-wrap.active .arrow{ transform:scale(1.3); }\n  .arrow-wrap.active.tone-order .arrow{ color:var(--accent); }\n  .arrow-wrap.active.tone-delivery .arrow{ color:var(--primary); }\n  .arrow-wrap.active.tone-abstract .arrow{ color:var(--footer-bg); }\n  .arrow-wrap.active.tone-plain .arrow{ color:var(--muted); }\n\n  .packet{\n    position:absolute; transform:translate(-50%,-50%);\n    pointer-events:none; z-index:6;\n  }\n  .packet.plain{ font-size:clamp(18px,4.6vw,25px); filter:drop-shadow(0 6px 10px rgba(23,50,77,.25)); }\n  .packet.pill{\n    display:flex; align-items:center; gap:5px; padding:6px 12px 6px 8px; border-radius:999px;\n    font-size:11px; font-weight:700; white-space:nowrap; box-shadow:0 10px 22px -10px rgba(23,50,77,0.4);\n    animation:packetBob calc(0.5s / var(--speed,1)) ease-in-out infinite alternate;\n  }\n  @keyframes packetBob{ from{ margin-top:0px; } to{ margin-top:-3px; } }\n  .packet.pill .pkt-icon{ font-size:14px; }\n  .packet.pill.tone-order{ background:linear-gradient(135deg,var(--accent-light),var(--accent-dark)); color:#fff; }\n  .packet.pill.tone-delivery{ background:linear-gradient(135deg,var(--primary-light),var(--primary-dark)); color:#fff; }\n  .packet.pill.tone-abstract{ background:var(--footer-bg); color:#EAF6FF; font-family:var(--font-mono); letter-spacing:.04em; }\n\n  .chaos-layer{\n    position:absolute; inset:-6px -6px auto auto; right:6px; top:-2px;\n    display:none; gap:3px; flex-wrap:wrap; width:96px; justify-content:flex-end;\n    pointer-events:none;\n  }\n  .chaos-layer.show{ display:flex; }\n  .chaos-layer span{ font-size:15px; animation:chaosShake calc(0.5s / var(--speed,1)) ease-in-out infinite; display:inline-block; }\n  .chaos-layer span:nth-child(2n){ animation-delay:.08s; }\n  .chaos-layer span:nth-child(3n){ animation-delay:.15s; }\n  @keyframes chaosShake{ 0%,100%{ transform:rotate(-8deg) translateY(0); } 50%{ transform:rotate(8deg) translateY(-3px); } }\n\n  .narration{\n    text-align:center; font-weight:700; font-family:var(--font-display); font-size:clamp(17px,3.6vw,22px);\n    margin:20px 0 4px; letter-spacing:-0.01em; min-height:30px; color:var(--ink);\n  }\n  .narration.pop{ animation:narrPop .35s cubic-bezier(.34,1.56,.64,1); }\n  @keyframes narrPop{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }\n\n  .interactive{ margin-top:14px; display:flex; flex-direction:column; align-items:center; gap:14px; min-height:64px; }\n  .interactive > *{ animation:fadeUp .4s cubic-bezier(.22,1,.36,1); }\n  @keyframes fadeUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }\n\n  /* ---------------- choice buttons ---------------- */\n  .choices{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }\n  .choice-btn{\n    border:1.5px solid var(--primary); background:transparent; color:var(--primary-dark);\n    border-radius:999px; padding:12px 20px; font-size:14.5px; font-weight:600;\n    transition:transform .15s, box-shadow .15s, background .15s, color .15s;\n  }\n  .choice-btn:hover:not(:disabled){ transform:translateY(-1px); box-shadow:0 10px 22px -12px rgba(43,111,163,0.4); }\n  .choice-btn:active:not(:disabled){ transform:translateY(0) scale(.97); }\n  .choice-btn:disabled{ cursor:default; opacity:.55; }\n  .choice-btn.chosen{\n    background:linear-gradient(135deg,var(--primary-light),var(--primary-dark));\n    border-color:transparent; color:#fff; box-shadow:var(--shadow-btn);\n  }\n  .choice-btn.primary{\n    background:linear-gradient(135deg,var(--primary-light),var(--primary-dark));\n    border-color:transparent; color:#fff; box-shadow:var(--shadow-btn);\n  }\n  .choice-btn.primary:hover:not(:disabled){ box-shadow:0 14px 28px -10px rgba(43,111,163,0.45); }\n  .choice-btn.ghost{ background:transparent; border-color:var(--border); color:var(--muted); }\n  .choice-btn.small{ padding:8px 14px; font-size:12.5px; }\n\n  /* ---------------- hotspot ---------------- */\n  .hotspot{ position:relative; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; }\n  .hotspot-ring{\n    width:60px; height:60px; border-radius:50%; border:3px solid var(--primary);\n    background:radial-gradient(circle, var(--primary-light) 0%, transparent 70%);\n    animation:hotspotPulse calc(1.4s / var(--speed,1)) ease-out infinite;\n  }\n  @keyframes hotspotPulse{ 0%{ box-shadow:0 0 0 0 rgba(74,155,209,.45); } 100%{ box-shadow:0 0 0 22px rgba(74,155,209,0); } }\n  .hotspot-label{ font-family:var(--font-mono); font-size:11.5px; font-weight:700; letter-spacing:.1em; color:var(--primary-dark); }\n  .hotspot.used .hotspot-ring{ animation:none; background:linear-gradient(135deg,var(--primary-light),var(--primary-dark)); }\n\n  /* ---------------- student row ---------------- */\n  .student-row{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }\n  .cust-chip{\n    display:flex; flex-direction:column; align-items:center; gap:2px;\n    padding:9px 11px; border-radius:14px; border:1.5px solid var(--border);\n    background:var(--bg-page); opacity:.55; transition:.25s; min-width:66px;\n  }\n  .cust-chip:hover{ transform:translateY(-2px); }\n  .cust-chip.active{ opacity:1; border-color:var(--accent); box-shadow:0 0 0 3px rgba(234,140,54,0.16); background:#fff; }\n  .cust-chip.done{ opacity:1; border-color:var(--success-border); background:var(--success-bg); }\n  .cust-icon{ font-size:20px; }\n  .cust-name{ font-size:10px; font-weight:700; color:var(--muted); }\n  .cust-item{ font-size:13px; }\n\n  /* ---------------- reveal / mapping ---------------- */\n  .reveal-banner{\n    font-family:var(--font-display); font-weight:700; text-align:center;\n    font-size:clamp(22px,5.4vw,34px); letter-spacing:-0.02em;\n    background:linear-gradient(120deg,var(--accent-dark),var(--primary-dark));\n    -webkit-background-clip:text; background-clip:text; color:transparent;\n    opacity:0; transform:scale(.85); transition:opacity .5s, transform .5s cubic-bezier(.34,1.56,.64,1);\n  }\n  .reveal-banner.show{ opacity:1; transform:scale(1); }\n\n  .confetti-layer{ position:fixed; inset:0; pointer-events:none; z-index:300; overflow:hidden; }\n  .confetti-bit{ position:absolute; top:-30px; font-size:20px; animation:confettiFall linear forwards; }\n  @keyframes confettiFall{ to{ transform:translateY(100vh) rotate(260deg); opacity:.15; } }\n\n  .mapping-table{ display:flex; flex-direction:column; gap:6px; width:100%; max-width:340px; }\n  .map-row{\n    display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:8px;\n    background:var(--bg-page); border:1px solid var(--border); border-radius:10px; padding:9px 12px;\n    font-size:13px; transition:.2s;\n  }\n  .map-row:hover{ border-color:var(--primary); }\n  .map-story{ color:var(--muted); text-align:right; }\n  .map-arrow{ color:var(--primary); font-weight:700; }\n  .map-term{ color:var(--ink); font-family:var(--font-mono); font-weight:700; }\n\n  /* ---------------- reflection cards ---------------- */\n  .reflection-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; width:100%; }\n  .reflect-card{ perspective:1200px; min-height:150px; }\n  .reflect-inner{\n    position:relative; width:100%; height:100%; min-height:150px;\n    transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,.2,.2,1);\n  }\n  .reflect-card.flipped .reflect-inner{ transform:rotateY(180deg); }\n  .reflect-card.thinking .reflect-front{ animation:thinkWiggle .5s ease; }\n  @keyframes thinkWiggle{ 0%,100%{ transform:rotate(0);} 30%{ transform:rotate(-1.5deg);} 70%{ transform:rotate(1.5deg);} }\n  .reflect-face{\n    position:absolute; inset:0; backface-visibility:hidden;\n    border-radius:14px; border:1px solid var(--border); background:var(--card);\n    box-shadow:var(--shadow-card);\n    padding:16px; display:flex; flex-direction:column; justify-content:space-between; gap:10px;\n  }\n  .reflect-back{ transform:rotateY(180deg); background:linear-gradient(160deg,rgba(74,155,209,0.08),rgba(234,140,54,0.06)); border-color:var(--primary); justify-content:center; }\n  .reflect-q{ font-weight:700; font-size:13.5px; line-height:1.45; color:var(--ink); }\n  .reflect-btns{ display:flex; gap:8px; }\n  .reflect-a{ font-size:13.5px; color:var(--ink); line-height:1.5; text-align:center; }\n\n  /* ---------------- complete ---------------- */\n  .complete-wrap{ text-align:center; display:flex; flex-direction:column; gap:6px; align-items:center; }\n  .complete-score{ font-family:var(--font-mono); font-size:15px; color:var(--primary-dark); font-weight:700; }\n  .complete-tier{ font-size:19px; font-weight:700; font-family:var(--font-display); color:var(--ink); }\n  .complete-def{ color:var(--muted); font-size:13.5px; font-style:italic; max-width:320px; }\n\n  /* ---------------- HUD footer ---------------- */\n  .hud{\n    position:fixed; left:0; right:0; bottom:0; z-index:200;\n    background:rgba(255,255,255,0.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);\n    border-top:1px solid var(--border);\n    box-shadow:0 -4px 18px -12px rgba(23,50,77,0.16);\n    padding:9px 16px; padding-bottom:max(9px, env(safe-area-inset-bottom));\n    display:flex; align-items:center; justify-content:center; gap:16px;\n  }\n  .hud-score-wrap{ font-family:var(--font-mono); font-size:12px; color:var(--muted); display:flex; align-items:center; gap:5px; }\n  #hud-score{ color:var(--accent-dark); font-weight:700; }\n  .hud-achievements{ display:flex; gap:6px; }\n  .achv-chip{\n    width:27px; height:27px; border-radius:50%; display:flex; align-items:center; justify-content:center;\n    background:var(--bg-page); border:1px solid var(--border); font-size:13px; filter:grayscale(1); opacity:.4;\n    transition:.3s;\n  }\n  .achv-chip.unlocked{\n    filter:none; opacity:1; border-color:var(--primary);\n    box-shadow:0 0 0 3px rgba(74,155,209,0.18);\n    animation:achvPop .5s cubic-bezier(.34,1.56,.64,1);\n  }\n  @keyframes achvPop{ 0%{ transform:scale(.5); } 60%{ transform:scale(1.25); } 100%{ transform:scale(1); } }\n\n  /* ---------------- toasts ---------------- */\n  .toast-layer{ position:fixed; top:76px; left:50%; transform:translateX(-50%); z-index:400; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; }\n  .toast{\n    background:var(--card); border:1px solid var(--primary); color:var(--primary-dark);\n    font-weight:700; font-size:12.5px; padding:9px 18px; border-radius:999px;\n    opacity:0; transform:translateY(-8px); transition:opacity .3s, transform .3s;\n    box-shadow:var(--shadow-card);\n  }\n  .toast.show{ opacity:1; transform:translateY(0); }\n\n  @media (max-width:640px){\n    body{ padding-top:126px; }\n    .mode-wrap{ margin-left:0; width:100%; justify-content:space-between; }\n    .progress-wrap{ margin-top:6px; }\n  }\n  @media (max-width:420px){\n    body{ padding-top:164px; padding-bottom:88px; }\n    .cb-btn{ padding:7px 10px; font-size:11.5px; }\n    .speed-btn{ padding:5px 7px; font-size:10px; }\n  }\n  .problem-statement{display:none !important;}\n<\/style>\n<\/head>\n<body>\n\n<div class=\"controlbar\">\n  <div class=\"cb-row\">\n    <div class=\"cb-group\">\n      <button class=\"cb-btn primary invite-pulse\" id=\"btn-auto\">▶ Auto<\/button>\n      <button class=\"cb-btn\" id=\"btn-pause\">⏸ Pause<\/button>\n      <button class=\"cb-btn\" id=\"btn-resume\">▶ Resume<\/button>\n      <button class=\"cb-btn\" id=\"btn-next\">⏭ Next<\/button>\n      <button class=\"cb-btn danger\" id=\"btn-restart\">↩ Restart<\/button>\n    <\/div>\n    <div class=\"cb-sep\"><\/div>\n    <div class=\"speed-group\">\n      <button class=\"speed-btn\" data-speed=\"0.5\">0.5x<\/button>\n      <button class=\"speed-btn active\" data-speed=\"1\">1x<\/button>\n      <button class=\"speed-btn\" data-speed=\"1.5\">1.5x<\/button>\n      <button class=\"speed-btn\" data-speed=\"2\">2x<\/button>\n      <button class=\"speed-btn\" data-speed=\"3\">3x<\/button>\n    <\/div>\n    <div class=\"mode-wrap\">\n      MODE: <span id=\"mode-label\">MANUAL<\/span>\n    <\/div>\n  <\/div>\n  <div class=\"progress-wrap\">\n    <div class=\"progress-track\"><div class=\"progress-fill\" id=\"progress-fill\"><\/div><\/div>\n    <span id=\"progress-text\">Step 1 / 13<\/span>\n  <\/div>\n<\/div>\n\n<section class=\"problem-statement\" aria-label=\"Problem statement\">\n  <span class=\"problem-kicker\">The Problem<\/span>\n  <h2>Two systems need to talk. Neither should have to know the other's secrets.<\/h2>\n  <p>A student needs a rare book — but the archive is huge, crowded, and impossible to just walk into.<\/p>\n  <p>How can a request be placed, fetched, and delivered back, without the student ever touching what happens inside? Play through the library below to find out.<\/p>\n<\/section>\n\n<main class=\"stage\">\n  <div class=\"flow-track\" id=\"flow-track\">\n    <div class=\"chaos-layer\" id=\"chaos-layer\">\n      <span>📦<\/span><span>🪜<\/span><span>📚<\/span><span>🗄️<\/span><span>📋<\/span><span>🧹<\/span>\n    <\/div>\n    <div class=\"track-inner\" id=\"track-inner\">\n      <div class=\"actor-slot\" id=\"slot-left\" data-role=\"client\">\n        <div class=\"actor-icon-wrap\"><div class=\"actor-icon\" id=\"icon-left\">🧑‍🎓<\/div><\/div>\n        <div class=\"actor-label\" id=\"label-left\">Student<\/div>\n        <div class=\"actor-sub\" id=\"sub-left\"><\/div>\n      <\/div>\n      <div class=\"arrow-wrap\" id=\"arrow-lm\"><span class=\"arrow\">↔<\/span><\/div>\n      <div class=\"actor-slot dim\" id=\"slot-mid\" data-role=\"api\">\n        <div class=\"actor-icon-wrap\"><div class=\"actor-icon\" id=\"icon-mid\">❔<\/div><\/div>\n        <div class=\"actor-label\" id=\"label-mid\">?<\/div>\n        <div class=\"actor-sub\" id=\"sub-mid\"><\/div>\n      <\/div>\n      <div class=\"arrow-wrap\" id=\"arrow-mr\"><span class=\"arrow\">↔<\/span><\/div>\n      <div class=\"actor-slot\" id=\"slot-right\" data-role=\"server\">\n        <div class=\"actor-icon-wrap\"><div class=\"actor-icon\" id=\"icon-right\">🗄️<\/div><\/div>\n        <div class=\"actor-label\" id=\"label-right\">Archive<\/div>\n        <div class=\"actor-sub\" id=\"sub-right\"><\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <div class=\"narration\" id=\"narration\"><\/div>\n  <div class=\"interactive\" id=\"interactive\"><\/div>\n<\/main>\n\n<div class=\"toast-layer\" id=\"toast-layer\"><\/div>\n\n<div class=\"hud\">\n  <div class=\"hud-score-wrap\">SCORE <span id=\"hud-score\">0<\/span><\/div>\n  <div class=\"hud-achievements\" id=\"hud-achievements\"><\/div>\n<\/div>\n\n<script>\n(function(){\n'use strict';\n\n/* =========================================================================\n   0. TINY DOM HELPER\n   ========================================================================= */\nfunction h(tag, attrs, ...children){\n  const e = document.createElement(tag);\n  attrs = attrs || {};\n  for(const k in attrs){\n    const v = attrs[k];\n    if(v == null) continue;\n    if(k === 'class') e.className = v;\n    else if(k === 'html') e.innerHTML = v;\n    else if(k.slice(0,2) === 'on') e.addEventListener(k.slice(2).toLowerCase(), v);\n    else e.setAttribute(k, v);\n  }\n  children.flat(Infinity).forEach(c=>{\n    if(c == null || c === false) return;\n    e.appendChild(typeof c === 'string' || typeof c === 'number' ? document.createTextNode(c) : c);\n  });\n  return e;\n}\nfunction clear(el){ while(el.firstChild) el.removeChild(el.firstChild); }\n\n/* =========================================================================\n   1. PAUSABLE, SPEED-AWARE TWEEN ENGINE\n   All timing in the game (narration delays, animations, auto-advance)\n   flows through this so Pause/Resume/Speed work everywhere uniformly.\n   ========================================================================= */\nconst tasks = [];\nlet lastTS = null;\nfunction easeInOutQuad(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }\n\nfunction frameLoop(ts){\n  requestAnimationFrame(frameLoop);\n  if(lastTS === null) lastTS = ts;\n  const rawDt = ts - lastTS;\n  lastTS = ts;\n  if(G.paused) return;\n  const dt = rawDt * G.speed;\n  for(let i = tasks.length - 1; i >= 0; i--){\n    const t = tasks[i];\n    t.elapsed += dt;\n    const p = Math.min(1, t.elapsed / t.duration);\n    t.onUpdate(p);\n    if(p >= 1){\n      tasks.splice(i,1);\n      t.onDone && t.onDone();\n    }\n  }\n}\nrequestAnimationFrame(frameLoop);\n\nfunction tween(duration, onUpdate, onDone){\n  return new Promise(resolve=>{\n    tasks.push({\n      elapsed: 0,\n      duration: Math.max(1,duration),\n      onUpdate,\n      onDone: ()=>{ onDone && onDone(); resolve(); }\n    });\n  });\n}\nfunction wait(ms){ return tween(ms, ()=>{}); }\n\n/* =========================================================================\n   2. GLOBAL GAME STATE\n   ========================================================================= */\nconst G = {\n  state: null,\n  gen: 0,\n  mode: 'MANUAL',\n  speed: 1,\n  paused: false,\n  score: 0,\n  achievements: new Set(),\n  pendingChoice: null,\n  pendingNext: null,\n  onAutoActivate: null,\n  revealCard: null,\n};\n\nconst STATE_ORDER = [\n  'INTRO','ARCHIVE_PROBLEM','WAITER_DISCOVERY','FIRST_ORDER','MULTIPLE_REQUESTS',\n  'WAITER_REMOVED','ORDER_DESK','ARCHIVE_CHANGE','SAME_PATH',\n  'IDEA_REVEAL','FINAL_CHALLENGE','COMPLETE'\n];\n\nconst ACHIEVEMENTS = [\n  {id:'request_sent',      icon:'📦', label:'Request Sent'},\n  {id:'response_received', icon:'🔄', label:'Request Delivered'},\n  {id:'first_request',     icon:'🎯', label:'First Request'},\n  {id:'pattern_spotted',   icon:'💡', label:'Pattern Spotted'},\n  {id:'api_discovered',    icon:'🚀', label:'Smart Idea'},\n];\n\nconst DEFAULT_ACTORS = {\n  left:  {icon:'🧑‍🎓', label:'Student'},\n  mid:   {icon:'❔', label:'—', dim:true},\n  right: {icon:'🗄️', label:'Archive'},\n};\n\n/* =========================================================================\n   3. DOM REFERENCES  (script sits at end of body, so all elements exist)\n   ========================================================================= */\nconst trackInner   = document.getElementById('track-inner');\nconst slotEl        = { left: document.getElementById('slot-left'), mid: document.getElementById('slot-mid'), right: document.getElementById('slot-right') };\nconst iconEl        = { left: document.getElementById('icon-left'), mid: document.getElementById('icon-mid'), right: document.getElementById('icon-right') };\nconst labelEl       = { left: document.getElementById('label-left'), mid: document.getElementById('label-mid'), right: document.getElementById('label-right') };\nconst subEl         = { left: document.getElementById('sub-left'), mid: document.getElementById('sub-mid'), right: document.getElementById('sub-right') };\nconst arrowLM       = document.getElementById('arrow-lm');\nconst arrowMR       = document.getElementById('arrow-mr');\nconst chaosLayer    = document.getElementById('chaos-layer');\nconst narrationEl   = document.getElementById('narration');\nconst interactiveEl = document.getElementById('interactive');\nconst toastLayer    = document.getElementById('toast-layer');\n\nconst btnAuto    = document.getElementById('btn-auto');\nconst btnPause   = document.getElementById('btn-pause');\nconst btnResume  = document.getElementById('btn-resume');\nconst btnNext    = document.getElementById('btn-next');\nconst btnRestart = document.getElementById('btn-restart');\nconst speedBtns  = Array.from(document.querySelectorAll('.speed-btn'));\nconst modeLabel  = document.getElementById('mode-label');\nconst progressFill = document.getElementById('progress-fill');\nconst progressText = document.getElementById('progress-text');\nconst scoreEl    = document.getElementById('hud-score');\nconst achvWrap   = document.getElementById('hud-achievements');\n\n/* =========================================================================\n   4. HUD / CONTROL BAR UI\n   ========================================================================= */\nfunction buildAchievementChips(){\n  clear(achvWrap);\n  ACHIEVEMENTS.forEach(a=>{\n    const chip = h('div', {class:'achv-chip', title:a.label, id:'achv-'+a.id},\n      h('span',{class:'achv-icon'}, a.icon)\n    );\n    achvWrap.appendChild(chip);\n  });\n}\nfunction updateScoreUI(){ scoreEl.textContent = String(G.score); }\nfunction addScore(n){ G.score += n; updateScoreUI(); }\n\nfunction unlock(id){\n  if(G.achievements.has(id)) return;\n  G.achievements.add(id);\n  const meta = ACHIEVEMENTS.find(a=>a.id===id);\n  const chip = document.getElementById('achv-'+id);\n  if(chip) chip.classList.add('unlocked');\n  if(meta) toast(meta.icon+' '+meta.label);\n  addScore(15);\n}\n\nfunction toast(msg){\n  const t = h('div',{class:'toast'}, msg);\n  toastLayer.appendChild(t);\n  requestAnimationFrame(()=> t.classList.add('show'));\n  wait(2200).then(()=>{\n    t.classList.remove('show');\n    wait(400).then(()=> t.remove());\n  });\n}\n\nfunction updateModeUI(){\n  modeLabel.textContent = G.mode;\n  modeLabel.classList.toggle('auto', G.mode==='AUTO');\n}\nfunction updatePauseUI(){\n  btnPause.disabled = G.paused;\n  btnResume.disabled = !G.paused;\n  document.body.classList.toggle('paused', G.paused);\n}\nfunction updateSpeedUI(){\n  speedBtns.forEach(b=> b.classList.toggle('active', parseFloat(b.dataset.speed) === G.speed));\n  document.documentElement.style.setProperty('--speed', G.speed);\n}\nfunction updateProgress(){\n  const idx = STATE_ORDER.indexOf(G.state);\n  const pct = idx <= 0 ? 0 : (idx/(STATE_ORDER.length-1))*100;\n  progressFill.style.width = pct+'%';\n  progressText.textContent = 'Step '+(idx+1)+' / '+STATE_ORDER.length;\n}\n\nbtnPause.addEventListener('click', ()=>{ G.paused = true; updatePauseUI(); });\nbtnResume.addEventListener('click', ()=>{ G.paused = false; updatePauseUI(); });\n\nbtnAuto.addEventListener('click', ()=>{\n  G.mode = 'AUTO';\n  updateModeUI();\n  if(G.pendingChoice) armAutoChoice(G.pendingChoice);\n  if(G.pendingNext) armAutoNext(G.pendingNext);\n  if(typeof G.onAutoActivate === 'function'){\n    const fn = G.onAutoActivate; G.onAutoActivate = null; fn();\n  }\n});\n\nbtnNext.addEventListener('click', ()=>{\n  if(G.pendingNext && !G.pendingNext.resolved) G.pendingNext.fire();\n});\n\nspeedBtns.forEach(b=>{\n  b.addEventListener('click', ()=>{\n    G.speed = parseFloat(b.dataset.speed);\n    updateSpeedUI();\n  });\n});\n\nbtnRestart.addEventListener('click', restart);\n\n/* =========================================================================\n   5. FLOW-TRACK ACTOR / PACKET VISUALS\n   ========================================================================= */\nfunction narrate(text){\n  narrationEl.classList.remove('pop');\n  void narrationEl.offsetWidth; /* restart animation */\n  narrationEl.textContent = text;\n  narrationEl.classList.add('pop');\n}\n\nfunction setActorsInstant(cfg){\n  ['left','mid','right'].forEach(k=>{\n    if(!cfg[k]) return;\n    const {icon, label, dim, sub} = cfg[k];\n    if(icon != null) iconEl[k].textContent = icon;\n    if(label != null) labelEl[k].textContent = label;\n    slotEl[k].classList.toggle('dim', !!dim);\n    subEl[k].textContent = sub || '';\n  });\n}\n\nfunction popInActor(which, {icon, label}){\n  iconEl[which].textContent = icon;\n  labelEl[which].textContent = label;\n  slotEl[which].classList.remove('dim');\n  slotEl[which].classList.add('pop-in');\n  return wait(500).then(()=> slotEl[which].classList.remove('pop-in'));\n}\n\n/* card-flip style morph: scale x to 0, swap content, scale back */\nfunction morphActor(which, {icon, label}){\n  const iEl = iconEl[which], lEl = labelEl[which];\n  slotEl[which].classList.remove('dim');\n  return tween(500, p=>{\n    const scale = Math.abs(Math.cos(p*Math.PI));\n    iEl.style.transform = 'scaleX('+scale+')';\n    if(p >= 0.5 && iEl.dataset.swapped !== '1'){\n      iEl.dataset.swapped = '1';\n      if(icon != null) iEl.textContent = icon;\n      if(label != null) lEl.textContent = label;\n    }\n  }, ()=>{\n    iEl.style.transform = '';\n    iEl.dataset.swapped = '';\n  });\n}\n\nfunction labelActors(map){\n  ['left','mid','right'].forEach(k=>{\n    if(map[k] != null) subEl[k].textContent = map[k];\n  });\n  Object.values(subEl).forEach(el=> el.classList.add('show'));\n  return wait(50);\n}\n\nfunction pulseArrow(which, on, tone){\n  const el = which==='lm' ? arrowLM : arrowMR;\n  el.classList.remove('tone-order','tone-delivery','tone-abstract','tone-plain');\n  if(on){\n    el.classList.add('active','tone-'+(tone||'plain'));\n  } else {\n    el.classList.remove('active');\n  }\n}\n\nfunction movePacket(from, to, content, duration, tone){\n  duration = duration || 700;\n  tone = tone || (content && typeof content === 'object' ? 'order' : 'plain');\n  return new Promise(resolve=>{\n    const trRect = trackInner.getBoundingClientRect();\n    const fRect = slotEl[from].getBoundingClientRect();\n    const tRect = slotEl[to].getBoundingClientRect();\n    const fx = fRect.left + fRect.width/2 - trRect.left;\n    const tx = tRect.left + tRect.width/2 - trRect.left;\n    const y  = fRect.top + fRect.height/2 - trRect.top;\n    let pkt;\n    if(content && typeof content === 'object'){\n      pkt = h('div',{class:'packet pill tone-'+tone},\n        h('span',{class:'pkt-icon'}, content.icon),\n        h('span',{class:'pkt-text'}, content.text)\n      );\n    } else {\n      pkt = h('div',{class:'packet plain'}, content);\n    }\n    pkt.style.left = fx+'px';\n    pkt.style.top = y+'px';\n    trackInner.appendChild(pkt);\n    const skipsMid = (from==='left' && to==='right') || (from==='right' && to==='left');\n    const arrowIds = skipsMid ? ['lm','mr'] : [(from==='left'||to==='left') ? 'lm' : 'mr'];\n    arrowIds.forEach(id=> pulseArrow(id, true, tone));\n    tween(duration, p=>{\n      const ep = easeInOutQuad(p);\n      pkt.style.left = (fx + (tx-fx)*ep) + 'px';\n      pkt.style.top  = (y - Math.sin(p*Math.PI)*20) + 'px';\n      pkt.style.opacity = p > 0.92 ? String(1-(p-0.92)/0.08) : '1';\n    }, ()=>{\n      arrowIds.forEach(id=> pulseArrow(id, false, tone));\n      pkt.remove();\n      resolve();\n    });\n  });\n}\n\nfunction showChaos(on){\n  chaosLayer.classList.toggle('show', on);\n}\n\n/* =========================================================================\n   6. CHOICE / CONTINUE PRIMITIVES  (shared by every decision point)\n   ========================================================================= */\nfunction armAutoChoice(state){\n  if(state.resolved || state.armed) return;\n  state.armed = true;\n  wait(state.autoDelay).then(()=>{ if(!state.resolved) state.resolveChoice(state.autoValue); });\n}\nfunction armAutoNext(state){\n  if(state.resolved || state.armed) return;\n  state.armed = true;\n  wait(state.autoDelay).then(()=>{ if(!state.resolved) state.fire(); });\n}\n\nfunction choose(buttons, autoValue, autoDelay){\n  autoDelay = autoDelay == null ? 1400 : autoDelay;\n  clear(interactiveEl);\n  const box = h('div',{class:'choices'});\n  const state = {resolved:false, armed:false, autoValue, autoDelay};\n  const promise = new Promise(resolve=>{\n    state.resolveChoice = (v)=>{\n      if(state.resolved) return;\n      state.resolved = true;\n      Array.from(box.children).forEach(c=>{\n        c.disabled = true;\n        if(c.dataset.value === String(v)) c.classList.add('chosen');\n      });\n      G.pendingChoice = null;\n      resolve(v);\n    };\n  });\n  buttons.forEach(b=>{\n    const btn = h('button',{class:'choice-btn'+(b.variant?(' '+b.variant):'')}, b.label);\n    btn.dataset.value = b.value;\n    btn.addEventListener('click', ()=> state.resolveChoice(b.value));\n    box.appendChild(btn);\n  });\n  interactiveEl.appendChild(box);\n  G.pendingChoice = state;\n  if(G.mode === 'AUTO') armAutoChoice(state);\n  return promise;\n}\n\nfunction next(label, autoDelay){\n  label = label || 'Continue →';\n  autoDelay = autoDelay == null ? 1200 : autoDelay;\n  clear(interactiveEl);\n  const state = {resolved:false, armed:false, autoDelay};\n  const promise = new Promise(resolve=>{\n    state.fire = ()=>{\n      if(state.resolved) return;\n      state.resolved = true;\n      btnNext.disabled = true;\n      G.pendingNext = null;\n      resolve();\n    };\n  });\n  const btn = h('button',{class:'choice-btn primary'}, label);\n  btn.addEventListener('click', state.fire);\n  interactiveEl.appendChild(btn);\n  btnNext.disabled = false;\n  G.pendingNext = state;\n  if(G.mode === 'AUTO') armAutoNext(state);\n  return promise;\n}\n\n/* =========================================================================\n   7. STATE MACHINE PLUMBING  (guards against stale continuations on restart)\n   ========================================================================= */\nfunction guard(myGen){\n  if(myGen !== G.gen){\n    const e = new Error('stale'); e.stale = true; throw e;\n  }\n}\nasync function runState(fn, myGen){\n  try{ await fn(myGen); }\n  catch(e){ if(!(e && e.stale)) console.error(e); }\n}\n\nfunction goTo(name){\n  G.gen += 1;\n  const myGen = G.gen;\n  G.state = name;\n  G.pendingChoice = null;\n  G.pendingNext = null;\n  G.onAutoActivate = null;\n  btnNext.disabled = true;\n  clear(interactiveEl);\n  updateProgress();\n  updateModeUI();\n  runState(STATE_FNS[name], myGen);\n}\n\nfunction restart(){\n  tasks.length = 0;\n  lastTS = null;\n  G.gen += 1;\n  G.mode = 'MANUAL';\n  G.speed = 1;\n  G.paused = false;\n  G.score = 0;\n  G.achievements = new Set();\n  G.pendingChoice = null;\n  G.pendingNext = null;\n  G.onAutoActivate = null;\n  document.querySelectorAll('.achv-chip.unlocked').forEach(c=> c.classList.remove('unlocked'));\n  updateScoreUI();\n  updateModeUI();\n  updateSpeedUI();\n  updatePauseUI();\n  showChaos(false);\n  Object.values(subEl).forEach(el=>{ el.textContent=''; el.classList.remove('show'); });\n  setActorsInstant(DEFAULT_ACTORS);\n  goTo('INTRO');\n}\n\n\n/* =========================================================================\n   7b. RELATABLE ORDER CONTENT\n   Early scenes travel as a concrete \"order\" (out, orange) and \"delivery\"\n   (back, blue) rather than a generic abstract package — the abstraction\n   is only introduced later, in REQUEST_RESPONSE / API_REVEAL.\n   ========================================================================= */\nconst ORDER_META = {\n  pizza:  {icon:'📖', order:'Book request',    ready:'Book ready!'},\n  burger: {icon:'📰', order:'Journal request',   ready:'Journal ready!'},\n  coffee: {icon:'🎓',       order:'Thesis request',   ready:'Thesis ready!'},\n  check:  {icon:'🔍', order:'Checking request', ready:'Request status'},\n  cancel: {icon:'❌',       order:'Cancel request', ready:'Cancelled'},\n};\n\n/* =========================================================================\n   8. EXTRA UI BUILDERS (chaos, students, reveal banner, mapping, reflection)\n   ========================================================================= */\nfunction faceStudent(emoji){ iconEl.left.textContent = emoji; }\n\nfunction renderStudentRow(custs){\n  const row = h('div',{class:'student-row'});\n  custs.forEach(c=>{\n    const chip = h('div',{class:'cust-chip', id:'cust-'+c.label},\n      h('span',{class:'cust-icon'}, c.icon),\n      h('span',{class:'cust-name'}, c.label),\n      h('span',{class:'cust-item'}, c.meta.icon)\n    );\n    row.appendChild(chip);\n  });\n  interactiveEl.appendChild(row);\n}\nfunction setStudentState(label, mode){\n  const chip = document.getElementById('cust-'+label);\n  if(!chip) return;\n  chip.classList.toggle('active', mode==='active');\n  chip.classList.toggle('done', mode==='done');\n}\n\nfunction showBigReveal(text){\n  clear(interactiveEl);\n  const banner = h('div',{class:'reveal-banner'}, text);\n  interactiveEl.appendChild(banner);\n  requestAnimationFrame(()=> banner.classList.add('show'));\n  spawnConfetti();\n}\nfunction spawnConfetti(){\n  const layer = h('div',{class:'confetti-layer'});\n  document.body.appendChild(layer);\n  const bits = ['🎉','✨','🎊','⭐'];\n  for(let i=0;i<18;i++){\n    const b = h('span',{class:'confetti-bit'}, bits[i % bits.length]);\n    b.style.left = (Math.random()*100)+'%';\n    b.style.animationDelay = (Math.random()*0.4)+'s';\n    b.style.animationDuration = (1.6+Math.random()*1.1)+'s';\n    layer.appendChild(b);\n  }\n  wait(2600).then(()=> layer.remove());\n}\n\nfunction showMappingTable(rows){\n  const table = h('div',{class:'mapping-table'});\n  rows.forEach(([story, term])=>{\n    table.appendChild(h('div',{class:'map-row'},\n      h('span',{class:'map-story'}, story),\n      h('span',{class:'map-arrow'}, '→'),\n      h('span',{class:'map-term'}, term)\n    ));\n  });\n  interactiveEl.appendChild(table);\n}\n\nfunction renderReflectionCards(qs, revealed){\n  const grid = h('div',{class:'reflection-grid'});\n  qs.forEach((item, i)=>{\n    const inner = h('div',{class:'reflect-inner'});\n    const front = h('div',{class:'reflect-face reflect-front'},\n      h('div',{class:'reflect-q'}, item.q),\n      h('div',{class:'reflect-btns'},\n        h('button',{class:'choice-btn ghost small', onClick:()=>{\n          card.classList.add('thinking');\n          wait(700).then(()=> card.classList.remove('thinking'));\n        }}, '🤔 Think'),\n        h('button',{class:'choice-btn small', onClick:()=> revealCard(i)}, 'Reveal')\n      )\n    );\n    const back = h('div',{class:'reflect-face reflect-back'},\n      h('div',{class:'reflect-a'}, item.a)\n    );\n    inner.appendChild(front);\n    inner.appendChild(back);\n    const card = h('div',{class:'reflect-card', id:'reflect-'+i}, inner);\n    grid.appendChild(card);\n  });\n  interactiveEl.appendChild(grid);\n\n  function revealCard(i){\n    if(revealed[i]) return;\n    revealed[i] = true;\n    document.getElementById('reflect-'+i).classList.add('flipped');\n    addScore(5);\n    if(G.onReflectionCheck) G.onReflectionCheck();\n  }\n  G.revealCard = revealCard;\n}\n\nfunction waitAllRevealedOrAuto(revealed, count, myGen){\n  return new Promise(resolve=>{\n    function checkDone(){\n      if(revealed.every(Boolean)){ G.onAutoActivate = null; resolve(); }\n    }\n    G.onReflectionCheck = checkDone;\n    function startAuto(){\n      (async ()=>{\n        for(let i=0;i<count;i++){\n          if(myGen !== G.gen) return;\n          await wait(900);\n          if(myGen !== G.gen) return;\n          if(!revealed[i] && G.revealCard) G.revealCard(i);\n        }\n      })();\n    }\n    if(G.mode === 'AUTO') startAuto();\n    else G.onAutoActivate = startAuto;\n    checkDone();\n  });\n}\n\n/* =========================================================================\n   9. STATE FUNCTIONS\n   ========================================================================= */\n\nasync function introState(myGen){\n  setActorsInstant(DEFAULT_ACTORS);\n  faceStudent('🧑‍🎓');\n  narrate('Book! 📖');\n  await next('Find My Book', 1000); guard(myGen);\n  narrate('How?');\n  const choice = await choose([\n    {label:'🚶 Go to Archive', value:'archive'},\n    {label:'🙋 Call Librarian', value:'librarian'},\n  ], 'librarian', 1700);\n  guard(myGen);\n  if(choice === 'archive') goTo('ARCHIVE_PROBLEM');\n  else goTo('WAITER_DISCOVERY');\n}\n\nasync function archiveProblemState(myGen){\n  narrate('Straight to the archive...');\n  await movePacket('left','right','🧑‍🎓',700); guard(myGen);\n  showChaos(true);\n  faceStudent('😵');\n  narrate('😵 Too much?');\n  await next('Try Again', 1600); guard(myGen);\n  showChaos(false);\n  faceStudent('🧑‍🎓');\n  goTo('INTRO');\n}\n\nasync function librarianDiscoveryState(myGen){\n  narrate('Calling the librarian...');\n  await popInActor('mid', {icon:'👨‍💼', label:'Librarian'}); guard(myGen);\n  await wait(300); guard(myGen);\n  narrate('Librarian: \"Book?\"');\n  await choose([{label:'📖 Book', value:'pizza'}], 'pizza', 1200); guard(myGen);\n  await next('Send Request →', 900); guard(myGen);\n  goTo('FIRST_ORDER');\n}\n\nasync function firstOrderState(myGen){\n  clear(interactiveEl);\n  narrate('You request: 📖 Book');\n  await movePacket('left','mid', {icon:'📖', text:'Book request'}, 700, 'order'); guard(myGen);\n  unlock('request_sent');\n  await movePacket('mid','right', {icon:'📖', text:'Book request'}, 700, 'order'); guard(myGen);\n  narrate('Archive is searching...');\n  await morphActor('right', {icon:'🔎'}); guard(myGen);\n  await wait(600); guard(myGen);\n  await morphActor('right', {icon:'🗄️'}); guard(myGen);\n  await movePacket('right','mid', {icon:'📖', text:'Book ready!'}, 700, 'delivery'); guard(myGen);\n  await movePacket('mid','left', {icon:'📖', text:'Book ready!'}, 700, 'delivery'); guard(myGen);\n  unlock('response_received');\n  faceStudent('😋');\n  narrate('Yum! 😋 Your book arrived.');\n  unlock('first_request');\n  await wait(700); guard(myGen);\n  await next('Continue →', 1500); guard(myGen);\n  faceStudent('🧑‍🎓');\n  goTo('MULTIPLE_REQUESTS');\n}\n\nasync function multipleRequestsState(myGen){\n  narrate('Try a few things.');\n  clear(interactiveEl);\n  const box = h('div',{class:'choices'});\n  const actions = [\n    {label:'📖 Book', value:'pizza', meta:ORDER_META.pizza},\n    {label:'📰 Journal', value:'burger', meta:ORDER_META.burger},\n    {label:'🎓 Thesis', value:'coffee', meta:ORDER_META.coffee},\n    {label:'🔎 Check Request', value:'check', meta:ORDER_META.check},\n    {label:'❌ Cancel Request', value:'cancel', meta:ORDER_META.cancel},\n  ];\n  let count = 0;\n  const MIN = 3;\n  let busy = false;\n  let doneResolve;\n  const donePromise = new Promise(res=> doneResolve = res);\n\n  async function runAction(a){\n    if(busy) return;\n    busy = true;\n    Array.from(box.children).forEach(c=> c.disabled = true);\n    narrate(a.meta.order+'...');\n    await movePacket('left','mid', {icon:a.meta.icon, text:a.meta.order}, 500, 'order'); guard(myGen);\n    await movePacket('mid','right', {icon:a.meta.icon, text:a.meta.order}, 500, 'order'); guard(myGen);\n    await wait(250); guard(myGen);\n    await movePacket('right','mid', {icon:a.meta.icon, text:a.meta.ready}, 500, 'delivery'); guard(myGen);\n    await movePacket('mid','left', {icon:a.meta.icon, text:a.meta.ready}, 500, 'delivery'); guard(myGen);\n    count += 1;\n    narrate(count < MIN ? 'Delivered. ✅' : 'Same path, every time. 👀');\n    Array.from(box.children).forEach(c=> c.disabled = false);\n    busy = false;\n    if(count >= MIN) doneResolve();\n  }\n\n  actions.forEach(a=>{\n    const btn = h('button',{class:'choice-btn'}, a.label);\n    btn.addEventListener('click', ()=> runAction(a));\n    box.appendChild(btn);\n  });\n  interactiveEl.appendChild(box);\n\n  if(G.mode === 'AUTO'){\n    (async ()=>{\n      for(let i=0;i<MIN;i++){\n        if(myGen !== G.gen) return;\n        await wait(1300); if(myGen !== G.gen) return;\n        if(!busy) await runAction(actions[i % actions.length]);\n      }\n    })();\n  } else {\n    G.onAutoActivate = ()=>{\n      (async ()=>{\n        while(count < MIN){\n          if(myGen !== G.gen) return;\n          await wait(1300); if(myGen !== G.gen) return;\n          if(!busy) await runAction(actions[count % actions.length]);\n        }\n      })();\n    };\n  }\n\n  await donePromise; guard(myGen);\n  await wait(400); guard(myGen);\n  narrate('Notice anything? 👀');\n  await next('Continue →', 1600); guard(myGen);\n  goTo('WAITER_REMOVED');\n}\n\nasync function librarianRemovedState(myGen){\n  narrate('The librarian steps away...');\n  await tween(500, p=>{\n    slotEl.mid.style.opacity = String(1-p*0.8);\n    slotEl.mid.style.transform = 'translateX('+(p*18)+'px)';\n  }); guard(myGen);\n  iconEl.mid.textContent = '🚶‍♂️💨';\n  labelEl.mid.textContent = '';\n  await wait(500); guard(myGen);\n  slotEl.mid.style.transform = '';\n  slotEl.mid.style.opacity = '';\n  setActorsInstant({mid:{icon:'❔', label:'?', dim:true}});\n  faceStudent('📰');\n  narrate('📰 Journal. What now?');\n\n  while(true){\n    const choice = await choose([\n      {label:'🚪 Enter Archive', value:'archive'},\n      {label:'💡 Set up one simple request desk', value:'interface'},\n    ], 'interface', 1900);\n    guard(myGen);\n    if(choice === 'archive'){\n      await movePacket('left','right','📰',700); guard(myGen);\n      showChaos(true);\n      faceStudent('😵');\n      narrate('😵 Still too much.');\n      await next('Try Again', 1500); guard(myGen);\n      showChaos(false);\n      faceStudent('📰');\n      narrate('What now?');\n      continue;\n    }\n    break;\n  }\n  goTo('ORDER_DESK');\n}\n\nasync function orderDeskState(myGen){\n  narrate('An request desk appears...');\n  clear(interactiveEl);\n  const hotspot = h('div',{class:'hotspot'},\n    h('div',{class:'hotspot-ring'}),\n    h('div',{class:'hotspot-label'}, 'REQUEST HERE')\n  );\n  interactiveEl.appendChild(hotspot);\n  labelEl.mid.textContent = 'Request Desk';\n  iconEl.mid.textContent = '🛎️';\n  slotEl.mid.classList.remove('dim');\n\n  let clicked = false;\n  const clickPromise = new Promise(resolve=>{\n    hotspot.addEventListener('click', ()=>{\n      if(clicked) return; clicked = true;\n      hotspot.classList.add('used');\n      resolve();\n    });\n    if(G.mode === 'AUTO'){\n      wait(1400).then(()=>{ if(!clicked){ clicked = true; hotspot.classList.add('used'); resolve(); } });\n    }\n  });\n  narrate('📰 Tap to request.');\n  await clickPromise; guard(myGen);\n  clear(interactiveEl);\n  await movePacket('left','mid', {icon:'📰', text:'Journal request'}, 600, 'order'); guard(myGen);\n  await movePacket('mid','right', {icon:'📰', text:'Journal request'}, 600, 'order'); guard(myGen);\n  await wait(250); guard(myGen);\n  await movePacket('right','mid', {icon:'📰', text:'Journal ready!'}, 600, 'delivery'); guard(myGen);\n  await movePacket('mid','left', {icon:'📰', text:'Journal ready!'}, 500, 'delivery'); guard(myGen);\n  narrate('It worked! 🎉');\n  await wait(600); guard(myGen);\n\n  narrate('More students arrive...');\n  await next('▶ Let them request', 1400); guard(myGen);\n  const custs = [\n    {icon:'👩', label:'Rohit', meta:ORDER_META.pizza},\n    {icon:'👨', label:'Arun', meta:ORDER_META.burger},\n    {icon:'🧑', label:'Krishna', meta:ORDER_META.coffee},\n    {icon:'🫵', label:'You', meta:ORDER_META.check},\n  ];\n  clear(interactiveEl);\n  renderStudentRow(custs);\n  for(const c of custs){\n    guard(myGen);\n    setStudentState(c.label,'active');\n    await movePacket('left','mid', {icon:c.meta.icon, text:c.meta.order}, 450, 'order'); guard(myGen);\n    await movePacket('mid','right', {icon:c.meta.icon, text:c.meta.order}, 450, 'order'); guard(myGen);\n    await wait(150); guard(myGen);\n    await movePacket('right','mid', {icon:c.meta.icon, text:c.meta.ready}, 450, 'delivery'); guard(myGen);\n    await movePacket('mid','left', {icon:c.meta.icon, text:c.meta.ready}, 450, 'delivery'); guard(myGen);\n    setStudentState(c.label,'done');\n    await wait(150); guard(myGen);\n  }\n  await wait(300); guard(myGen);\n  narrate('Notice anything? 👀');\n  unlock('pattern_spotted');\n  await next('Continue →', 1700); guard(myGen);\n  goTo('ARCHIVE_CHANGE');\n}\n\nasync function archiveChangeState(myGen){\n  narrate('Uh-oh...');\n  await wait(800); guard(myGen);\n  narrate('The archive is being rebuilt.');\n  await morphActor('right', {icon:'⚙️'}); guard(myGen);\n  await wait(500); guard(myGen);\n  await morphActor('right', {icon:'🤖', label:'Smart Archive'}); guard(myGen);\n\n  while(true){\n    narrate('Change your request?');\n    const choice = await choose([{label:'✅ Yes', value:'yes'},{label:'🙅 No', value:'no'}], 'no', 1800);\n    guard(myGen);\n    if(choice === 'yes'){\n      narrate('Hmm — did YOUR request change? 🤔');\n      await next('Try Again', 1400); guard(myGen);\n      continue;\n    }\n    break;\n  }\n  narrate('Same request, new archive...');\n  await movePacket('left','mid', {icon:'📖', text:'Book request'}, 600, 'order'); guard(myGen);\n  await movePacket('mid','right', {icon:'📖', text:'Book request'}, 600, 'order'); guard(myGen);\n  await wait(250); guard(myGen);\n  await movePacket('right','mid', {icon:'📖', text:'Book ready!'}, 600, 'delivery'); guard(myGen);\n  await movePacket('mid','left', {icon:'📖', text:'Book ready!'}, 600, 'delivery'); guard(myGen);\n  faceStudent('😮');\n  narrate('It still works! 😮');\n  await wait(800); guard(myGen);\n  await next('Continue →', 1600); guard(myGen);\n  faceStudent('🧑‍🎓');\n  goTo('SAME_PATH');\n}\n\nasync function samePathState(myGen){\n  narrate('Look at the pattern.');\n  await labelActors({left:'STUDENT', mid:'REQUEST DESK', right:'ARCHIVE'}); guard(myGen);\n  await wait(600); guard(myGen);\n  narrate('📋 Your request goes in');\n  await movePacket('left','mid', {icon:'📋', text:'Request'}, 700, 'order'); guard(myGen);\n  await movePacket('mid','right', {icon:'📋', text:'Request'}, 700, 'order'); guard(myGen);\n  await wait(450); guard(myGen);\n  narrate('📚 Your book comes back');\n  await movePacket('right','mid', {icon:'📚', text:'Delivery'}, 700, 'delivery'); guard(myGen);\n  await movePacket('mid','left', {icon:'📚', text:'Delivery'}, 700, 'delivery'); guard(myGen);\n  await wait(600); guard(myGen);\n  await next('Continue →', 1500); guard(myGen);\n  goTo('IDEA_REVEAL');\n}\n\nasync function ideaRevealState(myGen){\n  narrate('Let’s look at what you built.');\n  await wait(700); guard(myGen);\n  await morphActor('mid', {icon:'🧑‍💼', label:'Librarian'}); guard(myGen);\n  Object.values(subEl).forEach(el=>{ el.textContent=''; el.classList.remove('show'); });\n  await wait(500); guard(myGen);\n  showBigReveal('YOU FOUND A SMART IDEA 🎉');\n  unlock('api_discovered');\n  await wait(1400); guard(myGen);\n  clear(interactiveEl);\n  showMappingTable([\n    ['Student','Asks for what they want'],\n    ['Librarian','Carries the request in, brings the book back'],\n    ['Archive','Does the work, out of sight'],\n  ]);\n  narrate('A middle person keeps the mess hidden from everyone.');\n  await next('Take the challenge →', 2000); guard(myGen);\n  goTo('FINAL_CHALLENGE');\n}\n\nasync function finalChallengeState(myGen){\n  narrate('Quick check.');\n  clear(interactiveEl);\n  await choose([\n    {label:'📖 Find My Book', value:'pizza'},\n    {label:'📋 Get Catalogue', value:'menu'},\n    {label:'🔎 Check Request', value:'check'},\n    {label:'❌ Cancel Request', value:'cancel'},\n  ], 'pizza', 1500);\n  guard(myGen);\n\n  narrate('Where does your request go first?');\n  let correct = false;\n  while(!correct){\n    const dest = await choose([\n      {label:'Librarian', value:'librarian'},\n      {label:'Archive', value:'archive'},\n      {label:'Random stranger', value:'random'},\n    ], 'librarian', 1700);\n    guard(myGen);\n    if(dest === 'librarian'){\n      correct = true;\n    } else {\n      narrate('Not quite. Who takes every student’s request first?');\n      await wait(1300); guard(myGen);\n      narrate('Where does your request go first?');\n    }\n  }\n  narrate('Correct! 🎯');\n  addScore(25);\n  await movePacket('left','mid', {icon:'📋', text:'Request'}, 600, 'order'); guard(myGen);\n  await movePacket('mid','right', {icon:'📋', text:'Request'}, 600, 'order'); guard(myGen);\n  await wait(200); guard(myGen);\n  await movePacket('right','mid', {icon:'📚', text:'Delivery'}, 600, 'delivery'); guard(myGen);\n  await movePacket('mid','left', {icon:'📚', text:'Delivery'}, 600, 'delivery'); guard(myGen);\n  await wait(500); guard(myGen);\n\n  narrate('One more thing.');\n  await next('Continue →', 1400); guard(myGen);\n  await morphActor('right', {label:'OLD ARCHIVE'}); guard(myGen);\n  await wait(700); guard(myGen);\n  narrate('The archive is replaced...');\n  await morphActor('right', {icon:'🏭', label:'NEW ARCHIVE'}); guard(myGen);\n\n  let ok = false;\n  while(!ok){\n    narrate('Does the student need to change how they request?');\n    const ans = await choose([{label:'YES', value:'yes'},{label:'NO', value:'no'}], 'no', 1600);\n    guard(myGen);\n    if(ans === 'no'){\n      ok = true;\n    } else {\n      narrate('Think about the librarian in between...');\n      await wait(1200); guard(myGen);\n    }\n  }\n  narrate('Same way of requesting. New inside. 🚀');\n  addScore(25);\n  await movePacket('left','mid', {icon:'📋', text:'Request'}, 600, 'order'); guard(myGen);\n  await movePacket('mid','right', {icon:'📋', text:'Request'}, 600, 'order'); guard(myGen);\n  await wait(200); guard(myGen);\n  await movePacket('right','mid', {icon:'📚', text:'Delivery'}, 600, 'delivery'); guard(myGen);\n  await movePacket('mid','left', {icon:'📚', text:'Delivery'}, 600, 'delivery'); guard(myGen);\n  await next('Finish →', 1700); guard(myGen);\n  goTo('COMPLETE');\n}\n\nasync function completeState(myGen){\n  try{ parent.postMessage({type:'api-game-complete', score:G.score}, '*'); }catch(e){}\n  narrate('You found a smart idea. 🎉');\n  clear(interactiveEl);\n  const tierLabel = G.score >= 150 ? 'Master Planner 🏆' : G.score >= 90 ? 'Smart Thinker 🧭' : 'Quick Learner 🌱';\n  const wrap = h('div',{class:'complete-wrap'},\n    h('div',{class:'complete-score'}, 'Score: '+G.score),\n    h('div',{class:'complete-tier'}, tierLabel),\n    h('div',{class:'complete-def'}, '“A helpful middle step keeps the mess hidden.”'),\n  );\n  interactiveEl.appendChild(wrap);\n  const btn = h('button',{class:'choice-btn primary'}, '↩ Play Again');\n  btn.addEventListener('click', restart);\n  interactiveEl.appendChild(btn);\n}\n\nconst STATE_FNS = {\n  INTRO: introState,\n  ARCHIVE_PROBLEM: archiveProblemState,\n  WAITER_DISCOVERY: librarianDiscoveryState,\n  FIRST_ORDER: firstOrderState,\n  MULTIPLE_REQUESTS: multipleRequestsState,\n  WAITER_REMOVED: librarianRemovedState,\n  ORDER_DESK: orderDeskState,\n  ARCHIVE_CHANGE: archiveChangeState,\n  SAME_PATH: samePathState,\n  IDEA_REVEAL: ideaRevealState,\n  FINAL_CHALLENGE: finalChallengeState,\n    COMPLETE: completeState,\n};\n\n/* =========================================================================\n   10. INIT\n   ========================================================================= */\nbuildAchievementChips();\nupdateScoreUI();\nupdateModeUI();\nupdateSpeedUI();\nupdatePauseUI();\nsetActorsInstant(DEFAULT_ACTORS);\ngoTo('INTRO');\n\n})();\n\n<\/script>\n<\/body>\n<\/html>\n";
+const STEP_FOR_SECTION = {'sec-puzzle':1,'sec-briefing':2,'sec-sim':3,'sec-complete':3,'sec-notes':4,'sec-method':5,'sec-cases':6};
+function setStep(n){
+  for (let i = 1; i <= 6; i++){
+    const el = $('step-' + i);
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  }
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-view'));
+  $(id).classList.add('active-view');
+  setStep(STEP_FOR_SECTION[id] || 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+const INTRO_LINES = [
+  'You are a <span class="highlight">student in a hurry</span> who needs a book.',
+  'The archive is where the books are kept, but it is <span class="highlight">too big and crowded</span> to walk into.',
+  'Along the way, you will invent a smarter way to get what you want. Notice how it works. You will learn its name in Chapter 5.',
+];
+let done = false, score = 0;
+function loadGame(){
+  done = false;
+  $('btn-sim-next').disabled = true;
+  $('btn-sim-next').textContent = 'Finish the game to continue ➜';
+  $('game-frame').srcdoc = GAME_HTML;
+}
+window.addEventListener('message', e => {
+  if (e.source !== $('game-frame').contentWindow || !e.data || e.data.type !== 'api-game-complete') return;
+  done = true; score = e.data.score || 0;
+  $('btn-sim-next').disabled = false;
+  $('btn-sim-next').textContent = 'Continue ➜';
+});
+$('intro-story-lines').innerHTML = INTRO_LINES.map(l => '<p>' + l + '</p>').join('');
+$('btn-puzzle-continue').onclick = () => showSection('sec-briefing');
+$('btn-briefing-back').onclick = () => showSection('sec-puzzle');
+$('btn-briefing-start').onclick = () => { showSection('sec-sim'); loadGame(); };
+let leaveAction = null;
+function confirmLeave(msg, action){
+  leaveAction = action;
+  $('leave-msg').textContent = msg;
+  $('leave-overlay').classList.add('active');
+}
+$('leave-stay').onclick = () => { leaveAction = null; $('leave-overlay').classList.remove('active'); };
+$('leave-confirm').onclick = () => {
+  const fn = leaveAction; leaveAction = null;
+  $('leave-overlay').classList.remove('active');
+  if (fn) fn();
+};
+$('btn-case-back').onclick = () => confirmLeave('Your progress will be gone if you go back from this section.', () => {
+  $('game-frame').srcdoc = ''; showSection('sec-briefing');
+});
+$('btn-sim-skip').onclick = () => confirmLeave('Your progress will be gone if you skip this section.', () => {
+  $('game-frame').srcdoc = ''; showSection('sec-notes');
+});
+$('btn-sim-next').onclick = () => { $('complete-score').textContent = score; showSection('sec-complete'); };
+$('btn-complete-replay').onclick = () => { showSection('sec-sim'); loadGame(); };
+$('btn-complete-continue').onclick = () => showSection('sec-notes');
+$('btn-notes-back').onclick = () => showSection('sec-complete');
+$('btn-notes-continue').onclick = () => showSection('sec-method');
+$('btn-method-back').onclick = () => showSection('sec-notes');
+$('btn-method-continue').onclick = () => showSection('sec-cases');
+$('btn-cases-back').onclick = () => showSection('sec-method');
+$('btn-cases-finish').onclick = () => showSection('sec-puzzle');
+})();
+</script>
+</body>
+</html>
