@@ -145,22 +145,6 @@ main{max-width:1100px;margin:0 auto;padding:140px 24px 90px;}
 .empty p{color:var(--muted);font-size:15.5px;}
 .empty a{color:var(--primary-dark);font-weight:600;}
 
-
-/* contribute prompt */
-.contribute-cta{
-  margin:64px auto 0;max-width:720px;text-align:center;padding:34px 30px;
-  background:#fff;border:1px solid var(--border);border-left:4px solid var(--amber);
-  border-radius:4px 16px 16px 4px;box-shadow:0 10px 24px -14px var(--shadow-card);
-}
-.contribute-cta h2{font-size:22px;}
-.contribute-cta p{margin-top:10px;color:var(--muted);font-size:16px;}
-.contribute-cta a.cta-btn{
-  display:inline-block;margin-top:22px;color:#fff;text-decoration:none;font:600 15px 'Poppins',sans-serif;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:999px;padding:12px 26px;
-  box-shadow:0 10px 20px -8px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
-}
-.contribute-cta a.cta-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px -6px var(--shadow-btn);}
-
 /* ---- footer ---- */
 .wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
 footer{
@@ -182,6 +166,25 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
 }
 .footer-bottom{margin-top:24px;color:var(--footer-muted);font-size:13.5px;text-align:center;}
 @media(max-width:680px){.footer-grid{grid-template-columns:1fr;gap:32px;}}
+
+/* ---- contribute call-to-action card ---- */
+.contribute-cta{
+  margin:64px auto 0;background:#fff;border:1px solid var(--border);
+  border-left:6px solid var(--amber);border-radius:28px;
+  padding:48px 32px 52px;text-align:center;
+  box-shadow:0 18px 40px -22px var(--shadow-card);
+}
+.contribute-cta h2{font-size:clamp(22px,3.4vw,28px);color:var(--ink);}
+.contribute-cta p{max-width:62ch;margin:16px auto 0;font-size:17px;color:var(--muted);}
+.contribute-cta .cta-btn{
+  display:inline-block;margin-top:30px;padding:16px 34px;border-radius:999px;
+  font:700 16px 'Poppins',sans-serif;color:#fff;text-decoration:none;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 12px 26px -8px var(--shadow-btn);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.contribute-cta .cta-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -8px var(--shadow-btn);}
+@media(max-width:640px){.contribute-cta{padding:36px 20px 40px;margin-top:48px;}}
 </style>
 </head>
 <body>
@@ -230,10 +233,10 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
     <p>We couldn't find that concept. Try a shorter word, or <a href="get-in-touch.html">get in touch</a> and tell us what you'd like to see, or <a href="contribute.html">build the case study yourself</a>.</p>
   </div>
 
-  <section class="contribute-cta">
-    <h2>Do you want to contribute?</h2>
+  <section class="contribute-cta" aria-labelledby="cta-title">
+    <h2 id="cta-title">Do you want to contribute?</h2>
     <p>Check out the live and in-progress topics and read the contribution guidelines</p>
-    <a class="cta-btn" href="contribute.html">Go to the Contribute page &rarr;</a>
+    <a class="cta-btn" href="contribute.html">Go to the Contribute page →</a>
   </section>
 </main>
 
@@ -301,7 +304,7 @@ var STUDIES = {
 var CONCEPTS = [
   /* Algorithms */
   ["Binary Search","Algorithms","halving sorted search",[["trapped_doors"]]],
-  ["Divide and Conquer","Algorithms","split subproblems",[["fake_coin"],["nuts_bolts","Quick Sort splits the problem around a pivot."]]],
+  ["Divide and Conquer","Algorithms","split subproblems",[["fake_coin"],]],
   ["Recursion","Algorithms","tower of hanoi",[["tower"]]],
   ["Bubble Sort","Algorithms","sorting swap",[["photo_day_lineup"]]],
   ["Quick Sort","Algorithms","quicksort sorting pivot",[["nuts_bolts"]]],
@@ -313,8 +316,6 @@ var CONCEPTS = [
   ["BFS","Algorithms","breadth first search graph shortest path",[["birthday_gift"]]],
 
   /* Data structures */
-  ["Stack","Data Structures","lifo",[["missing_homework","A stack keeps track of where to go back to during the search."]]],
-  ["Queue","Data Structures","fifo",[["birthday_gift","A queue decides which place to explore next."],["water_park","People wait in a queue for the slide."]]],
   ["Priority Queue","Data Structures","priority heap",[["the_griddle"]]],
   ["Linked List","Data Structures","pointers nodes",[]],
 
@@ -356,8 +357,7 @@ var CONCEPTS = [
   ["Overfitting","Machine Learning","generalization training",[]],
   ["Backpropagation","Machine Learning","neural network",[]],
 
-  /* Security */
-  ["Cryptography (Asymmetric Keys)","Security","public key private key encryption",[["padlock"]]]
+  
 ];
 </script>
 <script>
@@ -394,7 +394,7 @@ var CONCEPTS = [
   }
   function wipCard(c){
     return '<article class="card wip"><div class="card-top"><h3>'+esc(c[0])+'</h3><span class="cat">'+esc(c[1])+'</span></div>'+
-           '<p class="wip-note">A case study for this is being worked on. <a href="contribute.html">Want to build it?</a></p></article>';
+           '<p class="wip-note">A case study for this is being worked on. </p></article>';
   }
 
   function render(){
