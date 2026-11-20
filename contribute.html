@@ -10,6 +10,7 @@
 
   gtag('config', 'G-9M9C5T1Y9R');
 </script>
+<link rel="icon" type="image/png" href="assets/iitropar.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contribute — CSE Concept Laboratory</title>
@@ -135,6 +136,23 @@ main{max-width:1400px;margin:0 auto;padding:150px 40px 100px}
 .note p{font-size:14.5px;color:var(--ink)}
 .note strong{font-weight:700}
 
+
+/* ---- topics already taken up ---- */
+.topics{margin-top:72px;text-align:center;}
+.topics h2{font-size:clamp(24px,3.4vw,32px);}
+.topics .lede{max-width:62ch;margin:14px auto 0;font-size:16.5px;}
+.topic-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-top:22px;font-size:13.5px;color:var(--muted);}
+.topic-legend span{display:inline-flex;align-items:center;gap:8px;}
+.topic-legend i{width:12px;height:12px;border-radius:50%;display:inline-block;}
+.topic-legend .k-live{background:var(--teal);}
+.topic-legend .k-wip{background:#fff;border:1.5px solid var(--line);}
+.topic-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px;}
+.topic-pill{font-size:14px;font-weight:500;padding:8px 16px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);}
+.topic-pill.live{background:rgba(74,155,209,.12);border-color:var(--teal);color:var(--blue-dark);}
+.topic-pill.live::before{content:"\2713\00a0";font-weight:700;}
+.topics-note{margin-top:30px;color:var(--muted);font-size:15px;}
+.topics-note a{color:var(--blue-dark);font-weight:600;}
+
 /* ---- footer ---- */
 footer{
   background:linear-gradient(160deg,var(--footer-bg),var(--footer-bg-2));
@@ -201,7 +219,8 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
     <a href="index.html#philosophy">Philosophy</a>
     <a href="index.html#goal">Goal</a>
     <a href="index.html#case-studies">Case Studies</a>
-    <a href="contribution.html" class="active">Contribute</a>
+    <a href="concept-map.html">Concept Map</a>
+    <a href="contribute.html" class="active">Contribute</a>
     <a href="get-in-touch.html" class="nav-cta">Get in Touch</a>
   </nav>
 
@@ -292,6 +311,67 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
 
   </section>
 
+  <section class="topics" id="topics">
+    <h2>Topics already taken up</h2>
+    <p class="lede">These are the CS topics already covered or being worked on. If you're picking a topic to contribute, try to pick one that isn't listed here yet.</p>
+
+    <div class="topic-legend">
+      <span><i class="k-live"></i>Live case study</span>
+      <span><i class="k-wip"></i>In progress</span>
+    </div>
+
+    <div class="topic-pills">
+      <span class="topic-pill live">Bubble Sort</span>
+      <span class="topic-pill live">DFS</span>
+      <span class="topic-pill live">BFS</span>
+      <span class="topic-pill live">Quick Sort</span>
+      <span class="topic-pill live">Recursion</span>
+      <span class="topic-pill live">Binary Search</span>
+      <span class="topic-pill live">Stack</span>
+      <span class="topic-pill live">Queue</span>
+      <span class="topic-pill live">Divide and Conquer</span>
+      <span class="topic-pill live">Dijkstra's Algorithm</span>
+      <span class="topic-pill">Linked List</span>
+      <span class="topic-pill live">Gradient Descent</span>
+      <span class="topic-pill live">Synchronization</span>
+      <span class="topic-pill live">Leaky Bucket</span>
+      <span class="topic-pill">Overfitting</span>
+      <span class="topic-pill live">Concurrency / Parallelism</span>
+      <span class="topic-pill live">API</span>
+      <span class="topic-pill live">Load Balancing</span>
+      <span class="topic-pill live">Deadlock</span>
+      <span class="topic-pill">Insertion Sort</span>
+      <span class="topic-pill">Selection Sort</span>
+      <span class="topic-pill live">Priority queue</span>
+      <span class="topic-pill live">Page replacement</span>
+      <span class="topic-pill">Backpropagation</span>
+      <span class="topic-pill live">Sliding Window</span>
+      <span class="topic-pill live">Transactions</span>
+      <span class="topic-pill live">Reinforcement learning</span>
+      <span class="topic-pill live">Feature Engineering</span>
+      <span class="topic-pill live">Reverse Proxy</span>
+      <span class="topic-pill live">Starvation</span>
+      <span class="topic-pill">Cryptography or Asymmetric Cryptographic Key</span>
+      <span class="topic-pill">Functional Dependency</span>
+      <span class="topic-pill">Database Anomalies</span>
+      <span class="topic-pill">Primary Key &amp; Foreign Key</span>
+      <span class="topic-pill">Error Detection</span>
+      <span class="topic-pill">Serializability</span>
+      <span class="topic-pill">TCP Congestion Control</span>
+      <span class="topic-pill">DNS Resolution</span>
+      <span class="topic-pill">Database Normalization</span>
+      <span class="topic-pill">Recoverability</span>
+      <span class="topic-pill">1NF</span>
+      <span class="topic-pill">2NF</span>
+      <span class="topic-pill">3NF</span>
+      <span class="topic-pill">BCNF</span>
+      <span class="topic-pill">Transaction States</span>
+      <span class="topic-pill">Isolation Levels</span>
+    </div>
+
+    <p class="topics-note">Don't see your topic here at all? That's fine too, <a href="get-in-touch.html">get in touch</a> and we'll help you fit it into the library. Looking for a live case study instead? Try the <a href="concept-map.html">Concept Map</a>.</p>
+  </section>
+
   <div class="note">
     <p>
       <strong>Have a question or facing an issue?</strong>
@@ -318,7 +398,8 @@ footer::before{content:"";display:block;height:4px;background:linear-gradient(90
           <li><a href="index.html#building">What We're Building</a></li>
           <li><a href="index.html#philosophy">Philosophy</a></li>
           <li><a href="index.html#case-studies">Case Studies</a></li>
-          <li><a href="contribution.html">Contribute</a></li>
+          <li><a href="concept-map.html">Concept Map</a></li>
+          <li><a href="contribute.html">Contribute</a></li>
           <li><a href="get-in-touch.html">Get in Touch</a></li>
         </ul>
       </div>

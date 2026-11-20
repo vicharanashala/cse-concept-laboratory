@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" href="assets/iitropar.png">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9M9C5T1Y9R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-9M9C5T1Y9R');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept Map — CSE Concept Laboratory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-1:#FDF1E9; --bg-2:#EDF3FA;
+  --card-bg:#FFFFFF;
+  --ink:#1F2E37; --muted:#54666D; --faint:#93A5AB;
+  --primary:#4A9BD1; --primary-dark:#2B6FA3; --primary-light:#8FCBEF;
+  --amber:#EA8C36; --amber-dark:#C96F1F;
+  --footer-bg:#22496B; --footer-bg-2:#183a56;
+  --footer-ink:#DCEAF7; --footer-muted:#9BB9D2;
+  --border:#D9E5F2;
+  --shadow-card:rgba(23,50,77,0.12); --shadow-btn:rgba(43,111,163,0.28);
+}
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',sans-serif;font-weight:400;
+  background:linear-gradient(180deg,var(--bg-1) 0%,var(--bg-2) 420px,var(--bg-2) 100%);
+  background-attachment:fixed;
+  color:var(--ink);margin:0;padding:0;min-height:100vh;
+  -webkit-font-smoothing:antialiased;line-height:1.55;
+}
+h1,h2,h3{font-family:'Poppins',sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;}
+p{margin:0;}
+a{color:inherit;}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;}
+
+/* ---- top brand bar (same as the rest of the site) ---- */
+.brand-bar{
+  position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+  height:88px;padding:0 24px;z-index:500;background:#fff;
+  border-bottom:1px solid var(--border);box-shadow:0 4px 16px -8px var(--shadow-card);
+}
+.brand-badge{display:flex;align-items:center;gap:8px;height:100%;}
+.brand-badge img{max-height:80px;width:auto;display:block;}
+.brand-badge img.logo-vsl{max-height:145px;}
+.site-nav{display:flex;align-items:center;gap:26px;height:100%;}
+.site-nav a{
+  position:relative;font-family:'Poppins',sans-serif;font-weight:600;font-size:13.5px;
+  color:var(--muted);text-decoration:none;padding-bottom:6px;
+}
+.site-nav a:hover,.site-nav a.active{color:var(--primary-dark);}
+.site-nav a.active::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);border-radius:2px;}
+.site-nav a.nav-cta{
+  margin-left:18px;padding:9px 18px;border-radius:8px;color:#fff;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow:0 8px 16px -8px var(--shadow-btn);transition:transform .15s,box-shadow .15s;
+}
+.site-nav a.nav-cta:hover{color:#fff;transform:translateY(-2px);}
+@media(max-width:640px){
+  .brand-bar{height:60px;padding:0 12px;}
+  .brand-badge img{max-height:38px;}
+  .brand-badge img.logo-vsl{max-height:44px;}
+  .site-nav{display:none;}
+}
+@media(max-width:980px){.site-nav{gap:15px;}}
+
+/* ---- page ---- */
+main{max-width:1100px;margin:0 auto;padding:140px 24px 90px;}
+@media(max-width:640px){main{padding-top:92px;}}
+.hero{text-align:center;}
+.hero h1{font-size:clamp(30px,5vw,44px);}
+.hero p{max-width:58ch;margin:16px auto 0;font-size:17px;color:var(--muted);}
+
+/* search */
+.search{position:relative;max-width:560px;margin:36px auto 0;}
+.search svg{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--faint);pointer-events:none;}
+.search input{
+  width:100%;font:500 16px 'Inter',sans-serif;color:var(--ink);
+  padding:16px 22px 16px 52px;border-radius:999px;border:1.5px solid var(--border);background:#fff;
+  box-shadow:0 10px 26px -14px var(--shadow-card);
+}
+.search input::placeholder{color:var(--faint);font-weight:400;}
+.search input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(74,155,209,.18);}
+
+/* category filter */
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px;}
+.chip{
+  font:600 13px 'Poppins',sans-serif;color:var(--muted);background:#fff;
+  border:1px solid var(--border);border-radius:999px;padding:7px 15px;cursor:pointer;
+}
+.chip:hover{border-color:var(--primary);color:var(--primary-dark);}
+.chip[aria-pressed="true"]{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff;}
+.status{text-align:center;margin-top:20px;font-size:14px;color:var(--faint);min-height:21px;}
+
+/* groups */
+.group{margin-top:44px;}
+.group-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:22px;}
+.group-head h2{font-size:21px;}
+.group-head span{font-size:14px;color:var(--faint);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;}
+
+/* concept card */
+.card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:16px;
+  padding:22px 22px 14px;box-shadow:0 10px 24px -14px var(--shadow-card);
+  display:flex;flex-direction:column;
+}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.card h3{font-size:18px;line-height:1.3;}
+.cat{font-size:12.5px;color:var(--faint);font-weight:500;white-space:nowrap;padding-top:4px;}
+.studies{list-style:none;margin:16px 0 0;padding:0;}
+.studies li{border-top:1px solid var(--border);}
+.studies a{
+  display:block;padding:12px 4px;text-decoration:none;border-left:3px solid transparent;
+  transition:background .15s,padding-left .15s,border-color .15s;
+}
+.studies a:hover{background:rgba(74,155,209,.07);padding-left:10px;border-left-color:var(--amber);}
+.s-title{font-family:'Poppins',sans-serif;font-weight:600;font-size:15px;color:var(--primary-dark);}
+.s-title::after{content:" \2192";color:var(--amber-dark);}
+.s-note{display:block;margin-top:3px;font-size:13.5px;color:var(--muted);line-height:1.5;}
+
+/* in-progress card */
+.card.wip{background:rgba(84,102,109,0.05);border-style:dashed;box-shadow:none;padding-bottom:20px;}
+.card.wip h3{color:var(--muted);}
+.wip-note{margin-top:14px;font-size:14px;color:var(--muted);}
+.wip-note a{color:var(--primary-dark);font-weight:600;}
+
+/* empty state */
+.empty{
+  display:none;text-align:center;margin:56px auto 0;max-width:52ch;padding:32px 28px;
+  background:#fff;border:1px dashed var(--border);border-radius:16px;
+}
+.empty.show{display:block;}
+.empty h2{font-size:20px;margin-bottom:8px;}
+.empty p{color:var(--muted);font-size:15.5px;}
+.empty a{color:var(--primary-dark);font-weight:600;}
+
+/* ---- footer ---- */
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+footer{
+  background:linear-gradient(160deg,var(--footer-bg),var(--footer-bg-2));
+  color:var(--footer-ink);padding:0 0 32px;position:relative;
+}
+footer::before{content:"";display:block;height:4px;background:linear-gradient(90deg,var(--amber),var(--primary));}
+.footer-inner{padding-top:60px;}
+.footer-grid{display:grid;grid-template-columns:1.1fr 1fr 0.9fr;gap:40px;}
+.footer-grid h3{color:#fff;font-size:14.5px;margin-bottom:16px;}
+.footer-org p{color:var(--footer-muted);margin:4px 0;font-size:15px;}
+.footer-org p.org-name{color:#fff;font-weight:600;font-size:17px;margin-bottom:4px;}
+.footer-links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{color:var(--footer-ink);text-decoration:none;font-size:15px;}
+.footer-links a:hover{color:#fff;text-decoration:underline;}
+.footer-tagline{
+  margin:44px auto 0;padding-top:28px;border-top:1px solid rgba(255,255,255,0.14);
+  color:var(--footer-ink);font-size:15.5px;max-width:60ch;text-align:center;
+}
+.footer-bottom{margin-top:24px;color:var(--footer-muted);font-size:13.5px;text-align:center;}
+@media(max-width:680px){.footer-grid{grid-template-columns:1fr;gap:32px;}}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="brand-badge"><img src="assets/vicharanashala.png" alt="Vicharanashala logo" class="logo-vsl"></div>
+  <nav class="site-nav">
+    <a href="index.html#vision">Vision</a>
+    <a href="index.html#building">What We're Building</a>
+    <a href="index.html#philosophy">Philosophy</a>
+    <a href="index.html#goal">Goal</a>
+    <a href="index.html#case-studies">Case Studies</a>
+    <a href="concept-map.html" class="active">Concept Map</a>
+    <a href="contribute.html">Contribute</a>
+    <a href="get-in-touch.html" class="nav-cta">Get in Touch</a>
+  </nav>
+  <div class="brand-badge"><img src="assets/iitropar.png" alt="IIT Ropar logo"></div>
+</div>
+
+<main>
+  <section class="hero">
+    <h1>Find a case study by concept</h1>
+    <p>Studying a particular CS topic? Search for it by name and jump straight to the case study that teaches it.</p>
+
+    <div class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Try “deadlock”, “binary search”, “queue”…" aria-label="Search concepts" autocomplete="off">
+    </div>
+
+    <div class="chips" id="chips" role="group" aria-label="Filter by area"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="group" id="g-live" hidden>
+    <div class="group-head"><h2>Case study available</h2><span id="n-live"></span></div>
+    <div class="grid" id="grid-live"></div>
+  </section>
+
+  <section class="group" id="g-wip" hidden>
+    <div class="group-head"><h2>In progress</h2><span id="n-wip"></span></div>
+    <div class="grid" id="grid-wip"></div>
+  </section>
+
+  <div class="empty" id="empty">
+    <h2>No match for that yet</h2>
+    <p>We couldn't find that concept. Try a shorter word, or <a href="get-in-touch.html">get in touch</a> and tell us what you'd like to see, or <a href="contribute.html">build the case study yourself</a>.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-grid">
+      <div class="footer-org">
+        <h3>A project under</h3>
+        <p class="org-name">Vicharanashala Lab for Education Design</p>
+        <p>Indian Institute of Technology Ropar (IIT Ropar)</p>
+      </div>
+      <div></div>
+      <div>
+        <h3>Explore</h3>
+        <ul class="footer-links">
+          <li><a href="index.html#vision">Vision</a></li>
+          <li><a href="index.html#building">What We're Building</a></li>
+          <li><a href="index.html#philosophy">Philosophy</a></li>
+          <li><a href="index.html#case-studies">Case Studies</a></li>
+          <li><a href="concept-map.html">Concept Map</a></li>
+          <li><a href="contribute.html">Contribute</a></li>
+          <li><a href="get-in-touch.html">Get in Touch</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-tagline">Making Computer Science concepts easier to experience, discover, and understand.</p>
+    <p class="footer-bottom">© 2026 Vicharanashala Lab for Education Design, IIT Ropar — All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+/* ======================================================================
+   DATA — edit this block when a case study is added or a topic goes live.
+   STUDIES: id -> folder, title (as shown on the home page), one-line hook
+   CONCEPTS: [name, area, search aliases, [[studyId, optional note], ...]]
+   A concept with an empty list shows up under "In progress".
+   ====================================================================== */
+var STUDIES = {
+  trapped_doors:   {path:"case_studies/trapped_doors/",                      title:"Trapped Door",               hook:"Escape a row of 600 doors by choosing which one to try next."},
+  photo_day_lineup:{path:"case_studies/photo_day_lineup/",                   title:"Photo Day Lineup",           hook:"Line students up by height, one swap at a time."},
+  fake_coin:       {path:"case_studies/fake_coin/",                          title:"Fake Coin",                  hook:"Find the odd coin out by splitting the problem into smaller ones."},
+  birthday_gift:   {path:"case_studies/birthday_gift/index.html",            title:"Birthday Gift",              hook:"Hunt for a hidden gift by exploring nearby places first."},
+  the_griddle:     {path:"case_studies/the_griddle/",                        title:"The Griddle",                hook:"A lunch rush where the most urgent order gets served first."},
+  missing_homework:{path:"case_studies/missing_homework/",                   title:"Missing Homework",           hook:"Retrace your steps, going deep down one path before backing up."},
+  milk_problem:    {path:"case_studies/the_milk_problem/",                   title:"The Milk Problem",           hook:"Sharing one fridge on a Sunday morning, and the whiteboard rule that fixes it."},
+  junction:        {path:"case_studies/junction__street/",                   title:"Junction Street",            hook:"Trains meet at a crossing and each one waits for the other."},
+  archer:          {path:"case_studies/the_blindfolded_archer/",             title:"The Blindfolded Archer",     hook:"Find the target blindfolded, guided only by feedback after each shot."},
+  nuts_bolts:      {path:"case_studies/nuts-&-bolts/",                       title:"Nuts and Bolts",             hook:"Match nuts to bolts in a workshop by picking a pivot."},
+  last_mile:       {path:"case_studies/the_last_mile/",                      title:"The Last Mile",              hook:"Find the shortest route for the final stretch of a delivery."},
+  backpack:        {path:"case_studies/oneBag_threeSlots_fourteenClasses/",  title:"1 Bag, 3 Slots, 14 Classes", hook:"A backpack with room for three books and fourteen classes to carry for."},
+  tower:           {path:"case_studies/tower_of_brahma/",                    title:"The Tower of Brahma",        hook:"Move the golden disks one at a time to finish the legendary puzzle."},
+  best_stretch:    {path:"case_studies/the_best_stretch/",                   title:"The Best Stretch",           hook:"Find the best run of consecutive days without recounting everything."},
+  campus_bites:    {path:"case_studies/campus_bites/",                       title:"Campus Bites",               hook:"One cook or several? Run a kitchen rush both ways."},
+  atomicity:       {path:"case_studies/atomicity/",                          title:"Atomicity",                  hook:"A payment gets stuck halfway. Did the money move or not?"},
+  bank_rush:       {path:"case_studies/the_bank_rush/",                      title:"The Bank Rush",              hook:"A crowd at the bank, and how to share it across the counters."},
+  hungry_mouse:    {path:"case_studies/hungry_mouse/",                       title:"Hungry Mouse",               hook:"A mouse learns the best route to the food through rewards."},
+  ant_colony:      {path:"case_studies/ant_colony/",                         title:"The Ant Colony",             hook:"Choose which path to follow using clues like smell and distance."},
+  cross_road:      {path:"case_studies/cross_road/",                         title:"Cross Road",                 hook:"A busy crossroads where ordinary cars keep getting left behind."},
+  water_park:      {path:"case_studies/the_water_park_analogy/",             title:"The Water Park Analogy",     hook:"Bursty crowds, one slide, and a steady flow at the other end."},
+  helpdesk:        {path:"case_studies/the_busy_helpdesk/",                  title:"The Busy Helpdesk",          hook:"A front desk that routes every student to the right clerk."},
+  archive:         {path:"case_studies/the_locked_archive/",                 title:"The Locked Archive",         hook:"A librarian in the middle fetches books from an archive you can't enter."},
+  padlock:         {path:"case_studies/operation_padlock/",                  title:"Operation Padlock",          hook:"One key locks, a different key unlocks."}
+};
+
+var CONCEPTS = [
+  /* Algorithms */
+  ["Binary Search","Algorithms","halving sorted search",[["trapped_doors"]]],
+  ["Divide and Conquer","Algorithms","split subproblems",[["fake_coin"],]],
+  ["Recursion","Algorithms","tower of hanoi",[["tower"]]],
+  ["Bubble Sort","Algorithms","sorting swap",[["photo_day_lineup"]]],
+  ["Quick Sort","Algorithms","quicksort sorting pivot",[["nuts_bolts"]]],
+  ["Insertion Sort","Algorithms","sorting",[]],
+  ["Selection Sort","Algorithms","sorting",[]],
+  ["Sliding Window","Algorithms","subarray window",[["best_stretch"]]],
+  ["Dijkstra's Algorithm","Algorithms","dijkstra shortest path graph",[["last_mile"]]],
+  ["DFS","Algorithms","depth first search graph backtracking",[["missing_homework"]]],
+  ["BFS","Algorithms","breadth first search graph shortest path",[["birthday_gift"]]],
+
+  /* Data structures */
+  ["Priority Queue","Data Structures","priority heap",[["the_griddle"]]],
+  ["Linked List","Data Structures","pointers nodes",[]],
+
+  /* Operating systems */
+  ["Synchronization","Operating Systems","mutex lock shared resource race",[["milk_problem"]]],
+  ["Deadlock","Operating Systems","circular wait locks",[["junction"]]],
+  ["Starvation","Operating Systems","priority aging scheduling",[["cross_road"]]],
+  ["Concurrency / Parallelism","Operating Systems","concurrent parallel threads cores",[["campus_bites"]]],
+  ["Page Replacement","Operating Systems","paging memory cache",[["backpack"]]],
+
+  /* Databases */
+  ["Transactions","Databases","atomicity acid commit rollback",[["atomicity"]]],
+  ["Transaction States","Databases","",[]],
+  ["Isolation Levels","Databases","",[]],
+  ["Serializability","Databases","schedules",[]],
+  ["Recoverability","Databases","schedules rollback",[]],
+  ["Primary Key & Foreign Key","Databases","keys relational",[]],
+  ["Functional Dependency","Databases","fd",[]],
+  ["Database Anomalies","Databases","insertion update deletion",[]],
+  ["Database Normalization","Databases","normal forms",[]],
+  ["1NF","Databases","first normal form",[]],
+  ["2NF","Databases","second normal form",[]],
+  ["3NF","Databases","third normal form",[]],
+  ["BCNF","Databases","boyce codd normal form",[]],
+
+  /* Networks & systems */
+  ["API","Networks & Systems","interface request response",[["archive"]]],
+  ["Load Balancing","Networks & Systems","servers traffic distribution",[["bank_rush"]]],
+  ["Reverse Proxy","Networks & Systems","proxy server gateway",[["helpdesk"]]],
+  ["Leaky Bucket","Networks & Systems","rate limiting traffic shaping",[["water_park"]]],
+  ["TCP Congestion Control","Networks & Systems","tcp network",[]],
+  ["DNS Resolution","Networks & Systems","dns domain name",[]],
+  ["Error Detection","Networks & Systems","checksum parity crc",[]],
+
+  /* Machine learning */
+  ["Gradient Descent","Machine Learning","optimization loss learning rate",[["archer"]]],
+  ["Reinforcement Learning","Machine Learning","reward policy",[["hungry_mouse"]]],
+  ["Feature Engineering","Machine Learning","features inputs",[["ant_colony"]]],
+  ["Overfitting","Machine Learning","generalization training",[]],
+  ["Backpropagation","Machine Learning","neural network",[]],
+
+  
+];
+</script>
+<script>
+(function(){
+  var AREAS = ["All areas"].concat(CONCEPTS.map(function(c){return c[1];}).filter(function(v,i,a){return a.indexOf(v)===i;}));
+  var area = "All areas", query = "";
+
+  var $q = document.getElementById("q"), $chips = document.getElementById("chips"),
+      $status = document.getElementById("status"), $empty = document.getElementById("empty");
+
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function norm(s){ return String(s).toLowerCase().replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim(); }
+
+  function haystack(c){
+    var titles = c[3].map(function(r){ var s = STUDIES[r[0]]; return s ? s.title + " " + s.hook : ""; }).join(" ");
+    return norm([c[0], c[1], c[2], titles].join(" "));
+  }
+  CONCEPTS.forEach(function(c){ c.hay = haystack(c); c.nm = norm(c[0]); });
+
+  function matches(c){
+    if (area !== "All areas" && c[1] !== area) return false;
+    if (!query) return true;
+    return query.split(" ").every(function(tok){ return c.hay.indexOf(tok) > -1; });
+  }
+
+  function studyHtml(ref){
+    var s = STUDIES[ref[0]]; if (!s) return "";
+    var note = ref[1] || s.hook;
+    return '<li><a href="'+esc(s.path)+'"><span class="s-title">'+esc(s.title)+'</span><span class="s-note">'+esc(note)+'</span></a></li>';
+  }
+  function liveCard(c){
+    return '<article class="card"><div class="card-top"><h3>'+esc(c[0])+'</h3><span class="cat">'+esc(c[1])+'</span></div>'+
+           '<ul class="studies">'+c[3].map(studyHtml).join("")+'</ul></article>';
+  }
+  function wipCard(c){
+    return '<article class="card wip"><div class="card-top"><h3>'+esc(c[0])+'</h3><span class="cat">'+esc(c[1])+'</span></div>'+
+           '<p class="wip-note">A case study for this is being worked on. </p></article>';
+  }
+
+  function render(){
+    var hits = CONCEPTS.filter(matches);
+    var live = hits.filter(function(c){ return c[3].length; }),
+        wip  = hits.filter(function(c){ return !c[3].length; });
+    // when searching, put exact/prefix name matches first
+    if (query) {
+      var rank = function(c){ return c.nm === query ? 0 : c.nm.indexOf(query) === 0 ? 1 : c.nm.indexOf(query) > -1 ? 2 : 3; };
+      live.sort(function(a,b){ return rank(a)-rank(b); });
+      wip.sort(function(a,b){ return rank(a)-rank(b); });
+    }
+    document.getElementById("grid-live").innerHTML = live.map(liveCard).join("");
+    document.getElementById("grid-wip").innerHTML  = wip.map(wipCard).join("");
+    document.getElementById("g-live").hidden = !live.length;
+    document.getElementById("g-wip").hidden  = !wip.length;
+    document.getElementById("n-live").textContent = live.length + (live.length===1 ? " concept" : " concepts");
+    document.getElementById("n-wip").textContent  = wip.length + (wip.length===1 ? " concept" : " concepts");
+    $empty.classList.toggle("show", !hits.length);
+    $status.textContent = (query || area !== "All areas")
+      ? (hits.length ? hits.length + (hits.length===1 ? " concept found" : " concepts found") : "")
+      : live.length + " of " + CONCEPTS.length + " concepts have a case study so far";
+  }
+
+  function renderChips(){
+    $chips.innerHTML = AREAS.map(function(a){
+      return '<button type="button" class="chip" aria-pressed="'+(a===area)+'" data-a="'+esc(a)+'">'+esc(a)+'</button>';
+    }).join("");
+  }
+  $chips.addEventListener("click", function(e){
+    var b = e.target.closest(".chip"); if (!b) return;
+    area = b.getAttribute("data-a"); renderChips(); render();
+  });
+  $q.addEventListener("input", function(){ query = norm($q.value); render(); });
+
+  // allow deep links like concept-map.html?q=deadlock
+  try {
+    var p = new URLSearchParams(location.search).get("q");
+    if (p) { $q.value = p; query = norm(p); }
+  } catch(e){}
+
+  renderChips(); render();
+})();
+</script>
+</body>
+</html>
